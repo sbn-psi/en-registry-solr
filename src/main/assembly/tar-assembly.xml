@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+  Copyright 2010-2014, by the California Institute of Technology.
+  ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+  Any commercial use must be negotiated with the Office of Technology 
+  Transfer at the California Institute of Technology.
+
+  This software is subject to U. S. export control laws and regulations 
+  (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software 
+  is subject to U.S. export control laws and regulations, the recipient has 
+  the responsibility to obtain export licenses or other export authority as 
+  may be required before exporting such information to foreign countries or 
+  providing access to foreign nationals.
+-->
+
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+  http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+  <id>bin</id>
+
+  <formats>
+    <format>tar.gz</format>
+  </formats>
+
+  <fileSets>
+    <fileSet>
+      <directory>target</directory>
+      <outputDirectory>dist</outputDirectory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
+      <fileMode>644</fileMode>
+      <lineEnding>keep</lineEnding>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/resources</directory>
+      <outputDirectory>/</outputDirectory>
+      <excludes>
+        <exclude>**/VERSION.txt</exclude>
+        <exclude>**/deploy-docker.sh</exclude>
+        <exclude>**/deploy-docker-win.sh</exclude>
+        <exclude>**/search_install.sh</exclude>
+        <exclude>**/search_uninstall.sh</exclude>
+      </excludes>
+      <fileMode>644</fileMode>
+      <lineEnding>keep</lineEnding>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/resources/build</directory>
+      <outputDirectory>/build/</outputDirectory>
+      <includes>
+        <include>**/deploy-docker.sh</include>
+        <include>**/deploy-docker-win.sh</include>
+      </includes>
+      <fileMode>755</fileMode>
+      <lineEnding>unix</lineEnding>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/resources/bin</directory>
+      <outputDirectory>/bin/</outputDirectory>
+      <includes>
+        <include>**/search-service.properties</include>
+      </includes>
+      <fileMode>644</fileMode>
+      <lineEnding>keep</lineEnding>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/resources/bin</directory>
+      <outputDirectory>/bin/</outputDirectory>
+      <includes>
+        <include>**/search_install.sh</include>
+        <include>**/search_uninstall.sh</include>
+        <!--include>**/search_install.bat</include>
+        <include>**/search_uninstall.bat</include-->
+      </includes>
+      <fileMode>755</fileMode>
+      <lineEnding>unix</lineEnding>
+      <filtered>true</filtered>
+    </fileSet>
+    <fileSet>
+      <directory>target/site</directory>
+      <outputDirectory>doc</outputDirectory>
+      <fileMode>644</fileMode>
+      <lineEnding>keep</lineEnding>
+    </fileSet>
+  </fileSets>
+
+  <files>
+    <file>
+      <source>LICENSE.txt</source>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>644</fileMode>
+      <lineEnding>unix</lineEnding>
+    </file>
+    <file>
+      <source>README-PACKAGE.txt</source>
+      <outputDirectory>/</outputDirectory>
+      <destName>README.txt</destName>
+      <fileMode>644</fileMode>
+      <lineEnding>unix</lineEnding>
+      <filtered>true</filtered>
+    </file>
+    <file>
+      <source>src/main/resources/build/VERSION.txt</source>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>644</fileMode>
+      <lineEnding>unix</lineEnding>
+      <filtered>true</filtered>
+    </file>
+  </files>
+
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>lib</outputDirectory>
+      <includes>
+        <include>net.sf.saxon:saxon</include>
+        <include>net.sf.saxon:saxon-dom</include>
+        <include>org.slf4j:slf4j-api</include>
+        <include>org.slf4j:slf4j-log4j12</include>
+        <include>commons-logging:commons-logging</include>
+        <include>log4j:log4j</include>
+        <include>commons-io:commons-io</include>
+      </includes>
+      <fileMode>644</fileMode>
+    </dependencySet>
+  </dependencySets>
+
+</assembly>
