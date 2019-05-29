@@ -14,11 +14,11 @@
 #
 # $Id$
 
-# Bourne Shell script that allows easy execution of the Search Service Installer
+# Bourne Shell script that allows easy execution of the Registry Installer
 # without the need to set the CLASSPATH or having to type in that long java
 # command (java gov.nasa.pds.search.SearchInstaller ...)
 
-# Expects the Search Service jar file to be in the ../lib directory.
+# Expects the Registry jar file to be in the ../lib directory.
 
 # Check if the JAVA_HOME environment variable is set.
 if [ -z "${JAVA_HOME}" ]; then
@@ -33,20 +33,20 @@ LIB_DIR=${PARENT_DIR}/dist
 EXTRA_LIB_DIR=${PARENT_DIR}/lib
 
 # Check for dependencies.
-if [ ! -f ${LIB_DIR}/search-service*.jar ]; then
-    echo "Cannot find Search Service jar file in ${LIB_DIR}" 1>&2
+if [ ! -f ${LIB_DIR}/registry*.jar ]; then
+    echo "Cannot find Registry jar file in ${LIB_DIR}" 1>&2
     exit 1
 fi
 
-# Finds the jar file in LIB_DIR and sets it to SEARCH_SERVICE_JAR.
-SEARCH_SERVICE_JAR=`ls ${LIB_DIR}/search-service-*.jar`
+# Finds the jar file in LIB_DIR and sets it to REGISTRY_JAR.
+REGISTRY_JAR=`ls ${LIB_DIR}/registry-*.jar`
 EXTRA_LIB_JAR=`ls ${EXTRA_LIB_DIR}/*.jar`
 EXTRA_LIB_JAR=`echo ${EXTRA_LIB_JAR} | sed 'y/ /:/'`
-#echo $SEARCH_SERVICE_JAR
+#echo $REGISTRY_JAR
 #echo $EXTRA_LIB_JAR
-CLASSPATH=$SEARCH_SERVICE_JAR:$EXTRA_LIB_JAR export CLASSPATH
+CLASSPATH=$REGISTRY_JAR:$EXTRA_LIB_JAR export CLASSPATH
 
-SEARCH_INSTALLER_PRESET_FILE=`ls ${SCRIPT_DIR}/search-service.properties` export SEARCH_INSTALLER_PRESET_FILE
+SEARCH_INSTALLER_PRESET_FILE=`ls ${SCRIPT_DIR}/search.properties` export SEARCH_INSTALLER_PRESET_FILE
 SEARCH_VER=`cat ${PARENT_DIR}/VERSION.txt` export SEARCH_VER
 
 # Executes Search Installer via the executable jar file

@@ -61,7 +61,7 @@
       <directory>src/main/resources/bin</directory>
       <outputDirectory>/bin/</outputDirectory>
       <includes>
-        <include>**/search-service.properties</include>
+        <include>**/search.properties</include>
       </includes>
       <fileMode>644</fileMode>
       <lineEnding>keep</lineEnding>
