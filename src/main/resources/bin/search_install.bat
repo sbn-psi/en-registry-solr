@@ -12,11 +12,11 @@
 ::
 :: $Id$
 
-:: Batch file that allows easy execution of the Registry
+:: Batch file that allows easy execution of the Search Service
 :: without the need to set the CLASSPATH or having to type in that long java
 :: command (java gov.nasa.pds.search.SearchInstaller ...)
 
-:: Expects Registry jar file to be located in the ..\dist directory.
+:: Expects Search Service jar file to be located in the ..\dist directory.
 
 @echo off
 
@@ -35,8 +35,8 @@ set EXTRA_LIB_DIR=%PARENT_DIR%\lib
 set CLASSPATH=
 
 :: Check for dependencies.
-if exist "%LIB_DIR%\regsitry*.jar" (
-   	set CLASSPATH=%LIB_DIR%\registry-2.0.0.jar
+if exist "%LIB_DIR%\search-service*.jar" (
+   	set CLASSPATH=%LIB_DIR%\search-service-2.0.0.jar
 ) 
 
 ::for %%i in ("%EXTRA_LIB_DIR%"\*.jar) do (
@@ -46,8 +46,8 @@ if exist "%LIB_DIR%\regsitry*.jar" (
 set CLASSPATH=%CLASSPATH%;%EXTRA_LIB_DIR%\log4j-1.2.16.jar;%EXTRA_LIB_DIR%\slf4j-api-1.6.6.jar;%EXTRA_LIB_DIR%\slf4j-log4j12-1.6.6.jar;%EXTRA_LIB_DIR%\commons-io-2.5.jar;%EXTRA_LIB_DIR%\commons-logging-1.0.4.jar
 echo %CLASSPATH%
 
-if exist "%SCRIPT_DIR%\search.properties" (
-	set SEARCH_INSTALLER_PRESET_FILE=%SCRIPT_DIR%\search.properties
+if exist "%SCRIPT_DIR%\search-service.properties" (
+	set SEARCH_INSTALLER_PRESET_FILE=%SCRIPT_DIR%\search-service.properties
 	echo %SEARCH_INSTALLER_PRESET_FILE%
 )
 
