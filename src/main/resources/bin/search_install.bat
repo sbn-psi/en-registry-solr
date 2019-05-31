@@ -35,7 +35,7 @@ set EXTRA_LIB_DIR=%PARENT_DIR%\lib
 set CLASSPATH=
 
 :: Check for dependencies.
-if exist "%LIB_DIR%\regsitry*.jar" (
+if exist "%LIB_DIR%\registry*.jar" (
    	set CLASSPATH=%LIB_DIR%\registry-2.0.0.jar
 ) 
 
