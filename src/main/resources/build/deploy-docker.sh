@@ -141,15 +141,15 @@ if [ "$uninstall"  = true ]; then
     echo "Stopping the SOLR instance.                                          " | tee -a $LOG
     docker exec -it ${DOCK_IMAGE} solr stop >>$LOG 2>&1
 
-    containerId=`docker ps -q` 
+    containerId=`docker ps -a | grep $DOCK_IMAGE | awk '{print $1}'`
     #echo $containerId 
     if [ -n $containerId ]; then
         # Gracefully stop the current container with hashkey
         echo "Stopping Registry/Search Docker Container.                           " | tee -a $LOG
         docker stop $containerId >> $LOG 2>&1
-
-	echo "Removing Registry/Search Docker Container.                   " | tee -a $LOG
-	docker ps -a | grep "$DOCK_IMAGE" | awk '{print $1}' | xargs docker rm
+        echo "Removing Registry/Search Docker Container.                   " | tee -a $LOG
+        docker rm $containerId >> $LOG 2>&1
+        #docker ps -a | grep "$DOCK_IMAGE" | awk '{print $1}' | xargs docker rm >>$LOG 2>&1
     fi
 
     echo "Removing Registry/Search Docker Images.                              " | tee -a $LOG
@@ -219,6 +219,10 @@ done
 
 # Start up container. TODO: uninstall this up, maybe use docker-compose
 echo -ne "Starting Registry/Search Docker Container.                           " | tee -a $LOG
+#containerId=`docker ps -a | grep "search-service" | awk '{print $1}'`
+#if [ -n $containerId ]; then
+#   docker rm $containerId
+#fi
 docker run --name ${DOCK_IMAGE} -u solr\
     -v $basepath/solr-docs:/data/solr-docs \
     -v solr_zoo_data:/opt/solr/server/solr/zoo_data/ \
