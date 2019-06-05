@@ -16,7 +16,7 @@ public class InstallerPresets extends Properties {
 		super();
 		InputStream propStream = null;
 		try {
-			presetsFilePath = System.getenv("SEARCH_INSTALLER_PRESET_FILE");
+			presetsFilePath = System.getenv("REGISTRY_INSTALLER_PRESET_FILE");
 			propStream = new FileInputStream(new File (presetsFilePath));
 			this.load(propStream);
 			//System.out.println(this.toString());
@@ -47,13 +47,13 @@ public class InstallerPresets extends Properties {
 			file.delete();
 			file.createNewFile();
 			FileOutputStream fileOut = new FileOutputStream(file);
-			this.store(fileOut, "SEARCH Configuration Properties (see: https://wiki.jpl.nasa.gov/display/search/Configuring+SEARCH)" + System.currentTimeMillis());
+			this.store(fileOut, "REGISTRY Configuration Properties (see: https://wiki.jpl.nasa.gov/display/search/Configuring+SEARCH)" + System.currentTimeMillis());
 			fileOut.close();
 			
 			File nextVer = new File(presetsFilePath);
-			String preContents = SearchInstallerUtils.getFileContents(nextVer.toPath());
+			String preContents = RegistryInstallerUtils.getFileContents(nextVer.toPath());
 			String nextContents = preContents.replaceAll("\\\\", "");
-			SearchInstallerUtils.writeToFile(nextVer.toPath(), nextContents);
+			RegistryInstallerUtils.writeToFile(nextVer.toPath(), nextContents);
 		}
 		catch (Throwable t) {
 			System.out.println("ERROR: Problem writing out properties to : " + presetsFilePath);

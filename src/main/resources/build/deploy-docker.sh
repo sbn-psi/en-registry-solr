@@ -1,12 +1,6 @@
 #!/bin/bash
 
-# Solr Java Heap Space for Search/Registry Service
-# Only update if heap size is too large for machine it is running on
-SOLR_HEAP="2048M"
-
-#################################################################################
-# WARNING: You should not need to update below. Modify at your own risk.        #
-#################################################################################
+SOLR_HEAP=2048m
 
 usage() {
     echo "Usage: $0 install/upgrade/uninstall [noPrompt] </path/to/harvest/output>" 1>&2
@@ -54,8 +48,8 @@ replicationFactor=1
 
 # Get path to this base dir where script exists
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-LOG=${DIR}/search-deploy-log-$(date '+%Y%m%d_%H%M%S').txt
-DOCK_IMAGE=search-service
+LOG=${DIR}/registry-deploy-log-$(date '+%Y%m%d_%H%M%S').txt
+DOCK_IMAGE=registry
 
 # Add additional volumes to maintain here. Will also need to update mappings below
 VOLUMES="solr_zoo_data solr_pds_shard1_n1 solr_system_shard1_n1 solr_xpath_shard1_n1"
@@ -135,7 +129,7 @@ if [ "$uninstall"  = true ]; then
     docker exec -it --user=solr ${DOCK_IMAGE} solr delete -c xpath  >>$LOG 2>&1
 
     # Remove 'pds' collection
-    echo "Removing the Search Service collection.                              " | tee -a $LOG
+    echo "Removing the Search collection.                              " | tee -a $LOG
     docker exec -it --user=solr ${DOCK_IMAGE} solr delete -c pds >>$LOG 2>&1
 
     echo "Stopping the SOLR instance.                                          " | tee -a $LOG
@@ -145,14 +139,14 @@ if [ "$uninstall"  = true ]; then
     #echo $containerId 
     if [ -n $containerId ]; then
         # Gracefully stop the current container with hashkey
-        echo "Stopping Registry/Search Docker Container.                           " | tee -a $LOG
+        echo "Stopping Registry Docker Container.                           " | tee -a $LOG
         docker stop $containerId >> $LOG 2>&1
-        echo "Removing Registry/Search Docker Container.                   " | tee -a $LOG
+        echo "Removing Registry Docker Container.                   " | tee -a $LOG
         docker rm $containerId >> $LOG 2>&1
         #docker ps -a | grep "$DOCK_IMAGE" | awk '{print $1}' | xargs docker rm >>$LOG 2>&1
     fi
 
-    echo "Removing Registry/Search Docker Images.                              " | tee -a $LOG
+    echo "Removing Registry Docker Images.                              " | tee -a $LOG
     DOCK_VERSION=$DOCK_IMAGE:$version
     #echo $DOCK_VERSION
     docker rmi -f $DOCK_VERSION  >>$LOG 2>&1
@@ -184,7 +178,7 @@ if [ "$install" = false ]; then
         check_exec $?
 
         # Stop and rename old container for upgrade
-    	echo -ne "Stopping Registry/Search Docker Container.                           " | tee -a $LOG
+    	echo -ne "Stopping Registry Docker Container.                           " | tee -a $LOG
         docker stop $containerId
         #check_exec $?
         #status=`check_exec $?`
@@ -204,7 +198,7 @@ if [ "$install" = false ]; then
 fi  
 
 # Build the new Docker image
-echo -ne "Building Registry/Search Docker Image.                               " | tee -a $LOG
+echo -ne "Building Registry Docker Image.                               " | tee -a $LOG
 cd ${DIR}/../build
 docker build -t $DOCK_IMAGE:$version -f Dockerfile ../ >>$LOG 2>&1
 cd ../../
@@ -218,7 +212,7 @@ done
 # TODO: Add some checks to make sure the above executed successfully
 
 # Start up container. TODO: uninstall this up, maybe use docker-compose
-echo -ne "Starting Registry/Search Docker Container.                           " | tee -a $LOG
+echo -ne "Starting Registry Docker Container.                           " | tee -a $LOG
 #containerId=`docker ps -a | grep "search-service" | awk '{print $1}'`
 #if [ -n $containerId ]; then
 #   docker rm $containerId
@@ -230,7 +224,7 @@ docker run --name ${DOCK_IMAGE} -u solr\
     -v solr_system_shard1_n1:/opt/solr/server/solr/.system_shard1_replica_n1 \
     -v solr_xpath_shard1_n1:/opt/solr/server/solr/xpath_shard1_replica_n1 \
     -d -p 8983:8983 \
-    -e SOLR_HEAP=${SOLR_HEAP} \
+    -e SOLR_HEAP=$SOLR_HEAP
     $DOCK_IMAGE:$version >>$LOG 2>&1    
 check_exec $?
 
@@ -241,18 +235,18 @@ if [ "$install" = true ]; then
     sleep $sec
 
     # Create the Registry collections
-    echo -ne "Creating a Registry Service Blob collection (.system)                " | tee -a $LOG
+    echo -ne "Creating a Registry Service Blob collection (.system)         " | tee -a $LOG
     check=$(curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=.system&maxShardsPerNode=${maxShardsPerNode}&numShards=${numShards}&replicationFactor=${replicationFactor}" 2>>$LOG | tee -a $LOG)
     curl "http://localhost:8983/solr/admin/collections?action=CREATEALIAS&name=registry-blob&collections=.system" >>$LOG 2>&1
     check_status "$check"
 
-    echo -ne "Creating a Registry Service XPath collection (xpath)                 " | tee -a $LOG
+    echo -ne "Creating a Registry Service XPath collection (xpath)          " | tee -a $LOG
     check=$(curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=xpath&maxShardsPerNode=${maxShardsPerNode}&numShards=${numShards}&replicationFactor=${replicationFactor}" 2>>$LOG | tee -a $LOG)
     curl "http://localhost:8983/solr/admin/collections?action=CREATEALIAS&name=registry-xpath&collections=xpath" >>$LOG 2>&1
     check_status "$check"
 
     # Create the Search collection 
-    echo -ne "Creating a Search Service collection (pds)                           " | tee -a $LOG
+    echo -ne "Creating a Search collection (pds)                            " | tee -a $LOG
     #check=$(curl "http://localhost:8983/solr/admin/collections?action=pds&name=xpath&maxShardsPerNode=${maxShardsPerNode}&numShards=${numShards}&replicationFactor=${replicationFactor}" 2>>$LOG | tee -a $LOG)
     #check_status "$check"
 
@@ -264,6 +258,7 @@ fi
 
 docker exec ${DOCK_IMAGE} solr status >>$LOG 2>&1
 check_exec $?
+
 #sleep 5
 
 #exit 0

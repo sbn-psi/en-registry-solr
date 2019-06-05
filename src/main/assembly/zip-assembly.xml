@@ -41,8 +41,8 @@
         <exclude>**/VERSION.txt</exclude>
         <exclude>**/deploy-docker.sh</exclude>
         <exclude>**/deploy-docker-win.sh</exclude>
-        <exclude>**/search_install.sh</exclude>
-        <exclude>**/search_uninstall.sh</exclude>
+        <exclude>**/registry_install.sh</exclude>
+        <exclude>**/registry_uninstall.sh</exclude>
       </excludes>
       <fileMode>644</fileMode>
       <lineEnding>keep</lineEnding>
@@ -61,7 +61,7 @@
       <directory>src/main/resources/bin</directory>
       <outputDirectory>/bin/</outputDirectory>
       <includes>
-        <include>**/search.properties</include>
+        <include>**/registry.properties</include>
       </includes>
       <fileMode>644</fileMode>
       <lineEnding>keep</lineEnding>
@@ -70,10 +70,10 @@
       <directory>src/main/resources/bin</directory>
       <outputDirectory>/bin/</outputDirectory>
       <includes>
-        <include>**/search_install.sh</include>
-        <include>**/search_uninstall.sh</include>
-        <!--include>**/search_install.bat</include>
-        <include>**/search_uninstall.bat</include-->
+        <include>**/registry_install.sh</include>
+        <include>**/registry_uninstall.sh</include>
+        <!--include>**/registry_install.bat</include>
+        <include>**/registry_uninstall.bat</include-->
       </includes>
       <fileMode>755</fileMode>
       <lineEnding>unix</lineEnding>

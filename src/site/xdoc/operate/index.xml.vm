@@ -26,24 +26,96 @@
 
   <body>
     <section name="Operation">
-      <p>The Registry operates as a web application hosted on a Java Application Server (Apache Tomcat).  Once it is deployed, operations include modifying the configuration and leveraging the PDS and PDAP protocols to query data and metadata that has been extracted from the Registry Service (see the <a href="../../search-core">Search Core</a> component for more information). The following topics will be covered below:
+      <p>The Registry is an Apache Solr adaptation that includes the Solr Admin interface along with the pre-installed collections that come with the PDS Registry and Search.  Once it is deployed, operations include modifying the configuration and leveraging the PDS and PDAP protocols to query data and metadata that has been extracted from PDS4 data products. The following topics will be covered below:
       </p>
       <ul>
+	<li><a href="#Common_Operations">Common Operations</a></li>
+	<ul>
+	  <li><a href="#Add_Data_To_Registry_and_Search">Add Data To Registry and Search</a></li>
+	  <li><a href="#Delete_Data_From_Registry_and_Search">Delete Data From Registry and Search</a></li>
+	  <li><a href="#Re-Ingest_Data_To_Registry_and_Search">Re-Ingest Data To Registry and Search</a></li>
+	</ul>
         <li><a href="#Administration_Interface">Administration Interface</a></li>
         <li><a href="#Configuration">Configuration</a></li>
+	<ul>
+	  <li><a href="#Add A Facet">Add A Facet</a></li>
+	  <li><a href="#Update_Output_Format">Update Output Format</a></li>
+	  <li><a href="#Add_a_Field_to_the_Schema">Add a Field to the Schema</a></li>
+	  <li><a href="#Create_New_Search_Endpoint">Create New Search Endpoint</a></li>
+	</ul>
         <li><a href="#Search_Protocols">Search Protocols</a></li>
         <li><a href="#Common_Errors">Common Errors</a></li>
       </ul>
     </section>
 
+    <section name="Common Operations">
+      <p>Here are some common operations you may wish to perform to interact with the Registry and Search. A tool to simplify these actions is in the plan, but in the meantime, here are the various raw commands you can do to modify data in your registry and search. For additional information for interacting with the Registry, please also take a look at the <a href="https://lucene.apache.org/solr/guide/7_6/collections-api.html">Solr Collections API</a> and other info on <a href="https://lucene.apache.org/solr/guide/7_7/overview-of-documents-fields-and-schema-design.html">interacting with Solr documents</a>.
+</p>
+
+	  <subsection name="Add Data To Registry and Search">
+	    <p>
+	      After you have run Harvest, you should now see files like <i>solr_doc_0.xml</i> under <i>$REGISTRY_HOME/../registry-data/solr-docs</i> (or on Windows C:\\%REGISTRY_HOME%\..\registry-data\solr-docs). To ingest these into the Search index (http://localhost:8983/solr/search), run the following command:
+	      </p>
+	      <p>Docker Installation:
+	      <source>
+docker exec -it registry post -c pds -params "tr=add-hierarchy.xsl" /data/solr-docs
+	      </source>
+	      </p>
+	      <p>Standalone Installation:
+	      <source>
+$SOLR_HOME/bin/post -c pds -params "tr=add-hierarchy.xsl" $REGISTRY_HOME/../registry-data/solr-docs
+	      </source>
+	      </p>
+	  </subsection>
+	  <subsection name="Delete Data From Registry and Search">
+	    <p>Once you have data in the Registry and/or Search, the following <a href="https://curl.haxx.se/download.html">cUrl</a> commands can modify the data you have ingested.
+	    </p>
+
+	    <p>Docker Installation:
+	      <source>
+# Clean out all data ingested into Registry and/or Search
+docker exec -it registry post -c .system -d "&lt;delete&gt;&lt;query&gt;-type:metrics_rrd&lt;/query&gt;&lt;/delete&gt;"
+docker exec -it registry post -c pds -d "&lt;delete&gt;&lt;query&gt;*:*&lt;/query>&lt;/delete&gt;"
+docker exec -it registry post -c xpath -d "&lt;delete&gt;=&lt;query&gt;*:*&lt;/query>&lt;/delete&gt;"
+
+# Remove collection with LIDVID = urn:nasa:pds:insight_rad:data_raw::1.0
+docker exec -it registry post -c .system -d '&lt;delete&gt;&lt;query&gt;-type:metrics_rrd AND lidvid:"urn:nasa:pds:insight_rad:data_raw::1.0"&lt;/query&gt;&lt;/delete&gt;'
+docker exec -it registry post -c pds -d '&lt;delete&gt;&lt;query&gt;lidvid:"urn:nasa:pds:insight_rad:data_raw::1.0"&lt;/query&gt;&lt;/delete&gt;'
+docker exec -it registry post -c xpath -d '&lt;delete&gt;&lt;query&gt;lidvid:"urn:nasa:pds:insight_rad:data_raw::1.0"&lt;/query&gt;&lt;/delete&gt;'
+	      </source>
+	    </p>
+	    
+	    <p>Standalone Installation:
+	      <source>
+# Clean out all data ingested into Registry and/or Search
+$SOLR_HOME/bin/post -c .system -d "&lt;delete&gt;&lt;query&gt;-type:metrics_rrd&lt;/query&gt;&lt;/delete&gt;"
+$SOLR_HOME/bin/post -c pds -d "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;"
+$SOLR_HOME/bin/post -c xpath -d "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;"
+
+# Remove collection with LIDVID = urn:nasa:pds:insight_rad:data_raw::1.0
+$SOLR_HOME/bin/post -c .system -d '&lt;delete&gt;&lt;query&gt;-type:metrics_rrd AND lidvid:"urn:nasa:pds:insight_rad:data_raw::1.0"&lt;/query&gt;&lt;/delete&gt;'
+$SOLR_HOME/bin/post -c pds -d '&lt;delete&gt;&lt;query&gt;lidvid:"urn:nasa:pds:insight_rad:data_raw::1.0"&lt;/query&gt;&lt;/delete&gt;'
+$SOLR_HOME/bin/post -c xpath -d '&lt;delete&gt;&lt;query&lt;lidvid:"urn:nasa:pds:insight_rad:data_raw::1.0"&lt;/query&gt;&lt;/delete&gt;'
+	      </source>
+	    </p>
+	  </subsection>
+	  <subsection name="Re-Ingest Data To Registry and Search">
+	    <ul>
+	      <li><a href="#Delete_Data_From_Registry_and_Search">Delete</a> the data you would like to remove from Registry and Search.</li>
+	      <li>If you removed data from both the Registry and Search, you will need to re-run Harvest and then <a href="#Add_Data_To_Registry_and_Search">re-ingest the data</a> into the Search index.</li>
+	      <li>If you only removed data from the Search index, you can then just <a href="#Add_Data_To_Registry_and_Search">re-ingest the data</a> into the Search index.</li>
+	    </ul>
+	  </subsection>
+    </section>
+
     <section name="Administration Interface">
-      <p>The Solr Administration Interface is available for advanced configuration and debugging of the Solr instance. The page can be viewed at <i>http://localhost:8080/search-service</i>. The following resources are available detailing the how to use this interface:
+      <p>The Solr Administration Interface is available for advanced configuration and debugging of the Solr instance. The page can be viewed at <i>http://localhost:8983/solr</i> or if you have setup the proxy pass as directed in the installation guide, <i>https://&lt;hostname&gt;:8983/services/registry</i>. The following resources are available detailing the how to use this interface:
       </p>
 
       <ul>
-        <li><a href="http://searchhub.org/2013/01/22/lucenesolr-4-management-administrative-user-interface/" target="_blank">Lucene/Solr 4 – Management &amp; Administrative User Interface</a>
+        <li><a href="https://lucene.apache.org/solr/guide/7_7/overview-of-the-solr-admin-ui.html" target="_blank">Overview of the Solr Admin UI</a>
         </li>
-        <li><a href="https://cwiki.apache.org/confluence/display/solr/Using+the+Solr+Administration+User+Interface" target="_blank">Using the Solr Administration User Interface</a>
+        <li><a href="https://lucene.apache.org/solr/guide/6_6/using-the-solr-administration-user-interface.html" target="_blank">Using the Solr Administration User Interface</a>
         </li>
       </ul>
 
@@ -56,16 +128,16 @@
       </p>
 
       <subsection name="Add A Facet">
-        <p>The following steps will allow a new facet to be added to the Registry output. The facets are the categories in the left sidebar of the Search UI that provide a means for browsing through the data. The name for the facet should not yet be a field in the schema, because a new field specifically dedicated to the faceting will be created. For instance, if you wanted to facet on <i>agency_name</i>, we will create a facet named <i>facet_agency</i>. These steps assume that the Registry was installed at <i>/usr/local/search-service</i>. If not, substitute the installation directory as needed. For the following example, we will be creating a facet on the <i>node_id</i> field.
+        <p>The following steps will allow a new facet to be added to the Registry output. The facets are the categories in the left sidebar of the Search UI that provide a means for browsing through the data. The name for the facet should not yet be a field in the schema, because a new field specifically dedicated to the faceting will be created. For instance, if you wanted to facet on <i>agency_name</i>, we will create a facet named <i>facet_agency</i>. These steps assume that the Registry was installed at <i>$REGISTRY_HOME</i>. If not, substitute the installation directory as needed. For the following example, we will be creating a facet on the <i>node_id</i> field.
         </p>
 
         <ol>
-          <li><p>Add the following to the <i>/usr/local/search-service/pds/conf/xslt/facets.xml</i> file:</p>
+          <li><p>Add the following to the <i>$REGISTRY_HOME/conf/xslt/facets.xml</i> file:</p>
             <source>
 &lt;facet name="facet node id" caption="Node" /&gt;
             </source>
           </li>
-          <li><p>Update the <i>/usr/local/search-service/pds/conf/xslt/add-hierarchy.xsl</i> file:</p>
+          <li><p>Update the <i>$REGISTRY_HOME/conf/xslt/add-hierarchy.xsl</i> file:</p>
             <source>
 &lt;xsl:template match="field[@name = 'node_id']"&gt;
   &lt;xsl:copy-of select="." &gt;
@@ -73,20 +145,20 @@
 &lt;/xsl:template&gt;
             </source>
           </li>
-          <li><p>Update the <i>/usr/local/search-service/pds/conf/solrconfig_defaults.xml</i> file:</p>
+          <li><p>Update the <i>$REGISTRY_HOME/conf/solrconfig.xml</i> file:</p>
             <source>
 &lt;str name="facet.field"&gt;facet_node_id&lt;/str&gt;
 
 &lt;str name="f.facet_node_id.facet.prefix"&gt;1,&lt;/str&gt;
             </source>
           </li>
-          <li><p>Update the <i>/usr/local/search-service/pds/conf/schema.xml</i> file by finding the area where facet fields are being declared (search for facet_) and add the following:</p>
+          <li><p>Update the <i>$REGISTRY_HOME/conf/managed-schema</i> file by finding the area where facet fields are being declared (search for facet_) and add the following:</p>
             <source>
 &lt;field name="facet_node" type="string_lc" indexed="true" stored="false" \
   multiValued="false" /&gt;
             </source>
           </li>
-          <li>Restart Tomcat</li>
+          <li>Execute the appropriate registry_uninstall and registry_install scripts (dependent upon operating system) to re-install the Registry with the new facets.</li>
         </ol>
       </subsection>
 
@@ -95,15 +167,15 @@
         </p>
 
         <ul>
-          <li>To update the output queried through the Search UI (<i>archive-filter</i> end point), make updates to the <i>/usr/local/search-service/pds/conf/xslt/data-search.xsl</i> file.
+          <li>To update the output queried through the Search UI (<i>archive-filter</i> end point), make updates to the <i>$REGISTRY_HOME/conf/xslt/data-search.xsl</i> file.
           </li>
-          <li>To update the output queried through the Product Search UI (<i>product-search</i> end point), make updates to the <i>/usr/local/search-service/pds/conf/xslt/product-search.xsl</i> file.
+          <li>To update the output queried through the Product Search UI (<i>product-search</i> end point), make updates to the <i>$REGISTRY_HOME/conf/xslt/product-search.xsl</i> file.
           </li>
         </ul>
       </subsection>
 
       <subsection name="Add a Field to the Schema">
-        <p>In order to add a field to the schema, modify the <i>/usr/local/search-service/pds/conf/schema.xml</i> file. The following example will add the field <i>my_field</i>:
+        <p>In order to add a field to the schema, modify the <i>$REGISTRY_HOME/conf/schema.xml</i> file. The following example will add the field <i>my_field</i>:
         </p>
 
         <source>
@@ -132,48 +204,7 @@ multiValued="false" /&gt;
     </section>
 
     <section name="Common Errors">
-      <subsection name="org.xml.sax.SAXParseException: A pseudo attribute name is expected.">
-        <p>This error usually means there is a typo in the Registry Tomcat context file. More specifically, make sure the first line in <i>$TOMCAT_HOME/conf/Catalina/localhost/${project.artifactId}.xml</i> matches this exactly:
-        </p>
-
-        <source>
-&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-        </source>
-
-        <p>See the <a href="../install/index.html#Deploying_the_Application">Deploying the Application</a> section in the Install document for more information on creating this file.
-        </p>
-      </subsection>
-
-      <subsection name="Provider net.sf.saxon.TransformerFactoryImpl not found">
-        <p>This error occurs when the <i>saxon-9.jar</i> is not in the classpath. The following are mitigation strategies:
-        </p>
-
-        <ul>
-          <li>Verify the following line is in <i>$TOMCAT_HOME/conf/Catalina/localhost/${project.artifactId}.xml</i>:
-            <source>
-&lt;Loader className="org.apache.catalina.loader.VirtualWebappLoader" 
-    virtualClasspath="/usr/local/${project.artifactId}/lib/saxon-9.jar"/&gt;
-            </source>
-            <p>See <a href="../install/index.html#Deploying_the_Application">Deploying the Application</a> in the Install Guide for more information on creating this file.
-            </p>
-          </li>
-          <li>Verify the path specified for virtualClasspath actually exists.</li>
-        </ul>
-      </subsection>
-
-      <subsection name="XSLT transformation error java.io.IOException: XSLT transformation error">
-        <p>This error occurs when the CATALINA_OPTS environment variable is not properly set, or set multiple times in the <i>/usr/local/tomcat/catalina.sh</i> file (or /etc/init.d):
-        </p>
-
-        <source>
-export CATALINA_OPTS="${CATALINA_OPTS} -Dsolr.pds.home=/usr/local/${project.artifactId}"
-        </source>
-      </subsection>
-
-      <subsection name="All Searches Return 0 Results">
-        <p>This error occurs when the Registry is not populated with data. See the <a href="../../search-core">Search Core</a> component for information on populating the Registry.
-        </p>
-      </subsection>
+      TBD
     </section>
   </body>
 </document>

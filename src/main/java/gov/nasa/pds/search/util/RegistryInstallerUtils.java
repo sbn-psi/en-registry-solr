@@ -19,11 +19,11 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SearchInstallerUtils {
-	private static final Logger log = LoggerFactory.getLogger(SearchInstallerUtils.class);
+public class RegistryInstallerUtils {
+	private static final Logger log = LoggerFactory.getLogger(RegistryInstallerUtils.class);
 	
 	private static final int    MIN_PORT_NUMBER = 1024;
-	private static final int    MAX_PORT_NUMBER = 65535;
+	private static final int    MAX_PORT_NUMBER =  65535;
 	private static final String SEP = File.separator;
 	private static final String NL  = System.getProperty("line.separator");
 	private static Charset charset = StandardCharsets.UTF_8;

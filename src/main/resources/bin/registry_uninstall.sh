@@ -14,9 +14,9 @@
 #
 # $Id$
 
-# Bourne Shell script that allows easy execution of the Search Installer
+# Bourne Shell script that allows easy execution of the Registry Installer
 # without the need to set the CLASSPATH or having to type in that long java
-# command (java gov.nasa.pds.search.SearchInstaller ...)
+# command (java gov.nasa.pds.search.RegistryInstaller ...)
 
 # Expects the Registry jar file to be in the ../lib directory.
 
@@ -38,7 +38,6 @@ if [ ! -f ${LIB_DIR}/registry*.jar ]; then
     exit 1
 fi
 
-
 # Finds the jar file in LIB_DIR and sets it to REGISTRY_JAR.
 REGISTRY_JAR=`ls ${LIB_DIR}/registry-*.jar`
 EXTRA_LIB_JAR=`ls ${EXTRA_LIB_DIR}/*.jar`
@@ -47,9 +46,9 @@ EXTRA_LIB_JAR=`echo ${EXTRA_LIB_JAR} | sed 'y/ /:/'`
 #echo $EXTRA_LIB_JAR
 CLASSPATH=$REGISTRY_JAR:$EXTRA_LIB_JAR export CLASSPATH
 
-SEARCH_INSTALLER_PRESET_FILE=`ls ${SCRIPT_DIR}/search.properties` export SEARCH_INSTALLER_PRESET_FILE
-SEARCH_VER=`cat ${PARENT_DIR}/VERSION.txt` export SEARCH_VER
+REGISTRY_INSTALLER_PRESET_FILE=`ls ${SCRIPT_DIR}/registry.properties` export REGISTRY_INSTALLER_PRESET_FILE
+REGISTRY_VER=`cat ${PARENT_DIR}/VERSION.txt` export REGISTRY_VER
 
-# Executes Search Installer via the executable jar file
+# Executes Registry Installer via the executable jar file
 # Arguments are passed in to the tool via '$@'
-"${JAVA_HOME}"/bin/java gov.nasa.pds.search.SearchInstaller "$@"
+"${JAVA_HOME}"/bin/java gov.nasa.pds.search.RegistryInstaller -d 

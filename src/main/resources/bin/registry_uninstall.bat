@@ -14,7 +14,7 @@
 
 :: Batch file that allows easy execution of the Registry
 :: without the need to set the CLASSPATH or having to type in that long java
-:: command (java gov.nasa.pds.search.SearchInstaller ...)
+:: command (java gov.nasa.pds.search.RegistryInstaller ...)
 
 :: Expects Registry jar file to be located in the ..\dist directory.
 
@@ -22,8 +22,8 @@
 
 :: Check if the JAVA_HOME environment variable is set.
 if not defined JAVA_HOME (
-    echo The JAVA_HOME environment variable is not set.
-    goto END
+echo The JAVA_HOME environment variable is not set.
+goto END
 )
 
 :: Setup environment variables.
@@ -39,19 +39,20 @@ if exist "%LIB_DIR%\registry*.jar" (
    	set CLASSPATH=%LIB_DIR%\registry-2.0.0.jar
 ) 
 
-::for %%i in ("%EXTRA_LIB_DIR%"\*.jar) do (
+::for %%i in ("%EXTRA_LIB_DIR%\*.jar") do (
 ::	set CLASSPATH=%CLASSPATH%;%%i
-::	echo %CLASSPATH%
+::echo %CLASSPATH%
 ::)
+
 set CLASSPATH=%CLASSPATH%;%EXTRA_LIB_DIR%\log4j-1.2.16.jar;%EXTRA_LIB_DIR%\slf4j-api-1.6.6.jar;%EXTRA_LIB_DIR%\slf4j-log4j12-1.6.6.jar;%EXTRA_LIB_DIR%\commons-io-2.5.jar;%EXTRA_LIB_DIR%\commons-logging-1.0.4.jar
 echo %CLASSPATH%
 
-if exist "%SCRIPT_DIR%\search.properties" (
-	set SEARCH_INSTALLER_PRESET_FILE=%SCRIPT_DIR%\search.properties
-	echo %SEARCH_INSTALLER_PRESET_FILE%
+if exist "%SCRIPT_DIR%\registry.properties" (
+	set REGISTRY_INSTALLER_PRESET_FILE=%SCRIPT_DIR%\registry.properties
+	echo %REGISTRY_INSTALLER_PRESET_FILE%
 )
 
-:: Executes Search Installer via the executable jar file
-"%JAVA_HOME%"\bin\java gov.nasa.pds.search.SearchInstaller  %*
+:: Executes Registry Installer via the executable jar file
+"%JAVA_HOME%"\bin\java gov.nasa.pds.search.RegistryInstaller  -d
 
 :END

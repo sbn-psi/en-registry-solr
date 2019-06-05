@@ -11,37 +11,21 @@
   the responsibility to obtain export licenses or other export authority as 
   may be required before exporting such information to foreign countries or 
   providing access to foreign nationals.
-
-  $Id$
 -->
 
 <document>
   <properties>
     <title>About Registry</title>
-    <author email="Paul.Ramirez@jpl.nasa.gov">Paul Ramirez</author>
     <author email="Jordan.Padams@jpl.nasa.gov">Jordan Padams</author>
-    <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
+    <author email="Galen.Hollins@jpl.nasa.gov">Galen Hollins</author>
   </properties>
 
   <body>
     <section name="About Registry">
-      <p>The Registry provides the search capability for the PDS search index generated through the Search Core software. The core functionality for this service is satisfied by Apache Solr.  It contains 3 main components:
+      <p>The Registry component provides functionality for tracking, searching, auditing, locating, and maintaining artifacts within the system. These artifacts can range from data files and label files, schemas, dictionary definitions for objects and elements, services, etc. The core functionality for this component is satisfied by <a href="https://lucene.apache.org/solr/">Apache Solr</a>.
       </p>
 
-      <ul>
-        <li>Apache Solr Web Application</li>
-        <li>PDS Search Protocol</li>
-        <li>PDAP Search Protocol</li>
-      </ul>
-
-      <p>The following image describes the end points available through the Registry:</p>
-
-      <center>
-        <a href="images/search-service-endpoints.png" target="_blank"><img width="100%" alt="Search Service End Points" src="images/search-service-endpoints.png"/></a><br/>
-        Click on the image for a larger version.
-      </center>
-
-      <p>Please send comments, change requests and bug reports to the <a href="mailto:pds_operator@jpl.nasa.gov">PDS Operator</a> at pds_operator@jpl.nasa.gov.
+      <p>For Build 9b (June 2019), the Registry and Search components of the PDS4 system received a major upgrade and significant re-design to greater leverage the power of Apache Solr. We are continuing to improve our documentation, but please do not hesitate to send questions, comments, change requests and bug reports to the <a href="mailto:pds_operator@jpl.nasa.gov">PDS Operator</a> at pds_operator@jpl.nasa.gov and we would be happy to help work through any issues you are having.
       </p>
     </section>
   </body>

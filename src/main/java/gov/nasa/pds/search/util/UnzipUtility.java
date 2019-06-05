@@ -1,6 +1,6 @@
 package gov.nasa.pds.search.util;
 
-import static gov.nasa.pds.search.util.SearchInstallerUtils.print;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.print;
 
 import java.io.File;
 import java.io.FileOutputStream;

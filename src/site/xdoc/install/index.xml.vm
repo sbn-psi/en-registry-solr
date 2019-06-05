@@ -32,8 +32,8 @@
       <ul>
         <li><a href="#System_Requirements">System Requirements</a></li>
         <li><a href="#Unpacking_the_Package">Unpacking the Package</a></li>
-        <li><a href="#Install_Solr_and_Search_Service">Install Solr and Search Service</a></li>
-        <li><a href="#Install_Solr_and Search_Service_in_Docker">Install Solr and Search Service in Docker</a></li>
+        <li><a href="#Install_Solr_and_Registry_-_Docker">Install Solr and Registry - Docker</a> (preferred method)</li>
+        <li><a href="#Install_Solr_and_Registry_-_Standalone">Install Solr and Registry - Standalone</a></li>
         <li><a href="#Common_Errors">Common Errors</a></li>
       </ul>
     </section>
@@ -59,12 +59,11 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode)
         <p>The first command above checks whether the <i>java</i> executable is in the environment's path and the second command reports the version. If Java is not installed or the version is not at least 1.8, Java will need to be downloaded and installed in the current environment. Consult the local system administrator for installation of this software. For the do-it-yourself crowd, the Java software can be downloaded from the <a href="http://www.oracle.com/technetwork/java/javase/downloads/" target="_blank">Oracle Java Download</a> page. The suggested software package is the Java Standard Edition (SE) 8, either the JDK or the JRE package. The JDK package is not necessary to run the software but could be useful if development and compilation of Java software will also occur in the current environment.
         </p>
       </subsection>
-
-      <subsection name="Solr Server">
-        <p>The Search Service requires a Solr server. The suggested Solr server for this release is a minimal version of 7.5.0. Consult the local system administrator for installation of this software. For the do-it-yourself crowd, see the <a href="http://lucene.apache.org/solr/guide/7_5/solr-tutorial.html" target="_blank">Solr tutorial</a> document for installation and configuration detail.</p>
-
-        <p>The top-level directory where Solr is installed (i.e. the directory containing the <i>server</i> and <i>dist</i> sub-directories) will be referenced in these instructions as <i><b>$SOLR_HOME</b></i>.
-        </p>
+      
+      <subsection name="Memory Requirements">
+	<ol>
+	  <ul>The Registry requires >2GB memory available in order to perform normal operations</ul>
+	</ol>
       </subsection>
     </section>
 
@@ -72,11 +71,20 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode)
       <p>Download the <i>${project.artifactId}</i> package from the PDS <a href="ftp://pds.nasa.gov/pub/toplevel/2010/search/" target="_blank">FTP</a> site. The binary distribution is available in identical zip or tar/gzip packages. The installation directory may vary from environment to environment but in UNIX-based environments it is typical to install software packages in the <i>/home/pds</i> directory and in Windows-based environments it is typical to install software packages in the <i>C:\Program Files</i> directory. Unpack the selected binary distribution file with one of the following commands:
       </p>
 
-      <p>The top-level directory where the package is installed will be referenced in these instructions as <i><b>$SEARCH_HOME</b></i>.</p>
+      <p>The top-level directory where the package is installed will be referenced in these instructions as <i><b>$REGISTRY_HOME</b></i>.</p>
       <source>
 % unzip ${project.artifactId}-${project.version}-bin.zip
 or
 % tar -xzvf ${project.artifactId}-${project.version}-bin.tar.gz
+
+# Set the REGISTRY_HOME variable.
+% cd ${project.artifactId}-${project.version}
+
+# On Linux and Mac
+% export REGISTRY_HOME=$(pwd)
+
+# On Windows
+% set "REGISTRY_HOME=%cd%"
       </source>
 
       <p>Note: Depending on the platform, the native version of <i>tar</i> may produce an error when attempting to unpack the distribution file because many of the file paths are greater than 100 characters. If available, the GNU version of tar will resolve this problem. If that is not available or cannot be installed, the zipped package will work just fine in a UNIX environment.
@@ -108,266 +116,44 @@ or
           <p>This directory contains the jar for the Registry API (PDS Search Protocol).</p>
         </li>
         <li><b>conf/</b><br />
-          <p>This directory contains the configuration for the SOLR core for the PDS Search.  This directory path is the SEARCH_HOME referenced in the <a href="../../search-core/operate/index.html">Search Core Operation documentation</a>
+          <p>This directory contains the configuration for Apache Solr. This is where you can make updates to the Solr schema and solrconfig.xml.
           </p>
         </li>
         <li><b>lib/</b><br />
-          <p>This directory contains the jars used by the SOLR to parse XSLT.</p>
+          <p>This directory contains the jars used by the Solr to parse XSLT.</p>
         </li>
       </ul>
     </section>
 
-    <section name="Install Solr and Search Service">
-      <p>The Registry includes the configuration for Solr as well as the Java extensions written to support the PDS Search Protocol and PDAP Handler. In order to deploy Solr with the Registry configuration, please complete the following procedure:
+    <section name="Install Solr and Registry - Docker">
+      <p>This section details how to install and deploy a dockerized instance of the PDS Registry. It has been separated into 3 sections depending on the target platform.
       </p>
 
-      <subsection name="SOLR Installation">
-        <ol>
-          <li>
-            <p>Install SOLR as indicated in <a href="http://lucene.apache.org/solr/guide/7_6/installing-solr.html" target="_blank">Installing SOLR</a> document.</p>
-            <p>Unpack SOLR pkg</p>
-            <source>
-% tar xvf solr-7.6.0.tgz
-% cd solr-7.6.0
-            </source>      
-          	<p>NOTE: Remember the location of SOLR installation for later steps.</p>
-          </li>
-        </ol>
-      </subsection>
+      <ul>
+        <li><a href="#Linux_/_Mac_OS_X_-_Docker">Linux / Mac OS X</a></li>
+        <li><a href="#Windows_-_Docker">Windows</a></li>
+      </ul>
       
-      <subsection name="Search Service Installation for MAC users">
-        <ol>
-          <li>Move to the directory that search service installer script resides.
-            <source>
-% cd $SEARCH_HOME/bin
-            </source>
-          </li>
-          <li>Execute a search service installer script.
-            <source>
-% ./search_install.sh
-            </source>
-          </li>
-          <li>Enter the harvest installation location, install mode and SOLR installation location that is done in previous step.
-            <source>
-Enter location of Harvest installation: /home/pds
-Enter an installation mode (docker or standalone): standalone
-
-Enter location of SOLR installation: /home/pds/solr-7.6.0
-            </source>
-            
-             <p>You should see output similar to the following: </p>
-          
-          <source>
-Harvest installation location -  /home/pds
-STARTING Search Service Installer in standalone mode.
-
-  Search Service   .....   
-       ( v 2.0.0 )
-       ( installing on platform: Mac OS X )
-       ( IP Address:- 192.168.1.65 )
-       ( Host Name:- MT-106917 )
-
-Enter location of SOLR installation: /Users/pds/SOLR/solr-7.6.0 
- Copied a directory from /Users/pds/search-service/target/search-service-2.0.0/bin/../dist to /Users/pds/SOLR/solr-7.6.0/contrib/pds/lib
- Copied a directory from /Users/pds/search-service/target/search-service-2.0.0/bin/../conf to /Users/pds/SOLR/solr-7.6.0/server/solr/configsets/pds/conf
- Copied a file from /Users/pds/search-service/target/search-service-2.0.0/bin/../lib/saxon-9.jar to /Users/pds/SOLR/solr-7.6.0/server/solr-webapp/webapp/WEB-INF/lib/saxon-9.jar
- Copied a file from /Users/pds/search-service/target/search-service-2.0.0/bin/../lib/saxon-dom-9.jar to /Users/pds/SOLR/solr-7.6.0/server/solr-webapp/webapp/WEB-INF/lib/saxon-dom-9.jar
-
-Starting a SOLR server ....Waiting up to 180 seconds to see Solr running on port 8983....
-*** [WARN] *** Your open file limit is currently 10240.  
- It should be set to 65000 to avoid operational disruption. 
- If you no longer wish to see this warning, set SOLR_ULIMIT_CHECKS to false in your profile or solr.in.sh
-*** [WARN] ***  Your Max Processes Limit is currently 1418. 
- It should be set to 65000 to avoid operational disruption. 
- If you no longer wish to see this warning, set SOLR_ULIMIT_CHECKS to false in your profile or solr.in.sh
-Waiting up to 180 seconds to see Solr running on port 8983 [-]  
-Started Solr server on port 8983 (pid=67836). Happy searching!
-
-    
-Return status from the SOLR server startup = 0
-The SOLR server is started successfully.
-Creating Registry Service collection (.system) ...
-{
-  "responseHeader":{
-    "status":400,
-    "QTime":45},
-  "Operation create caused exception:":"org.apache.solr.common.SolrException:org.apache.solr.common.SolrException: collection already exists: .system",
-  "exception":{
-    "msg":"collection already exists: .system",
-    "rspCode":400},
-  "error":{
-    "metadata":[
-      "error-class","org.apache.solr.common.SolrException",
-      "root-error-class","org.apache.solr.common.SolrException"],
-    "msg":"collection already exists: .system",
-    "code":400}}
-Return status from creating registry service collection (.system) = 0
-Registry service collection (.system) is created successfully.
-{
-  "responseHeader":{
-    "status":0,
-    "QTime":122}}
-Return status from creating registry service collection alias = 0
-Registry service collection alias (.system) is created successfully.
-Creating Registry Service collection (xpath) ...
-{
-  "responseHeader":{
-    "status":0,
-    "QTime":3528},
-  "success":{
-    "192.168.1.65:8983_solr":{
-      "responseHeader":{
-        "status":0,
-        "QTime":1881},
-      "core":"xpath_shard1_replica_n1"}},
-  "warning":"Using _default configset. Data driven schema functionality is enabled by default, which is NOT RECOMMENDED for production use. To turn it off: curl http://{host:port}/solr/xpath/config -d '{\"set-user-property\": {\"update.autoCreateFields\":\"false\"}}'"}
-Registry service collection (xpath) is created successfully.
-{
-  "responseHeader":{
-    "status":0,
-    "QTime":120}}
-Registry service collection alias (xpath) is created successfully.
-Creating Search Service collection (pds) ...
-Created collection 'pds' with 1 shard(s), 1 replica(s) with config-set 'pds'
-Return status from creating search service collection = 0
-Search service collection (pds) is created successfully.
-
-          </source>        
-          </li>
-          <li>Verify installation.
-            <p>Open up your favorite browser and type in <i>http://localhost:8983/solr</i>. You should see the Solr admin interface.
-            </p>
-          </li>
-        </ol>
-      </subsection> 
-      
-      <subsection name="Search Service Installation for Windows users">
-        <ol>
-          <li>Open Command Prompt via the <b><i>'Command Prompt'</i></b> executable.
-          </li>
-          <p>
-          </p>
-          
-          <li>Move to the directory that search service installer script resides.
-            <source>
-% cd %SEARCH_HOME%\bin
-            </source>
-          </li>
-          <li>Execute a search service installer script.
-            <source>
-% search_install.bat
-            </source>
-          </li>
-          <li>Enter the harvest installation location, install mode and SOLR installation location that is done in previous step.
-            <source>
-Enter location of Harvest installation: C:\home\pds
-Enter an installation mode (docker or standalone): standalone
-
-Enter location of SOLR installation: C:\home\pds\solr-7.6.0
-            </source>
-            
-             <p>You should see output similar to the following: </p>
-          
-          <source>
-Harvest installation location -  C:\home\pds
-STARTING Search Service Installer in standalone mode.
-
-  Search Service   .....   
-       ( v 2.0.0 )
-       ( installing on platform: Windows 7 )
-       ( IP Address:- 192.168.1.65 )
-       ( Host Name:- PDS-HP )
-
-Enter location of SOLR installation: C:\Users\pds\solr-7.6.0
- Copied a directory from C:\Users\pds\search-service-2.0.0\bin\..\dist to C:\Users\pds\solr-7.6.0\contrib\pds\lib
- Copied a directory from C:\Users\pds\search-service-2.0.0\bin\..\conf to C:\Users\pds\solr-7.6.0\server\solr\configs
-ets\pds\conf
- Copied a file from C:\Users\pds\search-service-2.0.0\bin\..\lib\saxon-9.jar to C:\Users\pds\solr-7.6.0\server\solr-w
-ebapp\webapp\WEB-INF\lib\saxon-9.jar
- Copied a file from C:\Users\pds\search-service-2.0.0\bin\..\lib\saxon-dom-9.jar to C:\Users\pds\solr-7.6.0\server\so
-lr-webapp\webapp\WEB-INF\lib\saxon-dom-9.jar
-
-Starting a SOLR server ....Waiting up to 180 seconds to see Solr running on port 8983....
-SOLR server is started on Windows 7
-Creating Registry Service collection (.system) ...
-{
-  "responseHeader":{
-    "status":0,
-    "QTime":11259},
-  "success":{
-    "169.254.193.90:8983_solr":{
-      "responseHeader":{
-        "status":0,
-        "QTime":7562},
-      "core":".system_shard1_replica_n1"}},
-  "warning":"Using _default configset. Data driven schema functionality is enabled by default, which is NOT RECOMMENDED for production use. To turn it off: curl http://{host:port}/solr/.system/config -d '{\"set-user-property\": {\"update.autoCreateFields\":\"false\"}}'"}
-Return status from creating registry service collection (.system) = 0
-Registry service collection (.system) is created successfully.
-{
-  "responseHeader":{
-    "status":0,
-    "QTime":384}}
-Return status from creating registry service collection alias = 0
-Registry service collection alias (.system) is created successfully.
-Creating Registry Service collection (xpath) ...
-{
-  "responseHeader":{
-    "status":0,
-    "QTime":17582},
-  "success":{
-    "169.254.193.90:8983_solr":{
-      "responseHeader":{
-        "status":0,
-        "QTime":13858},
-      "core":"xpath_shard1_replica_n1"}},
-  "warning":"Using _default configset. Data driven schema functionality is enabled by default, which is NOT RECOMMENDED for production use. To turn it off: curl http://{host:port}/solr/xpath/config -d '{\"set-user-property\": {\"update.autoCreateFields\":\"false\"}}'"}
-Registry service collection (xpath) is created successfully.
-{
-  "responseHeader":{
-    "status":0,
-    "QTime":355}}
-Registry service collection alias (xpath) is created successfully.
-Creating Search Service collection (pds) ...
-Created collection 'pds' with 1 shard(s), 1 replica(s) with config-set 'pds'
-Return status from creating search service collection = 0
-Search service collection (pds) is created successfully.
-
-          </source>        
-          </li>
-          <li>Verify installation.
-            <p>Open up your favorite browser and type in <i>http://localhost:8983/solr</i>. You should see the Solr admin interface.
-            </p>
-          </li>
-        </ol>
-      </subsection>        
-    </section>
-
-    <section name="Install Solr and Search Service in Docker">
-      <p>This section details how to install and deploy a dockerized instance of the PDS Search Service. It has been separated into 3 sections depending on the target platform.
-      </p>
-      
-      <subsection name="MAC Users">
-        <p>Note that this installation is still in its experimental stages and has not been fully tested.
-        </p>
+      <subsection name="Linux / Mac OS X - Docker">
+	<p>The following Registry installation procedure is for Linux and Mac operating systems. Please contact Engineering Node if you run into any issues.</p>
 
         <ol>
           <li>
             <p>Install and Run Docker Desktop for Mac as indicated in <a href="https://docs.docker.com/docker-for-mac/install/" target="_blank">Install Docker Desktop for Mac</a> website if your system doesn't have Docker.</p>
           </li>
           
-          <li>Move to the directory that search service installer script resides.
+          <li>Move to the directory that registry installer script resides.
             <source>
-% cd $SEARCH_HOME/bin
+% cd $REGISTRY_HOME/bin
             </source>
           </li>
-          <li>Execute a search service installer script.
+          <li>Execute a registry installer script.
             <source>
-% ./search_install.sh
+% ./registry_install.sh
             </source>
           </li>
-          <li>Enter the harvest installation location and install mode (docker).
+          <li>Enter the install mode (docker).
             <source>
-Enter location of Harvest installation: /home/pds
 Enter an installation mode (docker or standalone): docker
             </source>
                      
@@ -375,23 +161,22 @@ Enter an installation mode (docker or standalone): docker
           </p>
 
           <source>
-Harvest installation location -  /home/pds
-STARTING Search Service Installer in docker mode.
+STARTING Registry Installer in docker mode.
 
-  Search Service   .....   
+  Registry   .....   
        ( v 2.0.0 )
        ( installing on platform: Mac OS X )
        ( IP Address:- 192.168.1.65 )
        ( Host Name:- MT-106917 )
 
-Execute to install Registry/Search Services in Docker...
-Building Registry/Search Docker Image.                               SUCCESS
-Starting Registry/Search Docker Container.                           SUCCESS
+Execute to install Registry in Docker...
+Building Registry Docker Image.                               SUCCESS
+Starting Registry Docker Container.                           SUCCESS
 Waiting for Solr server to start (60 seconds)...
 Creating a Registry Service Blob collection (.system)                SUCCESS
 Creating a Registry Service XPath collection (xpath)                 SUCCESS
-Creating a Search Service collection (pds)                           SUCCESS
-Completed to install Registry/Search Services in Docker.
+Creating a Search collection (pds)                           SUCCESS
+Completed to install Registry in Docker.
 
           </source>     
           </li>  
@@ -406,19 +191,18 @@ Completed to install Registry/Search Services in Docker.
         <ol>
           <p>NOTE: Make sure that there is a Docker installation and up and running on the platform.</p>
           
-          <li>Move to the directory that search service installer script resides.
+          <li>Move to the directory that registry installer script resides.
             <source>
-% cd $SEARCH_HOME/bin
+% cd $REGISTRY_HOME/bin
             </source>
           </li>
-          <li>Execute a search service installer script.
+          <li>Execute a registry installer script.
             <source>
-% ./search_install.sh
+% ./registry_install.sh
             </source>
           </li>
-          <li>Enter the harvest installation location and install mode (docker).
+          <li>Enter the install mode (docker).
             <source>
-Enter location of Harvest installation: /home/pds
 Enter an installation mode (docker or standalone): docker
             </source>
            
@@ -426,24 +210,22 @@ Enter an installation mode (docker or standalone): docker
           </p>
 
           <source>
-Enter location of Harvest installation: /home/pds
 Enter an installation mode (docker or standalone): docker
-Harvest installation location -  /home/pds
-STARTING Search Service Installer in docker mode.
+STARTING Registry Installer in docker mode.
 
-  Search Service   .....   ( v 2.0.0 )
+  Registry   .....   ( v 2.0.0 )
                            ( installing on platform: Linux )
                            ( IP Address:- 192.168.1.65 )
        					   ( Host Name:- pds )
 
-Installing Registry/Search Services in Docker...
-Building Registry/Search Docker Image.                               SUCCESS
-Starting Registry/Search Docker Container.                           SUCCESS
+Installing Registry in Docker...
+Building Registry Docker Image.                               SUCCESS
+Starting Registry Docker Container.                           SUCCESS
 Waiting for Solr server to start (30 seconds)...
 Creating a Registry Service Blob collection (.system)                SUCCESS
 Creating a Registry Service XPath collection (xpath)                 SUCCESS
-Creating a Search Service collection (pds)                           
-Completed to install Registry/Search Services in Docker.
+Creating a Search collection (pds)                           
+Completed to install Registry in Docker.
 
           </source>     
           </li>  
@@ -454,7 +236,7 @@ Completed to install Registry/Search Services in Docker.
         </ol>
       </subsection>
       
-      <subsection name="Windows Users">
+      <subsection name="Windows - Docker">
         <p>Note that this installation is still in its experimental stages and has not been fully tested.
         </p>
                 
@@ -475,7 +257,7 @@ Completed to install Registry/Search Services in Docker.
           
           <li>Configure the VM.
           
-          <p><i>Oracle VM VirtualBox</i> should have been installed from step 1). Open up this application by clicking on the <i>Oracle VM VirtualBox Manager</i> icon. The VM settings configured for Docker should be optimized to boost the performance of the Search Service. To do this, right-click on the VM that is labeled <i>default</i>, then click on <i>Settings</i>.
+          <p><i>Oracle VM VirtualBox</i> should have been installed from step 1). Open up this application by clicking on the <i>Oracle VM VirtualBox Manager</i> icon. The VM settings configured for Docker should be optimized to boost the performance of the Registry. To do this, right-click on the VM that is labeled <i>default</i>, then click on <i>Settings</i>.
           </p>
           
           <p>Once inside the Settings window, click on <i>System</i> and in the <i>Motherboard</i> tab, increase the Base Memory accordingly:
@@ -507,42 +289,40 @@ Completed to install Registry/Search Services in Docker.
           
           </li>
           
-          <li>Run the search service installer script via the Docker Terminal. 
+          <li>Run the registry installer script via the Docker Terminal. 
           
           <p>The Docker Terminal runs in a Linux-like environment. The VM mounts the user's home directory and it can be accessed in a Linux-style path. So <i>C:\Users\PDS_User</i> can be accessed through this Terminal Window like so: <i>/c/Users/PDS_User</i>.
           </p>
           
-          <p>It is recommended that the Registry package be installed under the user's home directory. Assuming that the Registry package is installed under C:\Users\PDS_User\search-service, do the following:
+          <p>It is recommended that the Registry package be installed under the user's home directory. Assuming that the Registry package is installed under C:\Users\PDS_User\registry, do the following:
           </p>
           
           <source>
-% cd /c/Users/PDS_User/search-service/bin
+% cd /c/Users/PDS_User/registry/bin
 
-% ./search_install.sh
+% ./registry_install.sh
           </source>
           
           <p>You should see output similar to the following:
           </p>
           
           <source>
-          
-Harvest installation location -  /c/Users/PDS_User/registry
-STARTING Search Service Installer in docker mode.
+STARTING Registry Installer in docker mode.
 
-  Search Service   .....   
+  Registry   .....   
        ( v 2.0.0 )
        ( installing on platform: Windows 7 )
        ( IP Address:- 192.168.1.65 )
        ( Host Name:- MT-106917 )
 
-Execute to install Registry/Search Services in Docker...
-Building Registry/Search Docker Image.                               SUCCESS
-Starting Registry/Search Docker Container.                           SUCCESS
+Execute to install Registry in Docker...
+Building Registry Docker Image.                               SUCCESS
+Starting Registry Docker Container.                           SUCCESS
 Waiting for Solr server to start (60 seconds)...
 Creating a Registry Service Blob collection (.system)                SUCCESS
 Creating a Registry Service XPath collection (xpath)                 SUCCESS
-Creating a Search Service collection (pds)                           SUCCESS
-Completed to install Registry/Search Services in Docker.
+Creating a Search collection (pds)                           SUCCESS
+Completed to install Registry in Docker.
 
           </source>         
           </li>
@@ -569,11 +349,267 @@ It is recommended to double check and reset permissions for sensitive files and 
         </p>
       
       </subsection>
+    </section>
+    
+    <section name="Install Solr and Registry - Standalone">
+      <p>This section of the Registry Installation guide is for installing Solr and the Registry as a standalone application outside of Docker. The Docker installation method is the preferred method, however, the standalone version is acceptable in certain circumstances. Please consult Engineering Node if you have any questions about what installation method you should pursue.
+      </p>
       
+      <ul>
+        <li><a href="#Linux / Mac_OS_X_-_Standalone">Linux / Mac OS X</a></li>
+        <li><a href="#Windows_-_Standalone">Windows</a></li>
+      </ul>
       
+      <subsection name="Linux / Mac OS X - Standalone">
+        <ol>
+          <li>
+            <p>Install Solr as indicated in <a href="http://lucene.apache.org/solr/guide/7_6/installing-solr.html" target="_blank">Installing SOLR</a> document.</p>
+            <p>Unpack SOLR pkg and set SOLR_HOME</p>
+            <source>
+              % tar xvf solr-7.6.0.tgz
+              % cd solr-7.6.0
+              
+              # Set SOLR_HOME
+              % export SOLR_HOME=$(pwd)
+              % echo $SOLR_HOME
+              /home/pds/solr-7.6.0
+            </source>      
+            <p>NOTE: The export command will be used to store the directory of the Solr installation.</p>
+          </li>
+          <li>Move to the directory that registry installer script resides (Note: See <a href="#Unpacking_the_Package">above</a> for configuring the REGISTRY_HOME variable or find out what that path represents.)
+            <source>
+              % cd $REGISTRY_HOME/bin
+            </source>
+          </li>
+          <li>Execute the registry installer software:
+            <source>
+              % ./registry_install.sh
+            </source>
+          </li>
+          <li>Enter the install mode and SOLR installation location that is done in previous step.
+            <source>
+              Enter an installation mode (docker or standalone): standalone
+              
+              Enter location of SOLR installation: /home/pds/solr-7.6.0
+            </source>
+            
+            <p>You should see output similar to the following: </p>
+            
+            <source>
+              STARTING Registry Installer in standalone mode.
+              
+              Registry   .....   
+              ( v 2.0.0 )
+              ( installing on platform: Mac OS X )
+              ( IP Address:- 192.168.1.65 )
+              ( Host Name:- MT-106917 )
+              
+              Enter location of SOLR installation: /Users/pds/SOLR/solr-7.6.0 
+              Copied a directory from /Users/pds/registry/target/registry-2.0.0/bin/../dist to /Users/pds/SOLR/solr-7.6.0/contrib/pds/lib
+              Copied a directory from /Users/pds/registry/target/registry-2.0.0/bin/../conf to /Users/pds/SOLR/solr-7.6.0/server/solr/configsets/pds/conf
+              Copied a file from /Users/pds/registry/target/registry-2.0.0/bin/../lib/saxon-9.jar to /Users/pds/SOLR/solr-7.6.0/server/solr-webapp/webapp/WEB-INF/lib/saxon-9.jar
+              Copied a file from /Users/pds/registry/target/registry-2.0.0/bin/../lib/saxon-dom-9.jar to /Users/pds/SOLR/solr-7.6.0/server/solr-webapp/webapp/WEB-INF/lib/saxon-dom-9.jar
+              
+              Starting a SOLR server ....Waiting up to 180 seconds to see Solr running on port 8983....
+              *** [WARN] *** Your open file limit is currently 10240.  
+              It should be set to 65000 to avoid operational disruption. 
+              If you no longer wish to see this warning, set SOLR_ULIMIT_CHECKS to false in your profile or solr.in.sh
+              *** [WARN] ***  Your Max Processes Limit is currently 1418. 
+              It should be set to 65000 to avoid operational disruption. 
+              If you no longer wish to see this warning, set SOLR_ULIMIT_CHECKS to false in your profile or solr.in.sh
+              Waiting up to 180 seconds to see Solr running on port 8983 [-]  
+              Started Solr server on port 8983 (pid=67836). Happy searching!
+              
+              
+              Return status from the SOLR server startup = 0
+              The SOLR server is started successfully.
+              Creating Registry Service collection (.system) ...
+              {
+              "responseHeader":{
+              "status":400,
+              "QTime":45},
+              "Operation create caused exception:":"org.apache.solr.common.SolrException:org.apache.solr.common.SolrException: collection already exists: .system",
+              "exception":{
+              "msg":"collection already exists: .system",
+              "rspCode":400},
+              "error":{
+              "metadata":[
+              "error-class","org.apache.solr.common.SolrException",
+              "root-error-class","org.apache.solr.common.SolrException"],
+              "msg":"collection already exists: .system",
+              "code":400}}
+              Return status from creating registry service collection (.system) = 0
+              Registry service collection (.system) is created successfully.
+              {
+              "responseHeader":{
+              "status":0,
+              "QTime":122}}
+              Return status from creating registry service collection alias = 0
+              Registry service collection alias (.system) is created successfully.
+              Creating Registry Service collection (xpath) ...
+              {
+              "responseHeader":{
+              "status":0,
+              "QTime":3528},
+              "success":{
+              "192.168.1.65:8983_solr":{
+              "responseHeader":{
+              "status":0,
+              "QTime":1881},
+              "core":"xpath_shard1_replica_n1"}},
+              "warning":"Using _default configset. Data driven schema functionality is enabled by default, which is NOT RECOMMENDED for production use. To turn it off: curl http://{host:port}/solr/xpath/config -d '{\"set-user-property\": {\"update.autoCreateFields\":\"false\"}}'"}
+              Registry service collection (xpath) is created successfully.
+              {
+              "responseHeader":{
+              "status":0,
+              "QTime":120}}
+              Registry service collection alias (xpath) is created successfully.
+              Creating Search collection (pds) ...
+              Created collection 'pds' with 1 shard(s), 1 replica(s) with config-set 'pds'
+              Return status from creating search collection = 0
+              Search collection (pds) is created successfully.
+              
+            </source>        
+          </li>
+          <li>Verify installation.
+            <p>Open up your favorite browser and type in <i>http://localhost:8983/solr</i>. You should see the Solr admin interface.
+            </p>
+          </li>
+        </ol>
+      </subsection> 
+      
+      <subsection name="Windows - Standalone">
+        <ol>
+          <li>Open Command Prompt via the <b><i>'Command Prompt'</i></b> executable.
+          </li>
+          
+          <li>
+            <p>Install Solr as indicated in <a href="http://lucene.apache.org/solr/guide/7_6/installing-solr.html" target="_blank">Installing SOLR</a> document.</p>
+            <p>Unpack SOLR pkg and set SOLR_HOME</p>
+            <source>
+              % tar xvf solr-7.6.0.tgz
+              % cd solr-7.6.0
+              
+              # Set SOLR_HOME
+              $ set "SOLR_HOME=%cd%"
+              $ echo %SOLR_HOME%
+              /home/pds/solr-7.6.0
+            </source>      
+          </li>
+          
+          <li>Move to the directory that registry installer script resides.
+            <source>
+              % cd %REGISTRY_HOME%\bin
+            </source>
+          </li>
+          <li>Execute a registry installer script.
+            <source>
+              % registry_install.bat
+            </source>
+          </li>
+          <li>Enter the install mode and SOLR installation location that is done in previous step.
+            <source>
+              Enter an installation mode (docker or standalone): standalone
+              
+              Enter location of SOLR installation: C:\home\pds\solr-7.6.0
+            </source>
+            
+            <p>You should see output similar to the following: </p>
+            
+            <source>
+              STARTING Registry Installer in standalone mode.
+              
+              Registry   .....   
+              ( v 2.0.0 )
+              ( installing on platform: Windows 7 )
+              ( IP Address:- 192.168.1.65 )
+              ( Host Name:- PDS-HP )
+              
+              Enter location of SOLR installation: C:\Users\pds\solr-7.6.0
+              Copied a directory from C:\Users\pds\registry-2.0.0\bin\..\dist to C:\Users\pds\solr-7.6.0\contrib\pds\lib
+              Copied a directory from C:\Users\pds\registry-2.0.0\bin\..\conf to C:\Users\pds\solr-7.6.0\server\solr\configs
+              ets\pds\conf
+              Copied a file from C:\Users\pds\registry-2.0.0\bin\..\lib\saxon-9.jar to C:\Users\pds\solr-7.6.0\server\solr-w
+              ebapp\webapp\WEB-INF\lib\saxon-9.jar
+              Copied a file from C:\Users\pds\registry-2.0.0\bin\..\lib\saxon-dom-9.jar to C:\Users\pds\solr-7.6.0\server\so
+              lr-webapp\webapp\WEB-INF\lib\saxon-dom-9.jar
+              
+              Starting a SOLR server ....Waiting up to 180 seconds to see Solr running on port 8983....
+              SOLR server is started on Windows 7
+              Creating Registry Service collection (.system) ...
+              {
+              "responseHeader":{
+              "status":0,
+              "QTime":11259},
+              "success":{
+              "169.254.193.90:8983_solr":{
+              "responseHeader":{
+              "status":0,
+              "QTime":7562},
+              "core":".system_shard1_replica_n1"}},
+              "warning":"Using _default configset. Data driven schema functionality is enabled by default, which is NOT RECOMMENDED for production use. To turn it off: curl http://{host:port}/solr/.system/config -d '{\"set-user-property\": {\"update.autoCreateFields\":\"false\"}}'"}
+              Return status from creating registry service collection (.system) = 0
+              Registry service collection (.system) is created successfully.
+              {
+              "responseHeader":{
+              "status":0,
+              "QTime":384}}
+              Return status from creating registry service collection alias = 0
+              Registry service collection alias (.system) is created successfully.
+              Creating Registry Service collection (xpath) ...
+              {
+              "responseHeader":{
+              "status":0,
+              "QTime":17582},
+              "success":{
+              "169.254.193.90:8983_solr":{
+              "responseHeader":{
+              "status":0,
+              "QTime":13858},
+              "core":"xpath_shard1_replica_n1"}},
+              "warning":"Using _default configset. Data driven schema functionality is enabled by default, which is NOT RECOMMENDED for production use. To turn it off: curl http://{host:port}/solr/xpath/config -d '{\"set-user-property\": {\"update.autoCreateFields\":\"false\"}}'"}
+              Registry service collection (xpath) is created successfully.
+              {
+              "responseHeader":{
+              "status":0,
+              "QTime":355}}
+              Registry service collection alias (xpath) is created successfully.
+              Creating Search collection (pds) ...
+              Created collection 'pds' with 1 shard(s), 1 replica(s) with config-set 'pds'
+              Return status from creating search collection = 0
+              Search collection (pds) is created successfully.
+              
+            </source>        
+          </li>
+          <li>Verify installation.
+            <p>Open up your favorite browser and type in <i>http://localhost:8983/solr</i>. You should see the Solr admin interface.
+            </p>
+          </li>
+        </ol>
+      </subsection>        
     </section>
 
     <section name="Common Errors">
+      <subsection name="Failed to create a registry service collection (.system)...">
+	<p>This issue could happen for several reasons, but we will need to look through the logs to determine the issue:
+	</p>
+	<ul>
+	  <li>Look at Solr Console log to determine where the issue may lay:
+	    <source>
+# STANDALONE INSTALLATION
+open $SOLR_HOME/server/logs/solr.log
+open $SOLR_HOME/server/logs/solr-8983-console.log
+	    </source>
+	  </li>
+	  <li>If the log output states:
+	    <source>
+Error occurred during initialization of VM
+Could not reserve enough space for 2097152KB object heap
+	    </source>
+	    TBD solution
+	  </li>
+	</ul>
+      </subsection>
       <subsection name="HTTP 404 - Requested Resource Not Available">
         <p>This error means the application failed to install correctly. The following are potential mitigation strategies:
         </p>

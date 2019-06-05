@@ -4,28 +4,28 @@ import static java.lang.System.getProperty;
 import static java.lang.System.getenv;
 
 import gov.nasa.pds.search.util.InstallerPresets;
-import gov.nasa.pds.search.util.SearchInstallerUtils;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.bailOutMissingOption;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.bailOutWithMessage;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.copy;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.copyAll;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.copyAllType;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.copyDir;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.createFile;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.deleteDirectory;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.flushConsole;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.getFileContents;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.getPreset;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.getInstallerPresets;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.isLocalPortAvailable;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.isRemotePortListening;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.openUpPermissions;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.print;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.readLine;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.readPassword;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.readRequiredLine;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.serverListening;
-import static gov.nasa.pds.search.util.SearchInstallerUtils.writeToFile;
+import gov.nasa.pds.search.util.RegistryInstallerUtils;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.bailOutMissingOption;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.bailOutWithMessage;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.copy;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.copyAll;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.copyAllType;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.copyDir;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.createFile;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.deleteDirectory;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.flushConsole;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.getFileContents;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.getPreset;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.getInstallerPresets;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.isLocalPortAvailable;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.isRemotePortListening;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.openUpPermissions;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.print;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.readLine;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.readPassword;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.readRequiredLine;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.serverListening;
+import static gov.nasa.pds.search.util.RegistryInstallerUtils.writeToFile;
 import static gov.nasa.pds.search.util.UnzipUtility.unzipFile;
 
 import java.io.BufferedReader;
@@ -57,8 +57,8 @@ import org.apache.commons.io.FilenameUtils;
  * @author hyunlee
  *
  */
-public class SearchInstaller {
-	private static final Logger log = LoggerFactory.getLogger(SearchInstaller.class);
+public class RegistryInstaller {
+	private static final Logger log = LoggerFactory.getLogger(RegistryInstaller.class);
 
 	private static final String SEP = File.separator;
 
@@ -75,13 +75,13 @@ public class SearchInstaller {
 	private static int solrPort = 8983;
 	private static String solrHost = "localhost";
 
-	private static String search_version;
-	private static String search_root;
-	private static String search_solr_root;
-	private static String search_solr_bin;
-	private static String search_solr_conf;
-	private static String search_solr_lib;
-	private static String search_docker_build;
+	private static String registry_version;
+	private static String registry_root;
+	private static String registry_solr_root;
+	private static String registry_solr_bin;
+	private static String registry_solr_conf;
+	private static String registry_solr_lib;
+	private static String registry_docker_build;
 
 	private static String installType;
 
@@ -93,7 +93,7 @@ public class SearchInstaller {
 	private static int numShards = 1;
 	private static int replicationFactor = 1;
 
-	public SearchInstaller() {}
+	public RegistryInstaller() {}
 
 	public static void main(String args[]) {
 		for (String arg : args) {
@@ -104,22 +104,22 @@ public class SearchInstaller {
 
         }
 		Scanner reader = new Scanner(System.in);  // Reading from System.in
-		System.out.print("Enter location of Harvest installation: ");
-		harvest_home = reader.next();
+//		System.out.print("Enter location of Harvest installation: ");
+//		harvest_home = reader.next();
 
 		System.out.print("Enter an installation mode (docker or standalone): ");
 		installType = reader.next(); // Scans the next token of the input as a string.			
 
-		System.out.println("Harvest installation location -  " + harvest_home);
+//		System.out.println("Harvest installation location -  " + harvest_home);
 
 		if (installType.equalsIgnoreCase("docker"))
 			docker_mode = true;
 
 		Path currentRelativePath = Paths.get("");
-		search_root = currentRelativePath.toAbsolutePath().toString() + SEP + "..";
-		//System.out.println("Current relative path is (SEARCH_HOME): " + search_root);
+		registry_root = currentRelativePath.toAbsolutePath().toString() + SEP + "..";
+		//System.out.println("Current relative path is (SEARCH_HOME): " + registry_root);
 
-		print("STARTING Search Service Installer in " + installType + " mode.");
+		print("STARTING Registry Installer in " + installType + " mode.");
 		getVersion();
 		getOsName();
 		getTerminal();
@@ -134,7 +134,7 @@ public class SearchInstaller {
 
 		if (!docker_mode) {  // standalone mode
 			System.out.print("Enter location of SOLR installation: ");
-			search_solr_root = reader.next();
+			registry_solr_root = reader.next();
 
 			init();
 			if (osName.contains("Windows")) {
@@ -165,20 +165,20 @@ public class SearchInstaller {
 			createSearchCollection();
 		}
 		else {
-			search_docker_build = search_root+SEP+"build";
+			registry_docker_build = registry_root+SEP+"build";
 			prompt = "noPrompt";
             //print("termName = " + termName);
 			if (osName.contains("Windows") && termName.contains("cygwin")) {
 				envStr = "bash";
 				//print("envStr = " + envStr);
-				String tmpCmd = FilenameUtils.separatorsToUnix(SEP + search_docker_build+SEP+dockerCmd);
+				String tmpCmd = FilenameUtils.separatorsToUnix(SEP + registry_docker_build+SEP+dockerCmd);
 				print("tmpCmd = " + tmpCmd);
 				dockerCmd = tmpCmd.replace(":", "");
 				dockerCmd = FilenameUtils.normalize(dockerCmd, true);
 				//print("dockerCmd = " + dockerCmd);
 			}
 			else {
-				dockerCmd = FilenameUtils.separatorsToSystem(search_docker_build+SEP+dockerCmd);
+				dockerCmd = FilenameUtils.separatorsToSystem(registry_docker_build+SEP+dockerCmd);
 				//print("dockerCmd = " + dockerCmd);
 			}
 			
@@ -192,9 +192,9 @@ public class SearchInstaller {
 	}
 
 	private static void init() {
-		search_solr_bin  = search_solr_root+SEP+"bin";
-		search_solr_conf = search_solr_root+SEP+"server"+SEP+"solr"+SEP+"configsets"+SEP+"pds"+SEP+"conf";
-		search_solr_lib  = search_solr_root+SEP+"contrib"+SEP+"pds"+SEP+"lib";
+		registry_solr_bin  = registry_solr_root+SEP+"bin";
+		registry_solr_conf = registry_solr_root+SEP+"server"+SEP+"solr"+SEP+"configsets"+SEP+"pds"+SEP+"conf";
+		registry_solr_lib  = registry_solr_root+SEP+"contrib"+SEP+"pds"+SEP+"lib";
 	}
 
 	private static void exit(int status) {
@@ -202,8 +202,8 @@ public class SearchInstaller {
 	}
 
 	private static void getVersion() {
-		//System.out.println("getenv(SEARCH_VER) = " + getenv("SEARCH_VER"));
-		search_version = getenv("SEARCH_VER");
+		//System.out.println("getenv(REGISTRY_VER) = " + getenv("REGISTRY_VER"));
+		registry_version = getenv("REGISTRY_VER");
 
 	}
 
@@ -226,8 +226,8 @@ public class SearchInstaller {
 
 	private static void printWelcomeMessage() throws Exception {
 		print ("");
-		print ("  Search Service   .....   ");
-		print ("       ( v " + search_version + " )");
+		print ("  Registry   .....   ");
+		print ("       ( v " + registry_version + " )");
 		print ("       ( installing on platform: " + osName + " )");
 		InetAddress inetAddress = InetAddress.getLocalHost();
         print ("       ( IP Address:- " + inetAddress.getHostAddress() + " )");
@@ -238,16 +238,16 @@ public class SearchInstaller {
 	private static void setupSOLRDirs() {
         try {
 			// Copy the Search API JAR to necessary location for Solr to recogize it
-			copyDir(search_root+SEP+"dist", search_solr_lib);
+			copyDir(registry_root+SEP+"dist", registry_solr_lib);
 
 			// Copy 'pds' config set to necessary location for Solr to recognize it
-			copyDir(search_root+SEP+"conf", search_solr_conf);
+			copyDir(registry_root+SEP+"conf", registry_solr_conf);
 
 			// Copy saxon*.jar to solr-webapp directory
-			String solr_webapp_dir = search_solr_root+SEP+"server"+SEP+"solr-webapp"+SEP+"webapp"+SEP+"WEB-INF"+SEP+"lib";
-			copy(Paths.get(search_root+SEP+"lib"+SEP+"saxon-9.jar"),
+			String solr_webapp_dir = registry_solr_root+SEP+"server"+SEP+"solr-webapp"+SEP+"webapp"+SEP+"WEB-INF"+SEP+"lib";
+			copy(Paths.get(registry_root+SEP+"lib"+SEP+"saxon-9.jar"),
 				Paths.get(solr_webapp_dir+SEP+"saxon-9.jar"));
-			copy(Paths.get(search_root+SEP+"lib"+SEP+"saxon-dom-9.jar"),
+			copy(Paths.get(registry_root+SEP+"lib"+SEP+"saxon-dom-9.jar"),
 				Paths.get(solr_webapp_dir+SEP+"saxon-dom-9.jar"));
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -260,7 +260,7 @@ public class SearchInstaller {
 		try {
 			// need to check wheather the SOLR server is running already or not
 			// ./solr status       -> "No Solr nodes are running."
-			String[] statusCmd = new String[] {search_solr_bin+SEP+solrCmd, "status", "-p", String.valueOf(solrPort)};
+			String[] statusCmd = new String[] {registry_solr_bin+SEP+solrCmd, "status", "-p", String.valueOf(solrPort)};
 			progProcess = Runtime.getRuntime().exec(statusCmd);
 			BufferedReader in = new BufferedReader(
                                 new InputStreamReader(progProcess.getInputStream()));
@@ -291,11 +291,11 @@ public class SearchInstaller {
             //./bin/solr start -c -a "-Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl \
             // -Dsolr.pds.home=$SOLR_HOME/server/solr/ --Xmx2048m" -s $SOLR_HOME/server/solr
 			String sysProperties = "-Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl " + 
-				"-Dsolr.pds.home=" + search_solr_root + SEP + "server" + SEP + "solr -Xmx2048m";
-			     //"-Dsolr.pds.home=" + search_solr_root + SEP + "server" + SEP + "solr";
+				"-Dsolr.pds.home=" + registry_solr_root + SEP + "server" + SEP + "solr -Xmx2048m";
+			     //"-Dsolr.pds.home=" + registry_solr_root + SEP + "server" + SEP + "solr";
 			      
-			String[] execCmd = new String[] { search_solr_bin + SEP + solrCmd, "start", "-c",
-		        	"-p", String.valueOf(solrPort), "-a", sysProperties, "-s", search_solr_root + SEP + "server" + SEP + "solr"};
+			String[] execCmd = new String[] { registry_solr_bin + SEP + solrCmd, "start", "-c",
+		        	"-p", String.valueOf(solrPort), "-a", sysProperties, "-s", registry_solr_root + SEP + "server" + SEP + "solr"};
 			//print("Executing '" + java.util.Arrays.toString(execCmd) + "'");
 
 			progProcess = Runtime.getRuntime().exec(execCmd);		
@@ -349,7 +349,7 @@ public class SearchInstaller {
 		try {
 			// need to check wheather the SOLR server is running already or not
 			// ./solr status       -> "No Solr nodes are running."
-			progProcess = Runtime.getRuntime().exec(new String[] { search_solr_bin + SEP + solrCmd, "status", "-p", String.valueOf(solrPort)});
+			progProcess = Runtime.getRuntime().exec(new String[] { registry_solr_bin + SEP + solrCmd, "status", "-p", String.valueOf(solrPort)});
 			BufferedReader in = new BufferedReader(
                                 new InputStreamReader(progProcess.getInputStream()));
             String line = null;
@@ -376,7 +376,7 @@ public class SearchInstaller {
             print("\nStopping the SOLR server...");
 
             //./bin/solr stop
-			String[] execCmd = new String[] { search_solr_bin + SEP + solrCmd, "stop", "-p", String.valueOf(solrPort)};
+			String[] execCmd = new String[] { registry_solr_bin + SEP + solrCmd, "stop", "-p", String.valueOf(solrPort)};
 			//print("Executing '" + java.util.Arrays.toString(execCmd) + "'");
 
 			progProcess = Runtime.getRuntime().exec(execCmd);		
@@ -417,11 +417,11 @@ public class SearchInstaller {
 	}
 
 	private static void createSearchCollection() {
-		print("Creating Search Service collection (pds) ...");
+		print("Creating Search collection (pds) ...");
 		Process progProcess = null;
         int returnVal = -1;
 		try {
-			String[] execCmd = new String[] { search_solr_bin+SEP+solrCmd, "create", 
+			String[] execCmd = new String[] { registry_solr_bin+SEP+solrCmd, "create", 
 					"-p", String.valueOf(solrPort), "-c", "pds", "-d", "pds"};
 			//print("Executing '" + java.util.Arrays.toString(execCmd) + "'");
 					
@@ -434,13 +434,13 @@ public class SearchInstaller {
             }
             try{
                	returnVal = progProcess.waitFor();
-               	print("Return status from creating search service collection = " + returnVal);
+               	print("Return status from creating search collection = " + returnVal);
                	if (returnVal!=0) {
-                	print("Failed to create a search service collection....");
+                	print("Failed to create a search collection....");
                   	exit(1);
                	}
                	else 
-               		print("Search service collection (pds) is created successfully.");
+               		print("Search collection (pds) is created successfully.");
             } catch(InterruptedException ie){
                	ie.printStackTrace();
             }
@@ -609,7 +609,7 @@ public class SearchInstaller {
 	}
 
 	private static void deleteRegistrySearchCollection() {
-		print("Deleting Registry/Search Service collection (.system, xpath, pds) ....");
+		print("Deleting Registry and Search collections (.system, xpath, pds) ....");
 		Process progProcess = null;
         int returnVal = -1;
 		try {
@@ -664,7 +664,7 @@ public class SearchInstaller {
             in.close();
 
             // .system collection
-            execCmd = new String[] { search_solr_bin+SEP+solrCmd, "delete", "-p", String.valueOf(solrPort), "-c", ".system"};
+            execCmd = new String[] { registry_solr_bin+SEP+solrCmd, "delete", "-p", String.valueOf(solrPort), "-c", ".system"};
 			//print("Executing '" + java.util.Arrays.toString(execCmd) + "'");
 			progProcess = Runtime.getRuntime().exec(execCmd);
 			in = new BufferedReader(
@@ -687,7 +687,7 @@ public class SearchInstaller {
             }
             in.close();
 
-            execCmd = new String[] { search_solr_bin+SEP+solrCmd, "delete", "-p", String.valueOf(solrPort), "-c", "xpath",};
+            execCmd = new String[] { registry_solr_bin+SEP+solrCmd, "delete", "-p", String.valueOf(solrPort), "-c", "xpath",};
 			//print("Executing '" + java.util.Arrays.toString(execCmd) + "'");
 			progProcess = Runtime.getRuntime().exec(execCmd);
 			in = new BufferedReader(
@@ -708,7 +708,7 @@ public class SearchInstaller {
             }
             in.close();
 
-            execCmd = new String[] { search_solr_bin+SEP+solrCmd, "delete", "-p", String.valueOf(solrPort), "-c", "pds",};
+            execCmd = new String[] { registry_solr_bin+SEP+solrCmd, "delete", "-p", String.valueOf(solrPort), "-c", "pds",};
 			//print("Executing '" + java.util.Arrays.toString(execCmd) + "'");
 			progProcess = Runtime.getRuntime().exec(execCmd);
 			in = new BufferedReader(
@@ -719,11 +719,11 @@ public class SearchInstaller {
 			try{
                 returnVal = progProcess.waitFor();
                 if (returnVal!=0) {
-                    print("Failed to delete search service collection (pds).");
+                    print("Failed to delete search collection (pds).");
                     exit(1);
                 }
                 else 
-                	print("Search service collection (pds) is deleted successfully.");
+                	print("Search collection (pds) is deleted successfully.");
 
             } catch(Exception ex){
                ex.printStackTrace();
@@ -749,22 +749,22 @@ public class SearchInstaller {
 
 	private static void executeDockerBuild(String mode, String envStr) {
 	//private static void executeDockerBuild(String mode) {
-		print("Execute to " + mode + " Registry/Search Services in Docker...");
+		print("Execute to " + mode + " Registry in Docker...");
 		Process progProcess = null;
         int returnVal = -1;
 		try {
 			String[] execCmd = null;
 			if (envStr==null) {
 				if (prompt==null)
-					execCmd = new String[] { dockerCmd, mode};
+					execCmd = new String[] { dockerCmd, mode, registry_root};
 				else
-					execCmd = new String[] { dockerCmd, mode, prompt};
+					execCmd = new String[] { dockerCmd, mode, prompt, registry_root};
 			}
 			else {
 				if (prompt==null)
-					execCmd = new String[] { envStr, dockerCmd, mode};
+					execCmd = new String[] { envStr, dockerCmd, mode, registry_root};
 				else
-					execCmd = new String[] { envStr, dockerCmd, mode, prompt};
+					execCmd = new String[] { envStr, dockerCmd, mode, prompt, registry_root};
 
 			}
 			//print("Executing '" + java.util.Arrays.toString(execCmd) + "'");
@@ -779,12 +779,12 @@ public class SearchInstaller {
             try{
                 returnVal = progProcess.waitFor();
                 if (returnVal!=0) {
-                    print("Failed to " + mode + " Registry/Search Services in Docker.");
+                    print("Failed to " + mode + " Registry in Docker.");
                     exit(1);
                 }
                 else  {
                 	Thread.sleep(5000);
-               		print("Completed to " + mode + " Registry/Search Services in Docker.");
+               		print("Completed to " + mode + " Registry in Docker.");
                 }
 
             } catch(Exception ex){
@@ -811,7 +811,7 @@ public class SearchInstaller {
 
 	private static void setPreset(String key, String value) {
 		if (value != null) {
-			SearchInstallerUtils.getInstallerPresets().setProperty(key, value);
+			RegistryInstallerUtils.getInstallerPresets().setProperty(key, value);
 		}
 	}
 }
