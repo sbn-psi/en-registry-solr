@@ -46,6 +46,8 @@ if exist "%LIB_DIR%\registry*.jar" (
 set CLASSPATH=%CLASSPATH%;%EXTRA_LIB_DIR%\log4j-1.2.16.jar;%EXTRA_LIB_DIR%\slf4j-api-1.6.6.jar;%EXTRA_LIB_DIR%\slf4j-log4j12-1.6.6.jar;%EXTRA_LIB_DIR%\commons-io-2.5.jar;%EXTRA_LIB_DIR%\commons-logging-1.0.4.jar
 echo %CLASSPATH%
 
+set /p REGISTRY_VER=<%PARENT_DIR%/VERSION.txt
+
 if exist "%SCRIPT_DIR%\registry.properties" (
 	set REGISTRY_INSTALLER_PRESET_FILE=%SCRIPT_DIR%\registry.properties
 	echo %REGISTRY_INSTALLER_PRESET_FILE%

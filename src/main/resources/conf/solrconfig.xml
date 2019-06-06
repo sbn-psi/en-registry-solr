@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>7.5.0</luceneMatchVersion>
+  <luceneMatchVersion>7.7.0</luceneMatchVersion>
 
   <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
@@ -785,13 +785,8 @@
        <str name="f.facet_primary_result_purpose.facet.prefix">1,</str>
        <str name="f.facet_primary_result_processing_level.facet.prefix">1,</str>
 
-       <!-- Update params to include grouping for restricting to latest product versions -->
-       <str name="group">true</str>
-       <str name="group.field">lid</str>
-       <str name="group.sort">version_id desc</str>
-       <str name="group.ngroups">true</str>
-       <str name="group.format">simple</str>
-       <str name="group.truncate">true</str>
+       <!-- Update params to include filter query restricting to latest product versions -->
+      <str name="fq">{!collapse field=lid max=version_id}</str>
     </lst>
 
     <lst name="appends">
@@ -849,13 +844,8 @@
        <str name="f.facet_primary_result_purpose.facet.prefix">1,</str>
        <str name="f.facet_primary_result_processing_level.facet.prefix">1,</str>
 
-       <!-- Update params to include grouping for restricting to latest product versions -->
-       <str name="group">true</str>
-       <str name="group.field">lid</str>
-       <str name="group.sort">version_id desc</str>
-       <str name="group.ngroups">true</str>
-       <str name="group.format">simple</str>
-       <str name="group.truncate">true</str>
+      <!-- Update params to include filter query restricting to latest product versions -->
+      <str name="fq">{!collapse field=lid max=version_id}</str>
     </lst>
 
     <!-- Ignore superseded data sets by appending a filter to the query -->

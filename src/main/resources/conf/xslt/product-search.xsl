@@ -15,7 +15,7 @@
   <xsl:variable name="title">PDS: Search Results</xsl:variable>
   <xsl:variable name="ds_result_range">
     <xsl:choose>
-      <xsl:when test="//int/@ngroups &lt; 1">
+      <xsl:when test="//result/@numFound &lt; 1">
         <xsl:text />
       </xsl:when>
       <xsl:otherwise>
@@ -27,11 +27,11 @@
     </xsl:choose>
   </xsl:variable>
   <xsl:variable name="ds_result_count">
-    <xsl:value-of select="//int/@ngroups" />
+    <xsl:value-of select="//result/@numFound" />
   </xsl:variable>
   <xsl:variable name="ds_result_caption">
     <xsl:choose>
-      <xsl:when test="//int/@ngroups = 1">result</xsl:when>
+      <xsl:when test="//result/@numFound = 1">result</xsl:when>
       <xsl:otherwise>results</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -152,7 +152,7 @@
 
   <xsl:template match='/'>
 <xsl:choose>
-  <xsl:when test="//result">
+  <xsl:when test="response/result">
     <div id="sidebar">
       <xsl:apply-templates select="response/lst[@name='responseHeader']/lst[@name='params']" />
       <xsl:apply-templates select="response/lst[@name='facet_counts']" />
@@ -177,7 +177,7 @@
     </form>
 
 <xsl:choose>
-  <xsl:when test="//result">
+  <xsl:when test="response/result">
 
     <p>
         <xsl:value-of select="$ds_result_range" />
@@ -187,38 +187,38 @@
         (<xsl:value-of select="$ds_result_time" /> seconds)
     </p>
     
-    <xsl:if test="//result/doc[(arr|str)[@name='data_product_type']='Resource']">
+    <xsl:if test="response/result/doc[(arr|str)[@name='data_product_type']='Resource']">
       <div style="margin-top: 1em; padding: .25em; font-size: 100%; border: 1px solid #E0E000; background: #FFFFE0;">Archive Information</div>
       <p style="margin-top: .5em; margin-bottom: .5em;">These web pages provide detailed information for the matching investigations. If no page looks appropriate, you can browse the matching search tools and data sets, below.</p>
       <ul class="results">
-        <xsl:apply-templates select="//result/doc[(arr|str)[@name='data_product_type']='Resource']"/>
+        <xsl:apply-templates select="response/result/doc[(arr|str)[@name='data_product_type']='Resource']"/>
       </ul>
 
-      <xsl:if test="count(//result/doc[(arr|str)[@name='data_product_type']='Resource']) > 2">
+      <xsl:if test="count(response/result/doc[(arr|str)[@name='data_product_type']='Resource']) > 2">
         <div class="more-info"><a class="info-button">More...</a></div>
       </xsl:if>
     </xsl:if>
 
-    <xsl:if test="//result/doc[(arr|str)[@name='data_product_type']='Product_Collection' or (arr|str)[@name='data_product_type']='Product_Bundle']">
+    <xsl:if test="response/result/doc[(arr|str)[@name='data_product_type']='Product_Collection' or (arr|str)[@name='data_product_type']='Product_Bundle']">
       <div style="margin-top: 1em; margin-bottom: .5em; padding: .25em; font-size: 100%; border: 1px solid #E0E000; background: #FFFFE0;">Bundles and Collections</div>
       <ul class="results">
-        <xsl:apply-templates select="//result/doc[(arr|str)[@name='data_product_type']='Product_Collection' or (arr|str)[@name='data_product_type']='Product_Bundle']"/>
+        <xsl:apply-templates select="response/result/doc[(arr|str)[@name='data_product_type']='Product_Collection' or (arr|str)[@name='data_product_type']='Product_Bundle']"/>
       </ul>
       
-      <xsl:if test="count(//result/doc[(arr|str)[@name='data_product_type']='Product_Collection' or (arr|str)[@name='data_product_type']='Product_Bundle']) > 2">
+      <xsl:if test="count(response/result/doc[(arr|str)[@name='data_product_type']='Product_Collection' or (arr|str)[@name='data_product_type']='Product_Bundle']) > 2">
         <div class="more-tools"><a class="tools-button">More...</a></div>
       </xsl:if>
     </xsl:if>
 	
       <ul class="results" style="padding-top: 1em;">
       <div style="margin-top: 1em; margin-bottom: .5em; padding: .25em; font-size: 100%; border: 1px solid #E0E000; background: #FFFFE0;">Products and Documents</div>
-        <xsl:apply-templates select="//result/doc[(arr|str)[@name='data_product_type']!='Product_Collection' and (arr|str)[@name='data_product_type']!='Product_Bundle' and (arr|str)[@name='data_product_type']!='Resource']"/>
+        <xsl:apply-templates select="response/result/doc[(arr|str)[@name='data_product_type']!='Product_Collection' and (arr|str)[@name='data_product_type']!='Product_Bundle' and (arr|str)[@name='data_product_type']!='Resource']"/>
       </ul>
 
-    <xsl:if test="//int/@ngroups &gt; count(//result/doc)">
+      <xsl:if test="response/result/@numFound &gt; count(response/result/doc)">
         <p style="margin-top: 1.5em; font-size: 120%;">Result pages:
           <xsl:variable name="q" select="response/lst[@name='responseHeader']/lst[@name='params']/str[@name='q']" />
-          <xsl:for-each select="pds:page-range(//int/@ngroups,$start,$rows)">
+          <xsl:for-each select="pds:page-range(response/result/@numFound,$start,$rows)">
             <xsl:text> &#160;</xsl:text>
             <xsl:choose>
               <xsl:when test=". = $start">

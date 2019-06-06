@@ -224,7 +224,7 @@ docker run --name ${DOCK_IMAGE} -u solr\
     -v solr_system_shard1_n1:/opt/solr/server/solr/.system_shard1_replica_n1 \
     -v solr_xpath_shard1_n1:/opt/solr/server/solr/xpath_shard1_replica_n1 \
     -d -p 8983:8983 \
-    -e SOLR_HEAP=$SOLR_HEAP
+    -e SOLR_HEAP=$SOLR_HEAP \
     $DOCK_IMAGE:$version >>$LOG 2>&1    
 check_exec $?
 

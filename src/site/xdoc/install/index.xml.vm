@@ -43,8 +43,10 @@
       </p>
 
       <subsection name="Java Runtime Environment">
-        <p>The Registry was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The software was specifically compiled for and tested in Java version 1.8. The following commands test the local Java installation in a UNIX-based environment:
+        <p>The Registry was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The software was specifically compiled for and tested in Java version 1.8 (64-bit). The following commands test the local Java installation in a UNIX-based environment:
         </p>
+
+	<p>NOTE: This software only works with 64-bit Java installation.</p>
 
         <source>
 % which java
@@ -126,12 +128,13 @@ or
     </section>
 
     <section name="Install Solr and Registry - Docker">
-      <p>This section details how to install and deploy a dockerized instance of the PDS Registry. It has been separated into 3 sections depending on the target platform.
+      <p><b>NOTE: Docker installation is currently only available for Linux / Mac OS X users. We are working on a version for Windows. In the meantime, Windows Users please use the <a href="Windows_-_Standalone">Standalone Installation</a></b></p>
+
+      <p>This section details how to install and deploy a dockerized instance of the PDS Registry.
       </p>
 
       <ul>
         <li><a href="#Linux_/_Mac_OS_X_-_Docker">Linux / Mac OS X</a></li>
-        <li><a href="#Windows_-_Docker">Windows</a></li>
       </ul>
       
       <subsection name="Linux / Mac OS X - Docker">
@@ -235,120 +238,6 @@ Completed to install Registry in Docker.
           </li>
         </ol>
       </subsection>
-      
-      <subsection name="Windows - Docker">
-        <p>Note that this installation is still in its experimental stages and has not been fully tested.
-        </p>
-                
-        <ol>
-          <li>Install Curl if needed.
-          
-          <p>If Curl needs to be installed on the target Windows machine, it can be downloaded from the <a href="https://curl.haxx.se/windows/">Curl</a> website. Make sure that the <i>PATH</i> environment references the bin/ folder in the Curl directory(i.e. C:\path\to\curl\bin).
-          </p>
-          
-          </li>
-        
-          <li>Install Docker Toolbox.
-          
-          <p>Install Docker Toolbox from the <a href="https://docs.docker.com/toolbox/toolbox_install_windows/">Docker</a> website.
-          </p>
-          
-          </li>
-          
-          <li>Configure the VM.
-          
-          <p><i>Oracle VM VirtualBox</i> should have been installed from step 1). Open up this application by clicking on the <i>Oracle VM VirtualBox Manager</i> icon. The VM settings configured for Docker should be optimized to boost the performance of the Registry. To do this, right-click on the VM that is labeled <i>default</i>, then click on <i>Settings</i>.
-          </p>
-          
-          <p>Once inside the Settings window, click on <i>System</i> and in the <i>Motherboard</i> tab, increase the Base Memory accordingly:
-          </p>
-          
-          <center><img src="../images/system-memory-setting.jpg"/></center>
-          
-          <p>Next, click on the <i>Processor</i> tab and increase the number of Processors to use for the VM:
-          </p>
-          
-          <center><img src="../images/system-processor-setting.jpg"/></center>         
-          
-          <p>Click on the <i>Network</i> menu icon, click the arrow next to the <i>Advanced</i> section, and click on the <i>Port Forwarding</i> button.
-          </p>
-          
-          <center><img src="../images/virtual-box-network-settings.jpg"/></center>           
-          
-          <p>Add a new Port Forwarding rule, by clicking on the <i>+</i> icon on the right. Set the Name field to <i>Registry</i>, and set the Host Port and Guest Port fields to <i>8983</i>.
-          </p>
-          
-          <center><img src="../images/port-forward-rule.jpg"/></center>              
-          
-          </li>
-          
-          <li>Once the VM is configured, click on the <i>Docker Quickstart Terminal</i> Windows icon.
-          
-          <p>
-          </p>
-          
-          </li>
-          
-          <li>Run the registry installer script via the Docker Terminal. 
-          
-          <p>The Docker Terminal runs in a Linux-like environment. The VM mounts the user's home directory and it can be accessed in a Linux-style path. So <i>C:\Users\PDS_User</i> can be accessed through this Terminal Window like so: <i>/c/Users/PDS_User</i>.
-          </p>
-          
-          <p>It is recommended that the Registry package be installed under the user's home directory. Assuming that the Registry package is installed under C:\Users\PDS_User\registry, do the following:
-          </p>
-          
-          <source>
-% cd /c/Users/PDS_User/registry/bin
-
-% ./registry_install.sh
-          </source>
-          
-          <p>You should see output similar to the following:
-          </p>
-          
-          <source>
-STARTING Registry Installer in docker mode.
-
-  Registry   .....   
-       ( v 2.0.0 )
-       ( installing on platform: Windows 7 )
-       ( IP Address:- 192.168.1.65 )
-       ( Host Name:- MT-106917 )
-
-Execute to install Registry in Docker...
-Building Registry Docker Image.                               SUCCESS
-Starting Registry Docker Container.                           SUCCESS
-Waiting for Solr server to start (60 seconds)...
-Creating a Registry Service Blob collection (.system)                SUCCESS
-Creating a Registry Service XPath collection (xpath)                 SUCCESS
-Creating a Search collection (pds)                           SUCCESS
-Completed to install Registry in Docker.
-
-          </source>         
-          </li>
-          
-          <li>Verify installation.
-          
-          <p>Open up your favorite browser and type in <i>http://localhost:8983/solr</i>. You should see the Solr admin interface.
-          </p>
-          
-          </li>
-   
-        </ol>
-        
-        <p>When the deploy script is run, it will output a log file. In this log file, it is expected to see the following message:
-        </p>
-        
-        <source>
-SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. \
-All files and directories added to build context will have '-rwxr-xr-x' permissions. \
-It is recommended to double check and reset permissions for sensitive files and directories.        
-        </source>
-        
-        <p>At the time of this writing, it is unknown what the cause of this issue is. It does not appear to affect the Registry in the testing that was performed.
-        </p>
-      
-      </subsection>
     </section>
     
     <section name="Install Solr and Registry - Standalone">
@@ -363,16 +252,17 @@ It is recommended to double check and reset permissions for sensitive files and 
       <subsection name="Linux / Mac OS X - Standalone">
         <ol>
           <li>
-            <p>Install Solr as indicated in <a href="http://lucene.apache.org/solr/guide/7_6/installing-solr.html" target="_blank">Installing SOLR</a> document.</p>
+            <p><a href="https://www.apache.org/dyn/closer.lua/lucene/solr/7.7.2/solr-7.7.2.tgz">Download Solr</a>
+	    </p>
             <p>Unpack SOLR pkg and set SOLR_HOME</p>
             <source>
-              % tar xvf solr-7.6.0.tgz
-              % cd solr-7.6.0
+              % tar xvf solr-7.7.0.tgz
+              % cd solr-7.7.0
               
               # Set SOLR_HOME
               % export SOLR_HOME=$(pwd)
               % echo $SOLR_HOME
-              /home/pds/solr-7.6.0
+              /home/pds/solr-7.7.0
             </source>      
             <p>NOTE: The export command will be used to store the directory of the Solr installation.</p>
           </li>
@@ -390,7 +280,7 @@ It is recommended to double check and reset permissions for sensitive files and 
             <source>
               Enter an installation mode (docker or standalone): standalone
               
-              Enter location of SOLR installation: /home/pds/solr-7.6.0
+              Enter location of SOLR installation: /home/pds/solr-7.7.0
             </source>
             
             <p>You should see output similar to the following: </p>
@@ -404,11 +294,11 @@ It is recommended to double check and reset permissions for sensitive files and 
               ( IP Address:- 192.168.1.65 )
               ( Host Name:- MT-106917 )
               
-              Enter location of SOLR installation: /Users/pds/SOLR/solr-7.6.0 
-              Copied a directory from /Users/pds/registry/target/registry-2.0.0/bin/../dist to /Users/pds/SOLR/solr-7.6.0/contrib/pds/lib
-              Copied a directory from /Users/pds/registry/target/registry-2.0.0/bin/../conf to /Users/pds/SOLR/solr-7.6.0/server/solr/configsets/pds/conf
-              Copied a file from /Users/pds/registry/target/registry-2.0.0/bin/../lib/saxon-9.jar to /Users/pds/SOLR/solr-7.6.0/server/solr-webapp/webapp/WEB-INF/lib/saxon-9.jar
-              Copied a file from /Users/pds/registry/target/registry-2.0.0/bin/../lib/saxon-dom-9.jar to /Users/pds/SOLR/solr-7.6.0/server/solr-webapp/webapp/WEB-INF/lib/saxon-dom-9.jar
+              Enter location of SOLR installation: /Users/pds/SOLR/solr-7.7.0 
+              Copied a directory from /Users/pds/registry/target/registry-2.0.0/bin/../dist to /Users/pds/SOLR/solr-7.7.0/contrib/pds/lib
+              Copied a directory from /Users/pds/registry/target/registry-2.0.0/bin/../conf to /Users/pds/SOLR/solr-7.7.0/server/solr/configsets/pds/conf
+              Copied a file from /Users/pds/registry/target/registry-2.0.0/bin/../lib/saxon-9.jar to /Users/pds/SOLR/solr-7.7.0/server/solr-webapp/webapp/WEB-INF/lib/saxon-9.jar
+              Copied a file from /Users/pds/registry/target/registry-2.0.0/bin/../lib/saxon-dom-9.jar to /Users/pds/SOLR/solr-7.7.0/server/solr-webapp/webapp/WEB-INF/lib/saxon-dom-9.jar
               
               Starting a SOLR server ....Waiting up to 180 seconds to see Solr running on port 8983....
               *** [WARN] *** Your open file limit is currently 10240.  
@@ -480,38 +370,44 @@ It is recommended to double check and reset permissions for sensitive files and 
       
       <subsection name="Windows - Standalone">
         <ol>
+	  <li>Install Curl
+
+          <p>If Curl is not already installed on the target Windows machine, it can be downloaded from the <a href="https://curl.haxx.se/windows/">Curl</a> website. Make sure that the <i>PATH</i> environment references the bin/ folder in the Curl directory(i.e. C:\path\to\curl\bin).
+          </p>
+
+          </li>
+          
           <li>Open Command Prompt via the <b><i>'Command Prompt'</i></b> executable.
           </li>
-          
+
           <li>
-            <p>Install Solr as indicated in <a href="http://lucene.apache.org/solr/guide/7_6/installing-solr.html" target="_blank">Installing SOLR</a> document.</p>
-            <p>Unpack SOLR pkg and set SOLR_HOME</p>
+            <p><a href="https://www.apache.org/dyn/closer.lua/lucene/solr/7.7.2/solr-7.7.2.zip">Download Solr</a></p> and unpack the zip file. Note this directory location.
+            <p>From Command Prompty, go to directory of unpacked Solr software, and output the full path for future reference:</p>
             <source>
-              % tar xvf solr-7.6.0.tgz
-              % cd solr-7.6.0
+              $ cd solr-7.7.2
               
-              # Set SOLR_HOME
+              # Set SOLR_HOME variable and note path that is output
               $ set "SOLR_HOME=%cd%"
               $ echo %SOLR_HOME%
-              /home/pds/solr-7.6.0
+              C:\home\pds\solr-7.7.0
             </source>      
           </li>
-          
-          <li>Move to the directory that registry installer script resides.
+
+          <li>Now we go to where we unpacked the Registry, and move to the directory that registry installer script resides (See <a href="Unpacking_the_Package">Unpacking the Package</a> above.)
             <source>
-              % cd %REGISTRY_HOME%\bin
+              $ cd %REGISTRY_HOME%\bin
             </source>
           </li>
-          <li>Execute a registry installer script.
+          <li>Execute Registry installer script.
             <source>
-              % registry_install.bat
+              $ registry_install.bat
             </source>
           </li>
           <li>Enter the install mode and SOLR installation location that is done in previous step.
             <source>
               Enter an installation mode (docker or standalone): standalone
               
-              Enter location of SOLR installation: C:\home\pds\solr-7.6.0
+              Enter location of SOLR installation: C:\home\pds\solr-7.7.0
             </source>
             
             <p>You should see output similar to the following: </p>
@@ -525,13 +421,13 @@ It is recommended to double check and reset permissions for sensitive files and 
               ( IP Address:- 192.168.1.65 )
               ( Host Name:- PDS-HP )
               
-              Enter location of SOLR installation: C:\Users\pds\solr-7.6.0
-              Copied a directory from C:\Users\pds\registry-2.0.0\bin\..\dist to C:\Users\pds\solr-7.6.0\contrib\pds\lib
-              Copied a directory from C:\Users\pds\registry-2.0.0\bin\..\conf to C:\Users\pds\solr-7.6.0\server\solr\configs
+              Enter location of SOLR installation: C:\Users\pds\solr-7.7.0
+              Copied a directory from C:\Users\pds\registry-2.0.0\bin\..\dist to C:\Users\pds\solr-7.7.0\contrib\pds\lib
+              Copied a directory from C:\Users\pds\registry-2.0.0\bin\..\conf to C:\Users\pds\solr-7.7.0\server\solr\configs
               ets\pds\conf
-              Copied a file from C:\Users\pds\registry-2.0.0\bin\..\lib\saxon-9.jar to C:\Users\pds\solr-7.6.0\server\solr-w
+              Copied a file from C:\Users\pds\registry-2.0.0\bin\..\lib\saxon-9.jar to C:\Users\pds\solr-7.7.0\server\solr-w
               ebapp\webapp\WEB-INF\lib\saxon-9.jar
-              Copied a file from C:\Users\pds\registry-2.0.0\bin\..\lib\saxon-dom-9.jar to C:\Users\pds\solr-7.6.0\server\so
+              Copied a file from C:\Users\pds\registry-2.0.0\bin\..\lib\saxon-dom-9.jar to C:\Users\pds\solr-7.7.0\server\so
               lr-webapp\webapp\WEB-INF\lib\saxon-dom-9.jar
               
               Starting a SOLR server ....Waiting up to 180 seconds to see Solr running on port 8983....
@@ -579,7 +475,7 @@ It is recommended to double check and reset permissions for sensitive files and 
               Return status from creating search collection = 0
               Search collection (pds) is created successfully.
               
-            </source>        
+            </source>
           </li>
           <li>Verify installation.
             <p>Open up your favorite browser and type in <i>http://localhost:8983/solr</i>. You should see the Solr admin interface.
@@ -594,7 +490,7 @@ It is recommended to double check and reset permissions for sensitive files and 
 	<p>This issue could happen for several reasons, but we will need to look through the logs to determine the issue:
 	</p>
 	<ul>
-	  <li>Look at Solr Console log to determine where the issue may lay:
+	  <li>Look at Solr Console log to determine where the issue may lie:
 	    <source>
 # STANDALONE INSTALLATION
 open $SOLR_HOME/server/logs/solr.log

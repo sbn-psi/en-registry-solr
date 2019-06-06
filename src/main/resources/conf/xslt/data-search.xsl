@@ -16,7 +16,7 @@
   <xsl:variable name="title">PDS: Search Results</xsl:variable>
   <xsl:variable name="ds_result_range">
     <xsl:choose>
-      <xsl:when test="//int/@ngroups &lt; 1">
+      <xsl:when test="//result/@numFound &lt; 1">
         <xsl:text />
       </xsl:when>
       <xsl:otherwise>
@@ -28,11 +28,11 @@
     </xsl:choose>
   </xsl:variable>
   <xsl:variable name="ds_result_count">
-    <xsl:value-of select="//int/@ngroups" />
+    <xsl:value-of select="//result/@numFound" />
   </xsl:variable>
   <xsl:variable name="ds_result_caption">
     <xsl:choose>
-      <xsl:when test="//int/@ngroups = 1">result</xsl:when>
+      <xsl:when test="//result/@numFound = 1">result</xsl:when>
       <xsl:otherwise>results</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -76,7 +76,7 @@
   <xsl:variable name="facets" select="document('facets.xml')" />
   <xsl:key name="facet" match="facet" use="@name" />
   <xsl:key name="category" match="category" use="@name" />
-  
+
   <xsl:variable name="modifications" select="document('capitalize.xml')" />
   <xsl:key name="modify" match="category" use="@name" />
 
@@ -153,7 +153,7 @@
 
   <xsl:template match='/'>
 <xsl:choose>
-  <xsl:when test="//result">
+  <xsl:when test="response/result">
     <div id="sidebar">
       <xsl:apply-templates select="response/lst[@name='responseHeader']/lst[@name='params']" />
       <xsl:apply-templates select="response/lst[@name='facet_counts']" />
@@ -178,7 +178,7 @@
     </form>
 
 <xsl:choose>
-  <xsl:when test="//result">
+  <xsl:when test="response/result">
 
     <p>
         <xsl:value-of select="$ds_result_range" />
@@ -214,14 +214,14 @@
 -->
       <ul class="results" style="padding-top: 1em;">
       <div style="margin-top: 1em; margin-bottom: .5em; padding: .25em; font-size: 100%; border: 1px solid #E0E000; background: #FFFFE0;">Data Sets and Information</div>
-        <xsl:apply-templates select="//result/doc[(arr|str)[@name='data_product_type']!='Resource' and (arr|str)[@name='data_product_type']!='Product_Context_Search_Tool' and (arr|str)[@name='data_product_type']!='Service']"/>
+        <xsl:apply-templates select="response/result/doc[(arr|str)[@name='data_product_type']!='Resource' and (arr|str)[@name='data_product_type']!='Product_Context_Search_Tool' and (arr|str)[@name='data_product_type']!='Service']"/>
         
       </ul>
 
-      <xsl:if test="//lst/int/@ngroups &gt; count(//result/doc)">
+      <xsl:if test="response/result/@numFound &gt; count(response/result/doc)">
         <p style="margin-top: 1.5em; font-size: 120%;">Result pages:
           <xsl:variable name="q" select="response/lst[@name='responseHeader']/lst[@name='params']/str[@name='q']" />
-          <xsl:for-each select="pds:page-range(//lst/int/@ngroups,$start,$rows)">
+          <xsl:for-each select="pds:page-range(response/result/@numFound,$start,$rows)">
             <xsl:text> &#160;</xsl:text>
             <xsl:choose>
               <xsl:when test=". = $start">
