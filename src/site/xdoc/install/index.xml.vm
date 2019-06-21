@@ -35,6 +35,7 @@
         <li><a href="#Install_Solr_and_Registry_-_Docker">Install Solr and Registry - Docker</a> (preferred method)</li>
         <li><a href="#Install_Solr_and_Registry_-_Standalone">Install Solr and Registry - Standalone</a></li>
         <li><a href="#Common_Errors">Common Errors</a></li>
+        <li><a href="#Next_Steps">Next Steps</a></li>
       </ul>
     </section>
 
@@ -519,5 +520,14 @@ Could not reserve enough space for 2097152KB object heap
         <p>For other errors that arise while testing the installation, see the <a href="../operate/index.html#Common_Errors">Operate - Common Errors</a></p>
       </subsection>
     </section>
+
+    <section name="Next Steps">
+      <subsection name="Install Harvest Tool">
+        <p><a href="../../../ingest/harvest/index.html">The Harvest Tool</a> can be used to populate the Registry with data. 
+The Harvest Tool runs locally at the Discipline Node to crawl the local data repository in order to discover products 
+and index associated metadata with the Registry.</p>
+      </subsection>
+    </section>
+
   </body>
 </document>

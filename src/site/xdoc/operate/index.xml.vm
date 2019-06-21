@@ -49,24 +49,37 @@
     </section>
 
     <section name="Common Operations">
-      <p>Here are some common operations you may wish to perform to interact with the Registry and Search. A tool to simplify these actions is in the plan, but in the meantime, here are the various raw commands you can do to modify data in your registry and search. For additional information for interacting with the Registry, please also take a look at the <a href="https://lucene.apache.org/solr/guide/7_6/collections-api.html">Solr Collections API</a> and other info on <a href="https://lucene.apache.org/solr/guide/7_7/overview-of-documents-fields-and-schema-design.html">interacting with Solr documents</a>.
+      <p>Here are some common operations you may wish to perform to interact with the Registry and Search. 
+A tool to simplify these actions is in the plan, but in the meantime, here are the various raw commands you can do 
+to modify data in your registry and search. 
+For additional information for interacting with the Registry, please also take a look at 
+the <a href="https://lucene.apache.org/solr/guide/7_6/collections-api.html">Solr Collections API</a> and other info 
+on <a href="https://lucene.apache.org/solr/guide/7_7/overview-of-documents-fields-and-schema-design.html">interacting with Solr documents</a>.
 </p>
 
-	  <subsection name="Add Data To Registry and Search">
-	    <p>
-	      After you have run Harvest, you should now see files like <i>solr_doc_0.xml</i> under <i>$REGISTRY_HOME/../registry-data/solr-docs</i> (or on Windows C:\\%REGISTRY_HOME%\..\registry-data\solr-docs). To ingest these into the Search index (http://localhost:8983/solr/search), run the following command:
-	      </p>
-	      <p>Docker Installation:
-	      <source>
+      <subsection name="Add Data To Registry and Search">
+        <p>Run <a href="../../../ingest/harvest/index.html">the Harvest Tool</a> to populate the Registry with data. 
+The Harvest Tool runs locally at the Discipline Node to crawl the local data repository in order to discover products 
+and index associated metadata with the Registry.</p>
+        <p>When you run the Harvest Tool, some data will be loaded into the Registry by the tool.
+Unfortunately, the current version of the Harvest Tool requires additional manual step to load some data into PDS Solr collection.</p> 
+        <p>After you have run the Harvest Tool you should see one or more files like <i>solr_doc_0.xml</i>, <i>solr_doc_1.xml</i>
+under <i>$REGISTRY_HOME/../registry-data/solr-docs</i> (or on Windows C:\\%REGISTRY_HOME%\..\registry-data\solr-docs). 
+To ingest these files into the PDS Solr collection run the following command:
+        </p>
+        <p>Docker Installation:
+        <source>
 docker exec -it registry post -c pds -params "tr=add-hierarchy.xsl" /data/solr-docs
-	      </source>
-	      </p>
-	      <p>Standalone Installation:
-	      <source>
+        </source>
+        </p>
+        <p>Standalone Installation:
+        <source>
 $SOLR_HOME/bin/post -c pds -params "tr=add-hierarchy.xsl" $REGISTRY_HOME/../registry-data/solr-docs
-	      </source>
-	      </p>
-	  </subsection>
+        </source>
+        </p>
+        <p>NOTE: There is no Solr post script for Windows. You will have to use a Unix environment such as MSYS2 or Cygwin.</p>
+    </subsection>
+
 	  <subsection name="Delete Data From Registry and Search">
 	    <p>Once you have data in the Registry and/or Search, the following <a href="https://curl.haxx.se/download.html">cUrl</a> commands can modify the data you have ingested.
 	    </p>
