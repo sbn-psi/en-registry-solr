@@ -27,17 +27,24 @@ if [ -z "${JAVA_HOME}" ]; then
 fi
 
 # Setup environment variables.
-SCRIPT_DIR=`dirname $0`
+SCRIPT_DIR=`cd "$( dirname $0 )" && pwd`
 PARENT_DIR=`cd ${SCRIPT_DIR}/.. && pwd`
 LIB_DIR=${PARENT_DIR}/dist
 EXTRA_LIB_DIR=${PARENT_DIR}/lib
+
+echo "Create symlink for new registry installation"
+REGISTRY=${PARENT_DIR}/../registry
+rm -f ${REGISTRY}
+ln -s ${PARENT_DIR} ${REGISTRY}
+
+# Create Registry Solr Doc Directory
+mkdir -p ${REGISTRY}/../registry-data/solr-docs
 
 # Check for dependencies.
 if [ ! -f ${LIB_DIR}/registry*.jar ]; then
     echo "Cannot find Registry jar file in ${LIB_DIR}" 1>&2
     exit 1
 fi
-
 
 # Finds the jar file in LIB_DIR and sets it to REGISTRY_JAR.
 REGISTRY_JAR=`ls ${LIB_DIR}/registry-*.jar`

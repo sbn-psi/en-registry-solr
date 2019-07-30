@@ -17,14 +17,15 @@
 -->
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <parent>
+  <!--parent>
     <groupId>gov.nasa.pds.2010</groupId>
     <artifactId>search</artifactId>
     <version>2.0.0</version>
-  </parent>
+  </parent-->
 
   <groupId>gov.nasa.pds.2010.search</groupId>
   <artifactId>registry</artifactId>
+  <version>2.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Registry</name>
@@ -72,8 +73,18 @@
   </developers>
 
   <build>
-    <resources />
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
     <plugins>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.7.1</version>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>buildnumber-maven-plugin</artifactId>
@@ -153,6 +164,12 @@
     </repository>
   </repositories>
 
+  <scm>
+    <url>https://github.com/NASA-PDS-Incubator/pds-registry/tree/master</url>
+    <connection>scm:git:git://github.com/NASA-PDS-Incubator/pds-registry.git</connection>
+    <developerConnection>scm:git:ssh://github.com:NASA-PDS-Incubator/pds-registry.git</developerConnection>
+  </scm>
+
   <dependencies>
     <dependency>
       <artifactId>solr-core</artifactId>
@@ -180,54 +197,30 @@
       <version>9</version>
       <scope>runtime</scope>
     </dependency>
-	  <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
       <version>1.18</version>
     </dependency>
-    <!--dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr</artifactId>
-      <version>7.5.0</version>
-      <type>war</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-velocity</artifactId>
-      <version>7.5.0</version>
-      <scope>runtime</scope>
-    </dependency-->
-    <!--dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <version>3.2.1</version>
-      <scope>runtime</scope>
-    </dependency-->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>1.6.6</version>
-      <!--scope>runtime</scope-->
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.6.6</version>
-      <!--scope>runtime</scope-->
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
-      <!--scope>runtime</scope-->
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.16</version>
-      <!--scope>runtime</scope-->
     </dependency>
   </dependencies>
 
@@ -241,4 +234,8 @@
       </plugin>
     </plugins>
   </reporting>
+
+  <properties>
+    <solr.version>7.7.2</solr.version>
+  </properties>
 </project>

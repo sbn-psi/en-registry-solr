@@ -241,7 +241,7 @@ public class RegistryInstaller {
 			copyDir(registry_root+SEP+"dist", registry_solr_lib);
 
 			// Copy 'pds' config set to necessary location for Solr to recognize it
-			copyDir(registry_root+SEP+"conf", registry_solr_conf);
+			copyDir(registry_root+SEP+"conf"+SEP+"pds", registry_solr_conf);
 
 			// Copy saxon*.jar to solr-webapp directory
 			String solr_webapp_dir = registry_solr_root+SEP+"server"+SEP+"solr-webapp"+SEP+"webapp"+SEP+"WEB-INF"+SEP+"lib";

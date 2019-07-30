@@ -12,8 +12,6 @@
   the responsibility to obtain export licenses or other export authority as
   may be required before exporting such information to foreign countries or
   providing access to foreign nationals.
-
-  $Id$
 -->
 
 <document>
@@ -34,8 +32,9 @@
         <li><a href="#Unpacking_the_Package">Unpacking the Package</a></li>
         <li><a href="#Install_Solr_and_Registry_-_Docker">Install Solr and Registry - Docker</a> (preferred method)</li>
         <li><a href="#Install_Solr_and_Registry_-_Standalone">Install Solr and Registry - Standalone</a></li>
-        <li><a href="#Common_Errors">Common Errors</a></li>
+        <li><a href="#Operational_Deployment">Operational Deployment</a></li>
         <li><a href="#Next_Steps">Next Steps</a></li>
+        <li><a href="#Common_Errors">Common Errors</a></li>
       </ul>
     </section>
 
@@ -71,7 +70,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode)
     </section>
 
     <section name="Unpacking the Package">
-      <p>Download the <i>${project.artifactId}</i> package from the PDS <a href="ftp://pds.nasa.gov/pub/toplevel/2010/search/" target="_blank">FTP</a> site. The binary distribution is available in identical zip or tar/gzip packages. The installation directory may vary from environment to environment but in UNIX-based environments it is typical to install software packages in the <i>/home/pds</i> directory and in Windows-based environments it is typical to install software packages in the <i>C:\Program Files</i> directory. Unpack the selected binary distribution file with one of the following commands:
+      <p>Download the <i>${project.artifactId}</i> package from the PDS FTP site (<a href="ftp://pds.nasa.gov/pub/toplevel/2010/search/${project.artifactId}-${project.version}-bin.tar.gz" target="_blank">TAR.GZ</a> <a href="ftp://pds.nasa.gov/pub/toplevel/2010/search/${project.artifactId}-${project.version}-bin.tar.gz" target="_blank">ZIP</a>). The binary distribution is available in identical zip or tar/gzip packages. The installation directory may vary from environment to environment but in UNIX-based environments it is typical to install software packages in the <i>/home/pds</i> directory and in Windows-based environments it is typical to install software packages in the <i>C:\Program Files</i> directory. Unpack the selected binary distribution file with one of the following commands:
       </p>
 
       <p>The top-level directory where the package is installed will be referenced in these instructions as <i><b>$REGISTRY_HOME</b></i>.</p>
@@ -83,7 +82,7 @@ or
 # Set the REGISTRY_HOME variable.
 % cd ${project.artifactId}-${project.version}
 
-# On Linux and Mac
+# On Linux and Mac (Bash shell only. Update accordingly for other shells.)
 % export REGISTRY_HOME=$(pwd)
 
 # On Windows
@@ -190,55 +189,6 @@ Completed to install Registry in Docker.
           </li>
         </ol>
       </subsection>
-      
-      <subsection name="Linux Users">
-        <ol>
-          <p>NOTE: Make sure that there is a Docker installation and up and running on the platform.</p>
-          
-          <li>Move to the directory that registry installer script resides.
-            <source>
-% cd $REGISTRY_HOME/bin
-            </source>
-          </li>
-          <li>Execute a registry installer script.
-            <source>
-% ./registry_install.sh
-            </source>
-          </li>
-          <li>Enter the install mode (docker).
-            <source>
-Enter an installation mode (docker or standalone): docker
-            </source>
-           
-            <p>You should see output similar to the following:
-          </p>
-
-          <source>
-Enter an installation mode (docker or standalone): docker
-STARTING Registry Installer in docker mode.
-
-  Registry   .....   ( v 2.0.0 )
-                           ( installing on platform: Linux )
-                           ( IP Address:- 192.168.1.65 )
-       					   ( Host Name:- pds )
-
-Installing Registry in Docker...
-Building Registry Docker Image.                               SUCCESS
-Starting Registry Docker Container.                           SUCCESS
-Waiting for Solr server to start (30 seconds)...
-Creating a Registry Service Blob collection (.system)                SUCCESS
-Creating a Registry Service XPath collection (xpath)                 SUCCESS
-Creating a Search collection (pds)                           
-Completed to install Registry in Docker.
-
-          </source>     
-          </li>  
-          <li>Verify installation.
-            <p>Open up your favorite browser and type in <i>http://localhost:8983/solr</i>. You should see the Solr admin interface.
-            </p>
-          </li>
-        </ol>
-      </subsection>
     </section>
     
     <section name="Install Solr and Registry - Standalone">
@@ -255,19 +205,24 @@ Completed to install Registry in Docker.
           <li>
             <p><a href="https://www.apache.org/dyn/closer.lua/lucene/solr/7.7.2/solr-7.7.2.tgz">Download Solr</a>
 	    </p>
-            <p>Unpack SOLR pkg and set SOLR_HOME</p>
+            <p>Unpack Solr package and note the path to the Solr instance.<br />Note: It is preferred that the Solr package have same parent directory as Registry / Harvest.</p>
             <source>
-              % tar xvf solr-7.7.0.tgz
-              % cd solr-7.7.0
-              
-              # Set SOLR_HOME
-              % export SOLR_HOME=$(pwd)
-              % echo $SOLR_HOME
-              /home/pds/solr-7.7.0
-            </source>      
-            <p>NOTE: The export command will be used to store the directory of the Solr installation.</p>
+              % tar -xvf solr-7.7.2.tgz
+              % pwd
+	      /home/pds
+
+              % ls
+	      harvest-x.x.x/
+	      ${project.artifactId}-${project.version}/
+	      solr-7.7.2/
+
+	      # If different location, note location of SOLR
+	      % cd solr-7.7.2/
+	      % pwd
+	      /home/pds/solr-7.7.2/
+            </source>
           </li>
-          <li>Move to the directory that registry installer script resides (Note: See <a href="#Unpacking_the_Package">above</a> for configuring the REGISTRY_HOME variable or find out what that path represents.)
+          <li>Move to the directory that registry installer script resides (Note: See <a href="#Unpacking_the_Package">Unpacking the Package</a> for configuring the REGISTRY_HOME variable or find out what that path represents.)
             <source>
               % cd $REGISTRY_HOME/bin
             </source>
@@ -281,7 +236,7 @@ Completed to install Registry in Docker.
             <source>
               Enter an installation mode (docker or standalone): standalone
               
-              Enter location of SOLR installation: /home/pds/solr-7.7.0
+              Enter location of SOLR installation: /home/pds/solr-7.7.2
             </source>
             
             <p>You should see output similar to the following: </p>
@@ -295,11 +250,11 @@ Completed to install Registry in Docker.
               ( IP Address:- 192.168.1.65 )
               ( Host Name:- MT-106917 )
               
-              Enter location of SOLR installation: /Users/pds/SOLR/solr-7.7.0 
-              Copied a directory from /Users/pds/registry/target/registry-2.0.0/bin/../dist to /Users/pds/SOLR/solr-7.7.0/contrib/pds/lib
-              Copied a directory from /Users/pds/registry/target/registry-2.0.0/bin/../conf to /Users/pds/SOLR/solr-7.7.0/server/solr/configsets/pds/conf
-              Copied a file from /Users/pds/registry/target/registry-2.0.0/bin/../lib/saxon-9.jar to /Users/pds/SOLR/solr-7.7.0/server/solr-webapp/webapp/WEB-INF/lib/saxon-9.jar
-              Copied a file from /Users/pds/registry/target/registry-2.0.0/bin/../lib/saxon-dom-9.jar to /Users/pds/SOLR/solr-7.7.0/server/solr-webapp/webapp/WEB-INF/lib/saxon-dom-9.jar
+              Enter location of SOLR installation: /Users/pds/SOLR/solr-7.7.2 
+              Copied a directory from /Users/pds/registry/target/registry-2.0.0/bin/../dist to /Users/pds/SOLR/solr-7.7.2/contrib/pds/lib
+              Copied a directory from /Users/pds/registry/target/registry-2.0.0/bin/../conf to /Users/pds/SOLR/solr-7.7.2/server/solr/configsets/pds/conf
+              Copied a file from /Users/pds/registry/target/registry-2.0.0/bin/../lib/saxon-9.jar to /Users/pds/SOLR/solr-7.7.2/server/solr-webapp/webapp/WEB-INF/lib/saxon-9.jar
+              Copied a file from /Users/pds/registry/target/registry-2.0.0/bin/../lib/saxon-dom-9.jar to /Users/pds/SOLR/solr-7.7.2/server/solr-webapp/webapp/WEB-INF/lib/saxon-dom-9.jar
               
               Starting a SOLR server ....Waiting up to 180 seconds to see Solr running on port 8983....
               *** [WARN] *** Your open file limit is currently 10240.  
@@ -363,7 +318,7 @@ Completed to install Registry in Docker.
             </source>        
           </li>
           <li>Verify installation.
-            <p>Open up your favorite browser and type in <i>http://localhost:8983/solr</i>. You should see the Solr admin interface.
+            <p>Open up your favorite browser and type in <i>http://localhost:8983/solr</i> (replace localhost with hostname of the server). You should see the Solr admin interface. If not, there may be a port permissions issue. Consult your System Administrator to get the port accessible.
             </p>
           </li>
         </ol>
@@ -390,7 +345,7 @@ Completed to install Registry in Docker.
               # Set SOLR_HOME variable and note path that is output
               $ set "SOLR_HOME=%cd%"
               $ echo %SOLR_HOME%
-              C:\home\pds\solr-7.7.0
+              C:\home\pds\solr-7.7.2
             </source>      
           </li>
 
@@ -408,7 +363,7 @@ Completed to install Registry in Docker.
             <source>
               Enter an installation mode (docker or standalone): standalone
               
-              Enter location of SOLR installation: C:\home\pds\solr-7.7.0
+              Enter location of SOLR installation: C:\home\pds\solr-7.7.2
             </source>
             
             <p>You should see output similar to the following: </p>
@@ -422,13 +377,13 @@ Completed to install Registry in Docker.
               ( IP Address:- 192.168.1.65 )
               ( Host Name:- PDS-HP )
               
-              Enter location of SOLR installation: C:\Users\pds\solr-7.7.0
-              Copied a directory from C:\Users\pds\registry-2.0.0\bin\..\dist to C:\Users\pds\solr-7.7.0\contrib\pds\lib
-              Copied a directory from C:\Users\pds\registry-2.0.0\bin\..\conf to C:\Users\pds\solr-7.7.0\server\solr\configs
+              Enter location of SOLR installation: C:\Users\pds\solr-7.7.2
+              Copied a directory from C:\Users\pds\registry-2.0.0\bin\..\dist to C:\Users\pds\solr-7.7.2\contrib\pds\lib
+              Copied a directory from C:\Users\pds\registry-2.0.0\bin\..\conf to C:\Users\pds\solr-7.7.2\server\solr\configs
               ets\pds\conf
-              Copied a file from C:\Users\pds\registry-2.0.0\bin\..\lib\saxon-9.jar to C:\Users\pds\solr-7.7.0\server\solr-w
+              Copied a file from C:\Users\pds\registry-2.0.0\bin\..\lib\saxon-9.jar to C:\Users\pds\solr-7.7.2\server\solr-w
               ebapp\webapp\WEB-INF\lib\saxon-9.jar
-              Copied a file from C:\Users\pds\registry-2.0.0\bin\..\lib\saxon-dom-9.jar to C:\Users\pds\solr-7.7.0\server\so
+              Copied a file from C:\Users\pds\registry-2.0.0\bin\..\lib\saxon-dom-9.jar to C:\Users\pds\solr-7.7.2\server\so
               lr-webapp\webapp\WEB-INF\lib\saxon-dom-9.jar
               
               Starting a SOLR server ....Waiting up to 180 seconds to see Solr running on port 8983....
@@ -486,6 +441,31 @@ Completed to install Registry in Docker.
       </subsection>        
     </section>
 
+    <section name="Operational Deployment">
+      <p>Once you are ready to deploy the Registry operationally, you will want to secure Solr by setting up a reverse proxy in your Apache HTTP Server <i>httpd.conf</i> file:</p>
+      <source>
+        ProxyPass /services/registry/ http://localhost:8983/solr/
+        ProxyPassReverse /services/registry/ http://localhost:8983/solr/
+        ProxyPass /services/registry http://localhost:8983/solr
+        ProxyPassReverse /services/registry http://localhost:8983/solr
+        
+        &lt;!-- Secures the Solr admin interface. Change your IP/subnet information accordingly. --&gt;
+        &lt;Location "/services/registry/#/"&gt;
+        Order Deny,Allow
+        Deny from all
+        Allow from 123.45.0.0/255.255.0.0 123.56.0.0/255.255.0.0 .jpl.nasa.gov
+        &lt;/Location&gt;
+      </source>
+      
+      <p>You should now be able to go to http://my.website.com/services/registry and see the Solr Admin interface.</p>
+    </section>
+
+    <section name="Next Steps">
+      <subsection name="Install Harvest Tool">
+        <p><a href="../../../ingest/harvest/index.html">The Harvest Tool</a> can be used to populate the Registry with data. The Harvest Tool runs locally at the Discipline Node to crawl the local data repository in order to discover products and index associated metadata with the Registry.</p>
+      </subsection>
+    </section>
+
     <section name="Common Errors">
       <subsection name="Failed to create a registry service collection (.system)...">
 	<p>This issue could happen for several reasons, but we will need to look through the logs to determine the issue:
@@ -518,14 +498,6 @@ Could not reserve enough space for 2097152KB object heap
 
       <subsection name="Other Errors">
         <p>For other errors that arise while testing the installation, see the <a href="../operate/index.html#Common_Errors">Operate - Common Errors</a></p>
-      </subsection>
-    </section>
-
-    <section name="Next Steps">
-      <subsection name="Install Harvest Tool">
-        <p><a href="../../../ingest/harvest/index.html">The Harvest Tool</a> can be used to populate the Registry with data. 
-The Harvest Tool runs locally at the Discipline Node to crawl the local data repository in order to discover products 
-and index associated metadata with the Registry.</p>
       </subsection>
     </section>
 

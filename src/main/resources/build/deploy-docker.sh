@@ -42,8 +42,8 @@ else
 fi
 
 # Solr Default configs for SolrCloud
-maxShardsPerNode=2
-numShards=1
+maxShardsPerNode=3
+numShards=3
 replicationFactor=1
 
 # Get path to this base dir where script exists
@@ -52,7 +52,8 @@ LOG=${DIR}/registry-deploy-log-$(date '+%Y%m%d_%H%M%S').txt
 DOCK_IMAGE=registry
 
 # Add additional volumes to maintain here. Will also need to update mappings below
-VOLUMES="solr_zoo_data solr_pds_shard1_n1 solr_system_shard1_n1 solr_xpath_shard1_n1"
+#VOLUMES="solr_zoo_data solr_pds_shard1_n1 solr_system_shard1_n1 solr_xpath_shard1_n1"
+VOLUMES="solr_data"
 
 if [ $1 = "install" ]; then
     install=true
@@ -111,14 +112,6 @@ if [ "$uninstall"  = true ]; then
 	       esac
         done
     fi
-
-    # Remove '.system' collection alias
-    echo -ne "Removing the Registry Service Blob collection alias.                 " | tee -a $LOG
-    curl "http://localhost:8983/solr/admin/collections?action=DELETEALIAS&name=registry-blob&collections=.system" >>$LOG 2>&1
-    check_status "$check"
-    echo -ne "Removing the Registry Service XPath collection alias.                " | tee -a $LOG
-    curl "http://localhost:8983/solr/admin/collections?action=DELETEALIAS&name=registry-xpath&collections=xpath" >>$LOG 2>&1
-    check_status "$check"
 
     # Remove '.system' collection
     echo "Removing the Registry Blob collection from the SOLR.              " | tee -a $LOG
@@ -217,15 +210,23 @@ echo -ne "Starting Registry Docker Container.                           " | tee 
 #if [ -n $containerId ]; then
 #   docker rm $containerId
 #fi
+#docker run --name ${DOCK_IMAGE} -u solr\
+#    -v $basepath/solr-docs:/data/solr-docs \
+#    -v solr_zoo_data:/opt/solr/server/solr/zoo_data/ \
+#    -v solr_pds_shard1_n1:/opt/solr/server/solr/pds_shard1_replica_n1 \
+#    -v solr_system_shard1_n1:/opt/solr/server/solr/.system_shard1_replica_n1 \
+#    -v solr_xpath_shard1_n1:/opt/solr/server/solr/xpath_shard1_replica_n1 \
+#    -d -p 8983:8983 \
+#    -e SOLR_HEAP=$SOLR_HEAP \
+#    $DOCK_IMAGE:$version >>$LOG 2>&1    
+
 docker run --name ${DOCK_IMAGE} -u solr\
-    -v $basepath/solr-docs:/data/solr-docs \
-    -v solr_zoo_data:/opt/solr/server/solr/zoo_data/ \
-    -v solr_pds_shard1_n1:/opt/solr/server/solr/pds_shard1_replica_n1 \
-    -v solr_system_shard1_n1:/opt/solr/server/solr/.system_shard1_replica_n1 \
-    -v solr_xpath_shard1_n1:/opt/solr/server/solr/xpath_shard1_replica_n1 \
+    -v $basepath/../registry-data:/data/registry-data \
+    -v solr_data:/opt/solr/server/solr/ \
     -d -p 8983:8983 \
     -e SOLR_HEAP=$SOLR_HEAP \
-    $DOCK_IMAGE:$version >>$LOG 2>&1    
+    $DOCK_IMAGE:$version >>$LOG 2>&1
+
 check_exec $?
 
 if [ "$install" = true ]; then
@@ -237,12 +238,10 @@ if [ "$install" = true ]; then
     # Create the Registry collections
     echo -ne "Creating a Registry Service Blob collection (.system)         " | tee -a $LOG
     check=$(curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=.system&maxShardsPerNode=${maxShardsPerNode}&numShards=${numShards}&replicationFactor=${replicationFactor}" 2>>$LOG | tee -a $LOG)
-    curl "http://localhost:8983/solr/admin/collections?action=CREATEALIAS&name=registry-blob&collections=.system" >>$LOG 2>&1
     check_status "$check"
 
     echo -ne "Creating a Registry Service XPath collection (xpath)          " | tee -a $LOG
     check=$(curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=xpath&maxShardsPerNode=${maxShardsPerNode}&numShards=${numShards}&replicationFactor=${replicationFactor}" 2>>$LOG | tee -a $LOG)
-    curl "http://localhost:8983/solr/admin/collections?action=CREATEALIAS&name=registry-xpath&collections=xpath" >>$LOG 2>&1
     check_status "$check"
 
     # Create the Search collection 
