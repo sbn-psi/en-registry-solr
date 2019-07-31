@@ -100,11 +100,11 @@ POSSIBILITY OF SUCH DAMAGE.
       </resource>
     </resources>
     <plugins>
-      <plugin>
+      <!--plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>3.7.1</version>
-      </plugin>
+      </plugin-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>buildnumber-maven-plugin</artifactId>
@@ -190,31 +190,6 @@ POSSIBILITY OF SUCH DAMAGE.
           <tagNameFormat>v@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
-      <plugin>
-        <!-- Deploy the web site -->
-        <groupId>com.github.github</groupId>
-        <artifactId>site-maven-plugin</artifactId>
-        <version>0.9</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>site</goal>
-            </goals>
-            <!-- select the Maven phase in which the plugin will be executed -->
-            <phase>site-deploy</phase>
-            <configuration>
-              <!-- Plugin configuration goes here -->
-              <server>github</server>
-              <!-- The commit message -->
-              <message>v@{project.version} site update [automated]</message>
-              <!-- The location where the site is uploaded -->
-              <path>${site.path}</path>
-              <!-- Use merge or override the content -->
-              <merge>true</merge>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins> 
   </build>
 
@@ -279,9 +254,9 @@ POSSIBILITY OF SUCH DAMAGE.
   </profiles>
 
   <scm>
-    <url>https://github.com/NASA-PDS-Incubator/registry/tree/master</url>
+    <url>https://github.com/NASA-PDS-Incubator/registry</url>
     <connection>scm:git:git://github.com/NASA-PDS-Incubator/registry.git</connection>
-    <developerConnection>scm:git:ssh://github.com:NASA-PDS-Incubator/registry.git</developerConnection>
+    <developerConnection>scm:git:git@github.com:NASA-PDS-Incubator/registry.git</developerConnection>
   </scm>
   
   <distributionManagement>
