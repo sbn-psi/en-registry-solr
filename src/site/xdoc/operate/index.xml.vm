@@ -85,7 +85,7 @@ To ingest these files into the PDS Solr collection run the following command:
         </p>
         <p>Docker Installation:
         <source>
-docker exec -it registry post -c pds -params "tr=add-hierarchy.xsl" /data/solr-docs
+docker exec -it registry post -c pds -params "tr=add-hierarchy.xsl" /data/registry-data/solr-docs
         </source>
         </p>
         <p>Standalone Installation:
