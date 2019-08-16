@@ -1,0 +1,111 @@
+PDS_VERSION_ID                 = PDS3                                         
+OBJECT     = DATA_SET_COLLECTION                                              
+DATA_SET_COLLECTION_ID         = "SL9-J/C-3-IMPACT-EVENTS-SELECT-DATA-V1.0"   
+                                                                              
+OBJECT     = DATA_SET_COLLECTION_INFO                                         
+DATA_SET_COLLECTION_NAME       =                                              
+                 "SHOEMAKER-LEVY-9-JUPITER-IMPACT-EVENTS-SELECT-DATA-V1.0"    
+DATA_SETS                      = 18                                           
+START_TIME                     = 1993-07-17T04:07:53Z                         
+STOP_TIME                      = 1994-08-14T16:37:23Z                         
+DATA_SET_COLLECTION_RELEASE_DT = 1996-12-08                                   
+PRODUCER_FULL_NAME             = "ED GRAYZECK"                                
+PRODUCER_INSTITUTION_NAME      = "UNIVERSITY OF MARYLAND"                     
+DATA_SET_COLLECTION_DESC       = "                                            
+This data set collection contains portions of spacecraft measurements of      
+comet Shoemaker-Levy 9 both before and after its impact in the atmosphere     
+of Jupiter in July 1994.    The Galileo data focuses on the time periods      
+in which the major events (Impacts designated by letters G, H, L, Q1) took    
+place.  A statement of Null Results from the Voyager UVS instrument is        
+also provide for this time period.   A preliminary version of the             
+final IUE Archive data covering a full year around the impact time forms      
+the largest portion of coverage.  For comparison, important earth based       
+data sets in the near IR and visible for various fragments are included.      
+"                                                                             
+                                                                              
+DATA_SET_COLLECTION_USAGE_DESC = "                                            
+                                                                              
+The primary intent of this volume is to represent the spacecraft and          
+earth based data sets for the crash of comet Shoemaker-Levy 9  with Jupiter.  
+"                                                                             
+                                                                              
+END_OBJECT = DATA_SET_COLLECTION_INFO                                         
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "GO-J-NIMS-4-ADR-SL9IMPACT-V1.0"             
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "GO-J-PPR-3-EDR-SL9-G/H/L/Q1-V1.0"           
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "GO-J-SSI-2-REDR-SL9-V1.0"                   
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "GO-J-UVS-2-EDR-SL9-V1.0"                    
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "GO-J-UVS-3-RDR-SL9-G-FRAGMENT-V1.0"         
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "IUE-J-LWP-3-EDR-SL9-V1.0"                   
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "IUE-J-SWP-3-EDR-SL9-V1.0"                   
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "OAO-J-OASIS-3-RDR-SL9-V1.0"                 
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "VG2-J-UVS-0--SL9-NULL-RESULTS-V1.0"         
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "IRTF-J/C-NSFCAM-3-RDR-SL9-V1.0"             
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "MSSSO-J-CASPIR-3-RDR-SL9-V1.0"              
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "ESO-C-EMMI-3-RDR-SL9-V1.0"                  
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "ESO-J-IRSPEC-3-RDR-SL9-V1.0"                
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "ESO-J-SUSI-3-RDR-SL9-V1.0"                  
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "MSSSO-J-CASPIR-3-RDR-SL9-STDS-V1.0"         
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "HST-J-WFPC2-3-SL9-IMPACT-V1.0"              
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "EAR-J/C-HSCCD-3-RDR-SL9-V1.0"               
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+DATA_SET_ID                    = "EAR-J/SA-HSOTP-2-EDR-SL9-V1.0"              
+END_OBJECT = DATA_SET_COLL_ASSOC_DATA_SETS                                    
+                                                                              
+OBJECT     = DATA_SET_COLLECTION_REF_INFO                                     
+ REFERENCE_KEY_ID              = "N/A"                                        
+END_OBJECT = DATA_SET_COLLECTION_REF_INFO                                     
+                                                                              
+END_OBJECT                     = DATA_SET_COLLECTION                          
+END                                                                           

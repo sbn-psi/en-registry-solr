@@ -30,16 +30,10 @@ fi
 SCRIPT_DIR=`dirname $0`
 PARENT_DIR=`cd ${SCRIPT_DIR}/.. && pwd`
 LIB_DIR=${PARENT_DIR}/lib
-KEYSTORE=${PARENT_DIR}/keystore/tomcat_self_sign_keystore
 
 # Check for dependencies.
 if [ ! -f ${LIB_DIR}/catalog-*.jar ]; then
     echo "Cannot find Catalog jar file in ${LIB_DIR}" 1>&2
-    exit 1
-fi
-
-if [ ! -f ${KEYSTORE} ]; then
-    echo "Cannot find keystore file: ${KEYSTORE}." 1>&2
     exit 1
 fi
 
@@ -48,6 +42,4 @@ CATALOG_JAR=`ls ${LIB_DIR}/catalog-*.jar`
 
 # Executes Catalog via the executable jar file
 # Arguments are passed in to the tool via '$@'
-"${JAVA_HOME}"/bin/java -Dpds.registry="http://localhost:8080/registry" \
-   -Dfilemgr.datatransfer.factory="org.apache.oodt.cas.filemgr.datatransfer.LocalDataTransferFactory" \
-   -Dpds.security.keystore="${KEYSTORE}" -jar ${CATALOG_JAR} "$@"
+"${JAVA_HOME}"/bin/java -Dpds.registry="http://localhost:8983/solr" -jar ${CATALOG_JAR} "$@"

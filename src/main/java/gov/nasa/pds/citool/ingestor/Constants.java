@@ -87,15 +87,14 @@ public class Constants {
     
    
     /** Mapping of PDS3 to PDS4 names */
-    public static final Map<String, String> pds3ToPds4Map =
-      new HashMap<String, String>();
+    public static final Map<String, String> pds3ToPds4Map = new HashMap<String, String>();
 
       static {
         pds3ToPds4Map.put("VOLUMES",  "volume_size");
         pds3ToPds4Map.put("START_TIME", "data_set_start_date_time");
         pds3ToPds4Map.put("STOP_TIME", "data_set_stop_date_time");
         pds3ToPds4Map.put("CITATION_DESC", "data_set_citation_text");
-        pds3ToPds4Map.put("REFERENCE_KEY_ID", "external_reference_description");  // how to handle this??? should be external_reference_description
+        pds3ToPds4Map.put("REFERENCE_KEY_ID", "external_reference_description");
         pds3ToPds4Map.put("PRODUCER_FULL_NAME", "data_set_producer_full_name");
         pds3ToPds4Map.put("LABEL_REVISION_NOTE", "modification_description");
         pds3ToPds4Map.put("CONFIDENCE_LEVEL_NOTE", "data_set_confidence_level_note");
@@ -107,6 +106,5 @@ public class Constants {
         pds3ToPds4Map.put("DESCRIPTION", "volume_description");
         pds3ToPds4Map.put("MISSION_ALIAS_NAME", "alternate_title");
         pds3ToPds4Map.put("RESOURCE_LINK", "resource_url");
-        //pds3ToPds4Map.put("INSTRUMENT_HOST_DESC", "instrument_host_description");
       } 
 }

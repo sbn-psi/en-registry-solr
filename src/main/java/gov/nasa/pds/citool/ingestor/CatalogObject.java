@@ -14,43 +14,32 @@
 package gov.nasa.pds.citool.ingestor;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-//import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Vector;
 import java.util.Iterator;
-import java.util.logging.Logger;
 import java.text.SimpleDateFormat;
 
 import gov.nasa.pds.tools.label.Label;
-import gov.nasa.pds.tools.label.parser.LabelParser;
-import gov.nasa.pds.tools.LabelParserException;
-import gov.nasa.pds.tools.constants.Constants.ProblemType;
-import gov.nasa.pds.tools.label.Numeric;
 import gov.nasa.pds.tools.label.Scalar;
 import gov.nasa.pds.tools.label.Set;
 import gov.nasa.pds.tools.label.Sequence;
-import gov.nasa.pds.tools.label.Statement;
 import gov.nasa.pds.tools.label.ObjectStatement;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.PointerStatement;
 import gov.nasa.pds.tools.label.Value;
-import gov.nasa.pds.tools.util.Utility;
 import gov.nasa.pds.tools.containers.FileReference;
 
 import gov.nasa.pds.citool.report.IngestReport;
+import gov.nasa.pds.citool.util.References;
 import gov.nasa.pds.citool.file.FileObject;
 import gov.nasa.pds.citool.file.MD5Checksum;
-import gov.nasa.pds.citool.CIToolIngester;
-import gov.nasa.pds.registry.model.ExtrinsicObject;
+import gov.nasa.pds.citool.registry.model.Metadata;
+import gov.nasa.pds.citool.registry.model.RegistryObject;
 
-import org.apache.oodt.cas.metadata.Metadata;
 
 /**
  * Class to parse a PDS catalog file 
@@ -69,17 +58,18 @@ public class CatalogObject {
 	private IngestReport _report;
 	private Label _label;
 	private Map<String, AttributeStatement> _pdsLabelMap;
-	private List<Reference> _references;
 	private FileObject _fileObj;
 	private List<String> _pointerFiles;
 	private String _filename;
 	private float _version;
-	private ExtrinsicObject _product;
+	private RegistryObject _product;
 	private Metadata _metadata;
 	private List<ObjectStatement> _resrcObjs = null;
 	private Map<String, String> _targetInfos;
+
 	
-	public CatalogObject(IngestReport report) {
+	public CatalogObject(IngestReport report) 
+	{
 		this._report = report;
 		this._catObjType = null;
 		this._label = null;
@@ -116,14 +106,6 @@ public class CatalogObject {
 		return this._isLocal;
 	}
 
-	public void setReferences(List<Reference> refs) {
-		this._references = refs;
-	}
-	
-	public List<Reference> getReferences() {
-		return this._references;
-	}
-	
 	public void setVersion(float version) {
 		this._version = version;
 	}
@@ -165,11 +147,11 @@ public class CatalogObject {
 		return this._pointerFiles;
 	}
 	
-	public ExtrinsicObject getExtrinsicObject() {
+	public RegistryObject getExtrinsicObject() {
 		return this._product;
 	}
 	
-	public void setExtrinsicObject(ExtrinsicObject product) {
+	public void setExtrinsicObject(RegistryObject product) {
 		this._product = product;
 	}
 	
@@ -239,8 +221,11 @@ public class CatalogObject {
 				    	keyDesc = attrSmt.getValue().toString();
 				}
 			}
-			if (objType.equalsIgnoreCase("REFERENCE"))
-				CIToolIngester.refInfo.put(keyId, keyDesc);
+			
+			if(objType.equalsIgnoreCase("REFERENCE")) 
+			{
+				References.getInstance().put(keyId, keyDesc);
+			}
 
 			if (!objType.equalsIgnoreCase("VOLUME")) {
 				// add to _resrcObjs so that it can be created as Product_Context type

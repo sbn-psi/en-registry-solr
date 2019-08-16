@@ -21,16 +21,17 @@ import gov.nasa.pds.citool.commandline.options.Flag;
 import gov.nasa.pds.citool.commandline.options.InvalidOptionException;
 import gov.nasa.pds.citool.commandline.options.Mode;
 import gov.nasa.pds.citool.commandline.options.ToolsPropertiesConfiguration;
-import gov.nasa.pds.citool.ingestor.CatalogDB;
+import gov.nasa.pds.citool.registry.client.RegistryClientManager;
 import gov.nasa.pds.citool.report.CompareReport;
 import gov.nasa.pds.citool.report.IngestReport;
 import gov.nasa.pds.citool.report.Report;
 import gov.nasa.pds.citool.report.ValidateReport;
+import gov.nasa.pds.citool.search.DocConfigManager;
+import gov.nasa.pds.citool.search.DocGenerator;
 import gov.nasa.pds.citool.target.Target;
 import gov.nasa.pds.citool.util.ToolInfo;
 import gov.nasa.pds.citool.util.Utility;
 import gov.nasa.pds.tools.constants.Constants.Severity;
-import gov.nasa.pds.registry.client.SecurityContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -61,7 +63,10 @@ import org.apache.log4j.Priority;
  * @author mcayanan, hyunlee
  *
  */
-public class CITool {
+public class CITool 
+{
+	private static final String DEFAULT_REGISTRTY_URL = "http://localhost:8983/solr"; 
+	
     private List<Target> targets;
     private List<String> dictionaries;
     private List<URL> includePaths;
@@ -74,26 +79,19 @@ public class CITool {
     private Target target;
     private URL allrefs;
  
-    private String username;
-    private String password;
-    private String keystore_pass;
-    private String storageUrl;  
     private String registryUrl;
-    private String transportUrl;
-    
-    /** location to the self sign on keystore. */
-    private String keystore;
-    
-    /** Security context to support handling of the PDS Security. */
-    private SecurityContext securityContext;
-    
-    /** Keystore default password for the self sign certificate. */
-    private static String KEYSTORE_PASSWORD = "changeit";
-    
+    private String docConfifDir;
+    private String outputDir;
+        
     private Mode toolMode;
     private Report report;
+
+    private Logger log;
     
-    public CITool() {
+    public CITool() 
+    {
+    	log = Logger.getLogger(this.getClass().getName());
+    	
         targets = new ArrayList<Target>();
         dictionaries = new ArrayList<String>();
         includePaths = new ArrayList<URL>();
@@ -107,10 +105,6 @@ public class CITool {
         target = null;
         allrefs = null;
         report = null;
-        registryUrl = null;
-        storageUrl = null;
-        transportUrl = null;
-        keystore_pass = null;
     }
 
     /**
@@ -130,43 +124,52 @@ public class CITool {
         }
     }
 
-    /**
-     * Query the CommandLine object to process the options that were selected.
-     *
-     * @param commandLine The CommandLine object
-     *
-     * @throws Exception
-     */
-    public void query(CommandLine commandLine) throws Exception {
+    
+    private void processCommandLine(CommandLine commandLine) throws Exception
+    {
         List<Option> processedOptions = Arrays.asList(commandLine.getOptions());
         List<String> targetList = new ArrayList<String>();
 
         //Gets the implicit targets
-        for(Iterator<String> i = commandLine.getArgList().iterator();
-        i.hasNext();) {
+        for(Iterator<String> i = commandLine.getArgList().iterator(); i.hasNext();) 
+        {
             String[] values = i.next().split(",");
-            for(int index=0; index < values.length; index++) {
+            for(int index=0; index < values.length; index++) 
+            {
                 targetList.add(values[index].trim());
             }
         }
-        for (Option o : processedOptions) {
-            if (o.getOpt().equals(Flag.HELP.getShortName())) {
+        
+        for (Option o : processedOptions) 
+        {
+            if (o.getOpt().equals(Flag.HELP.getShortName())) 
+            {
                 showHelp();
                 System.exit(0);
-            } else if (o.getOpt().equals(Flag.VERSION.getShortName())) {
+            } 
+            else if (o.getOpt().equals(Flag.VERSION.getShortName())) 
+            {
                 showVersion();
                 System.exit(0);
-            } else if (o.getOpt().equals(Flag.CONFIG.getShortName())) {
+            } 
+            else if (o.getOpt().equals(Flag.CONFIG.getShortName())) 
+            {
                 File c = new File(o.getValue());
                 if (c.exists()) {
                     query(c);
                 } else {
-                    throw new InvalidOptionException("Configuration file "
-                            + "does not exist: " + c);
+                    throw new InvalidOptionException("Configuration file " + "does not exist: " + c);
                 }
-            } else if (o.getOpt().equals(Flag.TARGET.getShortName())) {
+            } 
+            else if (o.getOpt().equals(Flag.DOC_CONFIG.getShortName()))             
+            {
+                this.docConfifDir = o.getValue();
+            } 
+            else if (o.getOpt().equals(Flag.TARGET.getShortName()))             
+            {
                 targetList.addAll(o.getValuesList());
-            } else if (o.getOpt().equals(Flag.ALIAS.getShortName())) {
+            } 
+            else if (o.getOpt().equals(Flag.ALIAS.getShortName())) {
                 setAlias(true);
             } else if (o.getOpt().equals(Flag.LOCAL.getShortName())) {
                 setTraverse(false);
@@ -180,24 +183,20 @@ public class CITool {
                 setReportFile(new File(o.getValue()));
             } else if (o.getOpt().equals(Flag.VERBOSE.getShortName())) {
                 setSeverity(Integer.parseInt(o.getValue()));
-            } else if (o.getOpt().equals(Flag.USER.getShortName())) {
-            	setUsername(o.getValue());
-            } else if (o.getOpt().equals(Flag.PASS.getShortName())) {
-            	setPassword(o.getValue());
-            } else if (o.getOpt().equals(Flag.SERVERURL.getShortName())) {
-            	setStorageUrl(o.getValue());
-            } else if (o.getOpt().equals(Flag.TRANSPORTURL.getShortName())) {
-            	setTransportUrl(o.getValue());
-            } else if (o.getOpt().equals(Flag.ALLREFS.getShortName())) {
+            }
+            else if (o.getOpt().equals(Flag.ALLREFS.getShortName())) {
                 setAllrefs(o.getValue());
-            } else if (o.getOpt().equals(Flag.KEYPASS.getShortName())) {
-            	setKeystorePass(o.getValue());
+            } 
+            else if (o.getOpt().equals(Flag.OUTPUT_DIR.getShortName())) {
+            	this.outputDir = o.getValue();
             }
         }
+        
         //while statement removes empty values that get added to the list as
         //a result of a bug in the Commons-CLI library. Only occurs when
         //passing multiple values, separated with a comma.
         while(targetList.remove(""));
+        
         if (!targetList.isEmpty()) {
             List<Target> tList = new ArrayList<Target>();
             for (String t : targetList) {
@@ -205,13 +204,28 @@ public class CITool {
             }
             setTargets(tList);
         }
+    }
+
+    
+    /**
+     * Query the CommandLine object to process the options that were selected.
+     *
+     * @param commandLine The CommandLine object
+     *
+     * @throws Exception
+     */
+    public void query(CommandLine commandLine) throws Exception 
+    {
+    	processCommandLine(commandLine);
 
         try {
-        	if (toolMode == null) {
+        	if (toolMode == null) 
+        	{
         		throw new InvalidOptionException("No mode specified. 'm' "
                         + "flag must be specified.");
         	} 
-        	else {
+        	else 
+        	{
         		if (toolMode.equals(Mode.COMPARE)) {
         			if (targets.size() == 2) {
         				oldTarget = targets.get(0);
@@ -223,38 +237,31 @@ public class CITool {
         				throw new InvalidOptionException("2 Targets must be "
         						+ "specified when running in compare mode");
         			}
-        		} else if (toolMode.equals((Mode.INGEST))) {
-        			// pds.registry & pds.security.keystore system properties are required.
-        			// username and password are required for ingest mode
-        			if (targets.size() == 1) {
+        		} 
+        		else if (toolMode.equals((Mode.INGEST))) 
+        		{
+        			if (targets.size() == 1) 
+        			{
         				target = targets.get(0);
-        			} else {
+        			} 
+        			else 
+        			{
         				throw new InvalidOptionException("No target specified.");
         			}
+        			
         			registryUrl = System.getProperty("pds.registry");
-        			if (registryUrl == null) {
-        				throw new Exception("\'pds.registry\' java property is not set.");
-        			}               
-        			keystore = System.getProperty("pds.security.keystore");
-        			if ((username!=null) && (password!=null) && registryUrl.startsWith("https")) {
-        				if (keystore == null) {
-        					throw new Exception("\'pds.security.keystore\' java property not set.");
-        				}
-        				else {
-        					if (!new File(keystore).exists()) {
-        						throw new Exception("Keystore file does not exist: " + keystore);
-        					}
-
-        					if (keystore_pass == null)
-        						keystore_pass = KEYSTORE_PASSWORD;
-        					securityContext = new SecurityContext(keystore, keystore_pass,
-        							keystore, keystore_pass);
-        				}
+        			if (registryUrl == null) 
+        			{
+        				registryUrl = DEFAULT_REGISTRTY_URL;
+        				log.warning("'pds.registry' java property is not set. Using default: " + registryUrl);
         			}
-        			if (transportUrl==null || storageUrl==null)
-        				throw new InvalidOptionException("-s/-T must be specified "
-        						+ "when running in ingest mode.");
-        		} else if (toolMode.equals(Mode.VALIDATE)) {
+        			
+        			if(docConfifDir == null)
+        			{
+        				throw new InvalidOptionException("No doc-config specified.");
+        			}
+        		} 
+        		else if (toolMode.equals(Mode.VALIDATE)) {
         			if (dictionaries.isEmpty()) {
         				throw new InvalidOptionException("-d must be specified "
         						+ "when running in validate mode.");
@@ -342,21 +349,6 @@ public class CITool {
             if (config.containsKey(ConfigKey.REPORT)) {
                 setReportFile(new File(config.getString(ConfigKey.REPORT)));
             }
-            if (config.containsKey(ConfigKey.USER)) {
-            	setUsername(config.getString(ConfigKey.USER));
-            }
-            if (config.containsKey(ConfigKey.PASS)) {
-            	setPassword(config.getString(ConfigKey.PASS));
-            }
-            if (config.containsKey(ConfigKey.SERVERURL)) {
-            	setStorageUrl(config.getString(ConfigKey.SERVERURL));
-            }
-            if (config.containsKey(ConfigKey.TRANSPORTURL)) {
-            	setTransportUrl(config.getString(ConfigKey.TRANSPORTURL));
-            }
-            if (config.containsKey(ConfigKey.KEYPASS)) {
-            	setKeystorePass(config.getString(ConfigKey.KEYPASS));
-            }
         } catch(Exception e) {
             throw new ConfigurationException(e.getMessage());
         }
@@ -434,38 +426,7 @@ public class CITool {
         }
     }
     
-    public void setUsername(String user) {
-    	this.username = user;
-    }
-    
-    public String getUsername() {
-    	return this.username;
-    }
-    
-    public void setPassword(String passwd) {
-    	this.password = passwd;
-    }
-    
-    public String getPassword() {
-    	return this.password;
-    }
-    
-    public void setStorageUrl(String storageUrl) {
-    	this.storageUrl = storageUrl;
-    }
-    
-    public String getStorageUrl() {
-    	return this.storageUrl;
-    }
-    
-    public void setTransportUrl(String transportUrl) {
-    	this.transportUrl = transportUrl;
-    }
-    
-    public void setKeystorePass(String keypass) {
-    	this.keystore_pass = keypass;
-    }
-    
+
     /**
      * Show the version and disclaimer notice.
      *
@@ -554,22 +515,37 @@ public class CITool {
         try {
             CommandLine commandline = parseLine(args);
             query(commandline);
-            if (Mode.COMPARE.equals(toolMode)) {
-                CIToolComparator comparator = new CIToolComparator(
-                        (CompareReport) report);
+            
+            if (Mode.COMPARE.equals(toolMode)) 
+            {
+                CIToolComparator comparator = new CIToolComparator((CompareReport) report);
                 report.printHeader();
                 comparator.compare(oldTarget, newTarget, traverse);
                 report.printFooter();
-            } else if (Mode.INGEST.equals(toolMode)) {
+            } 
+            else if (Mode.INGEST.equals(toolMode)) 
+            {
             	report.printHeader();
+            	
+            	DocConfigManager.init(docConfifDir);
+            	RegistryClientManager.init(registryUrl);
+            	DocGenerator.init(outputDir);
+            	
             	CIToolIngester ingester = new CIToolIngester((IngestReport) report);
-            	ingester.setRegistryUrl(registryUrl);
-            	ingester.setSecurity(securityContext, username, password);
-            	ingester.setStorageUrl(storageUrl);
-            	ingester.setTransportUrl(transportUrl);
-            	ingester.ingest(target, traverse);
-            	report.printFooter();          	
-            } else if (Mode.VALIDATE.equals(toolMode)) {
+
+            	try
+            	{
+            		ingester.ingest(target, traverse);
+            	}
+            	finally
+            	{
+            		DocGenerator.getInstance().close();
+            	}
+            	
+            	report.printFooter();
+            } 
+            else if (Mode.VALIDATE.equals(toolMode)) 
+            {
                 CIToolValidator validator = new CIToolValidator(report, includePaths);
                 report.printHeader();
                 for (Target target : targets) {
@@ -578,7 +554,8 @@ public class CITool {
                 report.printFooter();
             }
         } catch (Exception e) {
-            System.err.println("\nException: " + e.getMessage() + "\n");
+        	e.printStackTrace();
+            //System.err.println("\nException: " + e.getMessage() + "\n");
         }
     }
 

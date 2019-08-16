@@ -140,17 +140,16 @@ public class IngestReport extends Report {
       writer.println();
       writer.println("Summary:");
       writer.println();
-      writer.println("  " + gov.nasa.pds.citool.ingestor.CatalogRegistryIngester.fileObjCount + " of " 
+      writer.println("  " + gov.nasa.pds.citool.ingestor.CatalogVolumeIngester.fileObjCount + " of " 
     		  + totalFiles + " file(s) ingested, "
               + this.getNumSkipped() + " skipped");
       //writer.println("  " + this.getNumPassed() + " of " + totalValidated
       //        + " passed");
       writer.println();  
       if (printDetails) {
-    	  writer.println("  Number of successful file object ingestion: " + gov.nasa.pds.citool.ingestor.CatalogRegistryIngester.fileObjCount);
-    	  writer.println("  Number of successful storage service ingestion: " + gov.nasa.pds.citool.ingestor.CatalogRegistryIngester.storageCount);
-    	  writer.println("  Number of successful registry ingestion: " + gov.nasa.pds.citool.ingestor.CatalogRegistryIngester.registryCount);
-    	  writer.println("  Name of the registry package: " + gov.nasa.pds.citool.ingestor.CatalogRegistryIngester.registryPackageName);
+    	  writer.println("  Number of successful file object ingestion: " + gov.nasa.pds.citool.ingestor.CatalogVolumeIngester.fileObjCount);
+    	  writer.println("  Number of successful registry ingestion: " + gov.nasa.pds.citool.ingestor.CatalogVolumeIngester.registryCount);
+//    	  writer.println("  Name of the registry package: " + gov.nasa.pds.citool.ingestor.CatalogRegistryIngester.registryPackageName);
     	  writer.println();
       }
       writer.println("End of Report\n");

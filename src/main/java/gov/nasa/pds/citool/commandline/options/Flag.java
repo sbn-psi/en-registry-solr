@@ -33,6 +33,9 @@ public enum Flag {
     CONFIG("c", "configuration", "file", String.class, "Specify a "
             + "configuration file to change tool behavior."),
 
+    DOC_CONFIG("C", "doc-config", "dir", String.class, 
+    		"Specify the directory location where the document generation configuration files reside."),
+    
     /** Specify the PDS data dictionary files. */
     PDSDD("d", "dict", ".full file(s)", String.class, true, "Specify the "
             + "PDS data dictionary file(s)."),
@@ -52,21 +55,10 @@ public enum Flag {
     LOCAL("L", "local", "Do not recurisevly traverse down a target "
             + "directory."),
 
-    /** Flag to specify a username for authentication with the PDS Security Service **/
-    USER("u", "user", "username", String.class, "Username for authentication "
-    		+ "with the PDS Security Service"),
-    		
-    /** Flag to specify a password associated with the username. **/
-    PASS("p", "pass", "password", String.class, "Password associated with the username"),
-    
-    /** Flag to specify the server url of the PDS storage service. **/
-    SERVERURL("s", "serverUrl", "server URL", String.class, "Specify the url to the PDS Storage Service."),
-    
-    /** Flag to specify the transport url of the PDS transport service. **/
-    TRANSPORTURL("T", "transportUrl", "transport URL", String.class, "Specify the url to the PDS Transport Service."),
-    
-    /** Flag to specify the password for the keystore file. **/
-    KEYPASS("k", "keystorePass", "keystore password", String.class, "Specify the password for the keystore file."),
+    OUTPUT_DIR("o", "output-dir", "dir", String.class, 
+    		"Specify a directory location to tell the tool "
+    		+ "where to output the Solr documents. The default is "
+    		+ "to write to the current working directory."),
     
     /** Flag to explicitly specify the targets. */
     TARGET("t", "target", "catalogs", String.class, true, "Explicitly specify "
@@ -218,14 +210,11 @@ public enum Flag {
         options.addOption(new ToolsOption(ALIAS));
         options.addOption(new ToolsOption(ALLREFS));
         options.addOption(new ToolsOption(CONFIG));
+        options.addOption(new ToolsOption(DOC_CONFIG));
         options.addOption(new ToolsOption(MODE));
         options.addOption(new ToolsOption(INCLUDES));
         options.addOption(new ToolsOption(LOCAL));
-        options.addOption(new ToolsOption(USER));
-        options.addOption(new ToolsOption(PASS));
-        options.addOption(new ToolsOption(SERVERURL));
-        options.addOption(new ToolsOption(TRANSPORTURL));
-        options.addOption(new ToolsOption(KEYPASS));
+        options.addOption(new ToolsOption(OUTPUT_DIR));
         options.addOption(new ToolsOption(PDSDD));
         options.addOption(new ToolsOption(TARGET));
         options.addOption(new ToolsOption(REPORT));

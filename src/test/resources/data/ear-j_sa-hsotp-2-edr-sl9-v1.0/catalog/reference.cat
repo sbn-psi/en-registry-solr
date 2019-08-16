@@ -1,0 +1,51 @@
+PDS_VERSION_ID = PDS3                                                         
+                                                                              
+LABEL_REVISION_NOTE = "                                                       
+  30 Sep 2005,  S.McLaughlin  Corrected description for WOODNEYETAL1998       
+  "                                                                           
+                                                                              
+OBJECT                         = REFERENCE                                    
+REFERENCE_KEY_ID               = "NEWBURN1994"                                
+REFERENCE_DESC                 = "Newburn, R., Periodic Comet Shoemaker-Levy  
+9 Collides with Jupiter, JPL 400-520, 3/94, Pasadena, CA, 1994."              
+END_OBJECT                     = REFERENCE                                    
+                                                                              
+OBJECT                         = REFERENCE                                    
+REFERENCE_KEY_ID               = "AHEARN&MCFADDEN1994"                        
+REFERENCE_DESC                 = "AHearn, M., and L. A. McFadden, Fact Sheet: 
+Comet P/Shoemaker-Levy 9 and Jupiter, private communication, 1994."           
+END_OBJECT                     = REFERENCE                                    
+                                                                              
+OBJECT                         = REFERENCE                                    
+REFERENCE_KEY_ID               = "HORROCKS&AHEARN1995"                        
+REFERENCE_DESC                 = "Horrocks, K., and M. AHearn, European SL9/  
+Jupiter Workshop, editors R. West and H. Boehnhardt, ESO Conference and       
+Workshop Proceedings #52, ISBN 3-923524-55-2, Garching, Germany, 1995."       
+END_OBJECT                     = REFERENCE                                    
+                                                                              
+OBJECT                         = REFERENCE                                    
+REFERENCE_KEY_ID               = "CHODAS&YEOMANS1996"                         
+REFERENCE_DESC                 = "Chodas, P. and D. Yeomans, The Collision of 
+Comet Shoemaker-Levy 9 and Jupiter, editors K. Noll, H. Weaver, and           
+P. Feldman, IAU Colloquim 156, ISBN 0-521-56192-2, Cambridge, United Kingdom."
+END_OBJECT                     = REFERENCE                                    
+                                                                              
+OBJECT                         = REFERENCE                                    
+REFERENCE_KEY_ID               = "BUIEETAL1995"                               
+REFERENCE_DESC                 = "Buie, M. W., L. H. Wasserman, R. L. Millis, 
+W. B. Hubbard, H. L. Reitsema, F. Roques, A. Peyrot, M. Vignand, E. Dunham,   
+C. Ford, H. Hammel, J. Faust, K. Meech, B. Patten, J. Bell, III, D. Toublanc, 
+R. Thompson, Global Imaging Campaign of Shoemaker-Levy 9 Impact Phenomena,    
+editor H. Weaver, Abstracts for IAU Colloquium 156: The Collision of Comet    
+P/Shoemaker-Levy 9 and Jupiter, Baltimore, USA, 1995."                        
+END_OBJECT                     = REFERENCE                                    
+                                                                              
+OBJECT                         = REFERENCE                                    
+REFERENCE_KEY_ID               = "WOODNEYETAL1998"                            
+REFERENCE_DESC                 = "Woodney, L. M., M. F. A'Hearn, R. Meier,    
+D. D. Wellnitz, T. Smith, A. Verveer, R. Martin, On the Reflection off the    
+Jovian Satellites of the Impact of Comet D/Shoemaker-Levy 9 with Jupiter,     
+was submitted to Icarus in 1998 but was not published."                       
+END_OBJECT                     = REFERENCE                                    
+                                                                              
+END                                                                           

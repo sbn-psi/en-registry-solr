@@ -51,10 +51,10 @@
       <lineEnding>keep</lineEnding>
     </fileSet>
     <fileSet>
-      <directory>src/main/resources/keystore</directory>
-      <outputDirectory>keystore</outputDirectory>
+      <directory>src/main/resources/search-conf</directory>
+      <outputDirectory>search-conf</outputDirectory>
       <fileMode>644</fileMode>
-      <lineEnding>crlf</lineEnding>
+      <lineEnding>keep</lineEnding>
     </fileSet>
   </fileSets>
 
