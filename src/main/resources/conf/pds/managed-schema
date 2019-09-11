@@ -19,18 +19,20 @@
 <schema name="default-config" version="1.6">
     <!-- docValues are enabled by default for long type so we don't need to index the version field  -->
     <field name="_version_" type="plong" indexed="false" stored="false"/>
-    <field name="identifier" type="string" indexed="true" stored="true" required="true" multiValued="true" />
-    <field name="lid" type="string" indexed="true" stored="true" required="true" />
-    <field name="version_id" type="pfloat" indexed="true" stored="true" />
-    <field name="lidvid" type="string" indexed="true" stored="true" required="true" />
-    <field name="abstract_text" type="text_general" indexed="false" stored="true" multiValued="true" />
-    <field name="agency_name" type="lowercase" indexed="true" stored="true" multiValued="true" />
-    <field name="airborne_name" type="text_general" indexed="true" stored="true" multiValued="true" />
-    <field name="airborne_type" type="text_general" indexed="true" stored="true" multiValued="true" />
-    <field name="airborne_description" type="text_general" indexed="true" stored="true" multiValued="true" />
-    <field name="alternate_id" type="text_general" indexed="false" stored="true" multiValued="true" />
-    <field name="alternate_title" type="text_general" indexed="false" stored="true" multiValued="true" />
-    <field name="archive_status" type="lowercase" indexed="true" stored="true" multiValued="false" />
+
+    <field name="transaction_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+
+   <field name="identifier" type="string" indexed="true" stored="true" required="true" multiValued="true" />
+   <field name="lid" type="string" indexed="true" stored="true" required="true" />
+   <field name="version_id" type="pfloat" indexed="true" stored="true" />
+   <field name="lidvid" type="string" indexed="true" stored="true" required="true" />
+   <field name="abstract_text" type="text_general" indexed="false" stored="true" multiValued="true" />
+   <field name="agency_name" type="lowercase" indexed="true" stored="true" multiValued="true" />
+   <field name="airborne_name" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="airborne_type" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="airborne_description" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="alternate_title" type="text_general" indexed="false" stored="true" multiValued="true" />
+   <field name="archive_status" type="lowercase" indexed="true" stored="true" multiValued="false" />
 
    <!-- Product_Attribute_Definition fields -->
    <field name="attribute_name" type="text_gen_sort" indexed="true" stored="true" multiValued="false" />
