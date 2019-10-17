@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Copyright 2019, California Institute of Technology ("Caltech").
 # U.S. Government sponsorship acknowledged.
 #
