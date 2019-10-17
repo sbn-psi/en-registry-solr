@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Copyright 2019, California Institute of Technology ("Caltech").
 # U.S. Government sponsorship acknowledged.
 #
@@ -36,8 +38,13 @@
 
 # Check if the JAVA_HOME environment variable is set.
 if [ -z "${JAVA_HOME}" ]; then
-   echo "The JAVA_HOME environment variable is not set." 1>&2
-   exit 1
+   JAVA_CMD=`which java`
+   if [ $? -ne 0 ]; then
+     echo "JAVA_HOME is not set as an environment variable"
+     exit 1
+   fi
+else
+   JAVA_CMD="${JAVA_HOME}"/bin/java
 fi
 
 # Setup environment variables.
