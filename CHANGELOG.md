@@ -1,6 +1,17 @@
 # Change Log
 
-## [v2.1.0](https://github.com/NASA-PDS-Incubator/registry/tree/v2.1.0) (2019-10-14)
+## [v2.1.1](https://github.com/NASA-PDS-Incubator/registry/tree/v2.1.1) (2019-10-16)
+[Full Changelog](https://github.com/NASA-PDS-Incubator/registry/compare/v2.1.0...v2.1.1)
+
+**Fixed bugs:**
+
+- Fix bug in registry installer occurring from open sourcing or project [\#18](https://github.com/NASA-PDS-Incubator/registry/issues/18)
+
+**Merged pull requests:**
+
+- Fix bug in registry installer occurring from open sourcing or project [\#19](https://github.com/NASA-PDS-Incubator/registry/pull/19) ([jordanpadams](https://github.com/jordanpadams))
+
+## [v2.1.0](https://github.com/NASA-PDS-Incubator/registry/tree/v2.1.0) (2019-10-15)
 **Implemented enhancements:**
 
 - Add capability to handle tracking of Harvest ingestions [\#17](https://github.com/NASA-PDS-Incubator/registry/issues/17)
