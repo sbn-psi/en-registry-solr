@@ -1,6 +1,6 @@
 # Change Log
 
-## [v2.1.1](https://github.com/NASA-PDS-Incubator/registry/tree/v2.1.1) (2019-10-16)
+## [v2.1.1](https://github.com/NASA-PDS-Incubator/registry/tree/v2.1.1) (2019-10-17)
 [Full Changelog](https://github.com/NASA-PDS-Incubator/registry/compare/v2.1.0...v2.1.1)
 
 **Fixed bugs:**
