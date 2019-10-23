@@ -55,19 +55,42 @@ check_status() {
     check_exec $((status))
 }
 
+# Build the new Docker image
+build_docker_image() {
+    echo -ne "Building Registry Docker Image.                               " | tee -a $LOG
+    cd ${DIR}/../build
+    docker build -t $DOCK_IMAGE:$version -f Dockerfile ../ >>$LOG 2>&1
+    cd ../../
+    check_exec $?
+}
+
+remove_registry_container() {
+    containerId=$(docker ps -a | grep "registry" | awk '{print $1}')
+    if [ ! -z "$containerId" ]; then
+        docker stop $containerId >> $LOG 2>&1
+        docker rm $containerId >> $LOG 2>&1
+    fi
+}
+
+wait_for_solr() {
+    attempt_counter=0
+    max_attempts=12
+
+    echo "Waiting for Solr server to start." | tee -a $LOG
+
+    until $(curl --output /dev/null --max-time 5 --silent --head --fail http://localhost:8983/solr); do
+        if [ ${attempt_counter} -eq ${max_attempts} ];then
+            echo "Could not start Solr."
+            exit 1
+        fi
+        attempt_counter=$(($attempt_counter+1))
+        sleep 5
+    done
+}
+
+
 if [[ $# -lt 1 ]]; then
     usage
-fi
-
-# Check if the JAVA_HOME environment variable is set.
-if [ -z "${JAVA_HOME}" ]; then
-   JAVA_CMD=`which java`
-   if [ $? -ne 0 ]; then
-     echo "JAVA_HOME is not set as an environment variable"
-     exit 1
-   fi
-else
-   JAVA_CMD="${JAVA_HOME}"/bin/java
 fi
 
 # Solr Default configs for SolrCloud
@@ -81,7 +104,6 @@ LOG=${DIR}/registry-deploy-log-$(date '+%Y%m%d_%H%M%S').txt
 DOCK_IMAGE=registry
 
 # Add additional volumes to maintain here. Will also need to update mappings below
-#VOLUMES="solr_zoo_data solr_pds_shard1_n1 solr_system_shard1_n1 solr_xpath_shard1_n1"
 VOLUMES="solr_data"
 
 if [ $1 = "install" ]; then
@@ -142,35 +164,25 @@ if [ "$uninstall"  = true ]; then
         done
     fi
 
-    # Remove '.system' collection
+    # Remove 'registry' collection
     echo "Removing the Registry Blob collection from the SOLR.              " | tee -a $LOG
-    docker exec -it --user=solr ${DOCK_IMAGE} solr delete -c .system  >>$LOG 2>&1
+    docker exec -it --user=solr ${DOCK_IMAGE} solr delete -c registry  >>$LOG 2>&1
 
     # Remove 'xpath' collection
-    echo "Removing the Registry XPath collection.                              " | tee -a $LOG
+    echo "Removing the Registry XPath collection.                           " | tee -a $LOG
     docker exec -it --user=solr ${DOCK_IMAGE} solr delete -c xpath  >>$LOG 2>&1
 
     # Remove 'pds' collection
-    echo "Removing the Search collection.                              " | tee -a $LOG
+    echo "Removing the Search collection.                                   " | tee -a $LOG
     docker exec -it --user=solr ${DOCK_IMAGE} solr delete -c pds >>$LOG 2>&1
 
-    echo "Stopping the SOLR instance.                                          " | tee -a $LOG
+    echo "Stopping the SOLR instance.                                       " | tee -a $LOG
     docker exec -it ${DOCK_IMAGE} solr stop >>$LOG 2>&1
 
-    containerId=`docker ps -a | grep $DOCK_IMAGE | awk '{print $1}'`
-    #echo $containerId 
-    if [ -n $containerId ]; then
-        # Gracefully stop the current container with hashkey
-        echo "Stopping Registry Docker Container.                           " | tee -a $LOG
-        docker stop $containerId >> $LOG 2>&1
-        echo "Removing Registry Docker Container.                   " | tee -a $LOG
-        docker rm $containerId >> $LOG 2>&1
-        #docker ps -a | grep "$DOCK_IMAGE" | awk '{print $1}' | xargs docker rm >>$LOG 2>&1
-    fi
+    remove_registry_container
 
-    echo "Removing Registry Docker Images.                              " | tee -a $LOG
+    echo "Removing Registry Docker Images.                                  " | tee -a $LOG
     DOCK_VERSION=$DOCK_IMAGE:$version
-    #echo $DOCK_VERSION
     docker rmi -f $DOCK_VERSION  >>$LOG 2>&1
 
     # Remove the volumes
@@ -220,11 +232,9 @@ if [ "$install" = false ]; then
 fi  
 
 # Build the new Docker image
-echo -ne "Building Registry Docker Image.                               " | tee -a $LOG
-cd ${DIR}/../build
-docker build -t $DOCK_IMAGE:$version -f Dockerfile ../ >>$LOG 2>&1
-cd ../../
-check_exec $?
+if [[ "$(docker images -q $DOCK_IMAGE:$version 2>/dev/null)" == "" ]]; then
+    build_docker_image
+fi
 
 # Create volumes
 for vol in $VOLUMES; do
@@ -233,24 +243,12 @@ done
 
 # TODO: Add some checks to make sure the above executed successfully
 
-# Start up container. TODO: uninstall this up, maybe use docker-compose
+# Start up container.
 echo -ne "Starting Registry Docker Container.                           " | tee -a $LOG
-#containerId=`docker ps -a | grep "search-service" | awk '{print $1}'`
-#if [ -n $containerId ]; then
-#   docker rm $containerId
-#fi
-#docker run --name ${DOCK_IMAGE} -u solr\
-#    -v $basepath/solr-docs:/data/solr-docs \
-#    -v solr_zoo_data:/opt/solr/server/solr/zoo_data/ \
-#    -v solr_pds_shard1_n1:/opt/solr/server/solr/pds_shard1_replica_n1 \
-#    -v solr_system_shard1_n1:/opt/solr/server/solr/.system_shard1_replica_n1 \
-#    -v solr_xpath_shard1_n1:/opt/solr/server/solr/xpath_shard1_replica_n1 \
-#    -d -p 8983:8983 \
-#    -e SOLR_HEAP=$SOLR_HEAP \
-#    $DOCK_IMAGE:$version >>$LOG 2>&1    
+
+remove_registry_container
 
 docker run --name ${DOCK_IMAGE} -u solr\
-    -v $basepath/../registry-data:/data/registry-data \
     -v solr_data:/opt/solr/server/solr/ \
     -d -p 8983:8983 \
     -e SOLR_HEAP=$SOLR_HEAP \
@@ -258,35 +256,27 @@ docker run --name ${DOCK_IMAGE} -u solr\
 
 check_exec $?
 
+
 if [ "$install" = true ]; then
-    # Wait 30 seconds for Solr server to start
-    sec=60
-    echo "Waiting for Solr server to start (${sec} seconds)..." | tee -a $LOG
-    sleep $sec
+    # Wait for Solr server to start
+    wait_for_solr
 
     # Create the Registry collections
-    echo -ne "Creating a Registry Service Blob collection (.system)         " | tee -a $LOG
-    check=$(curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=.system&maxShardsPerNode=${maxShardsPerNode}&numShards=${numShards}&replicationFactor=${replicationFactor}" 2>>$LOG | tee -a $LOG)
-    check_status "$check"
+    echo -ne "Creating a Registry Service Blob collection (registry)        " | tee -a $LOG
+    docker exec --user=solr ${DOCK_IMAGE} solr create -c registry -d registry -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
+    check_exec $?
 
+    # Create XPath collection
     echo -ne "Creating a Registry Service XPath collection (xpath)          " | tee -a $LOG
     check=$(curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=xpath&maxShardsPerNode=${maxShardsPerNode}&numShards=${numShards}&replicationFactor=${replicationFactor}" 2>>$LOG | tee -a $LOG)
     check_status "$check"
 
     # Create the Search collection 
     echo -ne "Creating a Search collection (pds)                            " | tee -a $LOG
-    #check=$(curl "http://localhost:8983/solr/admin/collections?action=pds&name=xpath&maxShardsPerNode=${maxShardsPerNode}&numShards=${numShards}&replicationFactor=${replicationFactor}" 2>>$LOG | tee -a $LOG)
-    #check_status "$check"
-
     docker exec --user=solr ${DOCK_IMAGE} solr create -c pds -d pds -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
-    if [ "$noPrompt" = false ]; then
-        check_exec $?
-    fi
+    check_exec $?
 fi
 
 docker exec ${DOCK_IMAGE} solr status >>$LOG 2>&1
-check_exec $?
-
-#sleep 5
 
 #exit 0
