@@ -34,6 +34,7 @@ ADD VERSION.txt .
 # Config sets
 COPY conf/registry /opt/solr/server/solr/configsets/registry/conf
 COPY conf/pds /opt/solr/server/solr/configsets/pds/conf
+COPY conf/xpath /opt/solr/server/solr/configsets/xpath/conf
 # Plugins
 COPY dist /opt/solr/contrib/pds/lib
 # Libs

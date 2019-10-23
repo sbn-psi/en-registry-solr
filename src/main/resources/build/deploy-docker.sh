@@ -262,14 +262,14 @@ if [ "$install" = true ]; then
     wait_for_solr
 
     # Create the Registry collections
-    echo -ne "Creating a Registry Service Blob collection (registry)        " | tee -a $LOG
+    echo -ne "Creating a Registry collection (registry)                     " | tee -a $LOG
     docker exec --user=solr ${DOCK_IMAGE} solr create -c registry -d registry -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
     check_exec $?
 
-    # Create XPath collection
-    echo -ne "Creating a Registry Service XPath collection (xpath)          " | tee -a $LOG
-    check=$(curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=xpath&maxShardsPerNode=${maxShardsPerNode}&numShards=${numShards}&replicationFactor=${replicationFactor}" 2>>$LOG | tee -a $LOG)
-    check_status "$check"
+    # Create the XPath collection
+    echo -ne "Creating a XPath collection (xpath)                           " | tee -a $LOG
+    docker exec --user=solr ${DOCK_IMAGE} solr create -c xpath -d xpath -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
+    check_exec $?
 
     # Create the Search collection 
     echo -ne "Creating a Search collection (pds)                            " | tee -a $LOG

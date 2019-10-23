@@ -54,9 +54,7 @@ LIB_DIR=${PARENT_DIR}/dist
 EXTRA_LIB_DIR=${PARENT_DIR}/lib
 
 echo "Create symlink for new registry installation"
-REGISTRY=${PARENT_DIR}/../registry
-rm -f ${REGISTRY}
-ln -s ${PARENT_DIR} ${REGISTRY}
+REGISTRY=${PARENT_DIR}
 
 # Create Registry Solr Doc Directory
 mkdir -p ${REGISTRY}/../registry-data/solr-docs
