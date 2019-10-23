@@ -12,10 +12,9 @@ TOOL_JAR=(${LIB_DIR}/solr-core-*.jar)
 
 function print_usage() {
   echo ""
-  echo "Usage: search_post.sh [OPTIONS] <file|directory>"
+  echo "Usage: $0 [OPTIONS] <file|directory>"
   echo ""
-  echo "OPTIONS"
-  echo "======="
+  echo "Options:"
   echo "  -host <host> (default: localhost)"
   echo "  -port <port> (default: 8983)"
   echo ""
