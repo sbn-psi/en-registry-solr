@@ -28,7 +28,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-FROM solr:7.7.2
+FROM solr:8.2.0
 MAINTAINER Jordan Padams <jordan.padams@jpl.nasa.gov>
 ADD VERSION.txt .
 # Config sets
