@@ -83,36 +83,24 @@ done
 
 # No file / directory parameter
 if [[ "${#FILES[@]}" -eq 0 ]]; then
-  echo "INFO:  No SOLR-DOCS parameter (Use -h flag to print help)."
-  echo "INFO:  Looking for Solr documents in default location."
+  DEFAULT_DOCS_DIR=${HOME}/registry-data/solr-docs
+  echo "INFO:  No SOLR-DOCS parameter (Use -h flag for help)."
+  echo "INFO:  Looking for Solr documents in default location: ${DEFAULT_DOCS_DIR}"
 
-  REGISTRY_HOME=${PARENT_DIR}/../registry
-  if [ ! -e "${REGISTRY_HOME}" ]; then
+  if [ ! -e "${DEFAULT_DOCS_DIR}" ]; then
     echo
-    echo "ERROR: Registry does not exist at ${REGISTRY_HOME}." 1>&2
-    echo "       Verify Registry has been installed and path is valid." 1>&2
-    echo "       If path to Registry differs, please update in this script." 1>&2
-    echo
-    exit 1
-  fi
-  # Normalize
-  REGISTRY_HOME=$(cd "${REGISTRY_HOME}" && pwd)
-
-  REGISTRY_DATA=${REGISTRY_HOME}/../registry-data/solr-docs
-  if [ ! -e "${REGISTRY_DATA}" ]; then    
-    echo
-    echo "ERROR: ${REGISTRY_DATA} does not exist as expected." 1>&2
+    echo "ERROR: ${DEFAULT_DOCS_DIR} does not exist." 1>&2
     echo "       Verify Registry installation completed successfully." 1>&2
     echo
     exit 1
   fi
 
   # Must be a directory
-  if [[ -d "${REGISTRY_DATA}" ]]; then
+  if [[ -d "${DEFAULT_DOCS_DIR}" ]]; then
     RECURSIVE=yes
-    FILES+=("${REGISTRY_DATA}")
+    FILES+=("${DEFAULT_DOCS_DIR}")
   else
-    echo "${REGISTRY_DATA} must be a directory."
+    echo "ERROR: ${DEFAULT_DOCS_DIR} must be a directory." 1>&2
     exit 1
   fi
 
