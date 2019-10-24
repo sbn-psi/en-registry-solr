@@ -86,9 +86,9 @@ public class RegistryInstaller {
 	private static boolean docker_mode = false;
 	private static boolean delete = false;
 
-	private static int maxShardsPerNode = 2;
-	private static int numShards = 1;
-	private static int replicationFactor = 1;
+	private static String maxShardsPerNode;
+	private static String numShards;
+	private static String replicationFactor;
 
 	public RegistryInstaller() {}
 
@@ -143,9 +143,9 @@ public class RegistryInstaller {
 			setupSOLRDirs();
 			startSOLRServer();
 
-			maxShardsPerNode = Integer.parseInt(getPreset("maxShardsPerNode"));
-			numShards = Integer.parseInt(getPreset("numShards"));
-			replicationFactor = Integer.parseInt(getPreset("replicationFactor"));
+			maxShardsPerNode = getPreset("maxShardsPerNode");
+			numShards = getPreset("numShards");
+			replicationFactor = getPreset("replicationFactor");
 
 			// Create 'registry' collection
 			createRegistryCollection();
@@ -240,6 +240,9 @@ public class RegistryInstaller {
 			
 			copyDir(registry_root + SEP + "conf" + SEP + "registry", 
 					solrConfigsets + SEP + "registry" + SEP + "conf");
+			
+			copyDir(registry_root + SEP + "conf" + SEP + "xpath", 
+					solrConfigsets + SEP + "xpath" + SEP + "conf");
 		} 
         catch (IOException ex) 
         {
@@ -393,39 +396,13 @@ public class RegistryInstaller {
 			solrBin + SEP + solrCmd, 
 			"create", 
 			"-p", String.valueOf(solrPort), 
-			"-c", "pds", "-d", "pds"
+			"-c", "pds", "-d", "pds",
+			"-shards", numShards,
+			"-replicationFactor", replicationFactor
 		};
 						
 		execCreateCommand(execCmd, "search collection (pds)");
 	}
-
-	
-	private static void createRegistryXpathCollection() 
-	{
-		// Create collection
-		String[] execCmd = new String[]
-		{
-			"curl", 
-			"http://" + solrHost + ":" + solrPort
-				+ "/solr/admin/collections?action=CREATE&name=xpath" 
-				+ "&maxShardsPerNode=" + maxShardsPerNode 
-				+ "&numShards=" + numShards 
-				+ "&replicationFactor=" + replicationFactor
-		};
-		
-		execCreateCommand(execCmd, "xpath collection");
-		
-		// Create alias
-		execCmd = new String[]
-		{
-            "curl", 
-            "http://" + solrHost + ":" + solrPort
-            	+ "/solr/admin/collections?action=CREATEALIAS&name=registry-xpath&collections=xpath"
-		};
-
-		execCreateCommand(execCmd, "xpath collection alias");
-	}
-
 	
 	private static void createRegistryCollection() 
 	{
@@ -435,23 +412,29 @@ public class RegistryInstaller {
 			solrBin + SEP + solrCmd, 
 			"create", 
 			"-p", String.valueOf(solrPort), 
-			"-c", "registry", "-d", "registry"
+			"-c", "registry", "-d", "registry",
+			"-shards", numShards,
+			"-replicationFactor", replicationFactor
 		};
 				
 		execCreateCommand(execCmd, "registry collection");
-            
-
-        // Create alias
-        execCmd = new String[]
-        {
-        	"curl", 
-        	"http://" + solrHost + ":" + solrPort
-        		+ "/solr/admin/collections?action=CREATEALIAS&name=registry-blob&collections=registry"
-        };
-
-        execCreateCommand(execCmd, "registry collection alias");
 	}
-
+	
+	private static void createRegistryXpathCollection() 
+	{
+		// Create collection
+		String[] execCmd = new String[] 
+		{
+			solrBin + SEP + solrCmd, 
+			"create", 
+			"-p", String.valueOf(solrPort), 
+			"-c", "xpath", "-d", "xpath",
+			"-shards", numShards,
+			"-replicationFactor", replicationFactor
+		};
+				
+		execCreateCommand(execCmd, "xpath collection");
+	}
 	
 	private static void execCreateCommand(String[] cmd, String name)
 	{
@@ -537,28 +520,8 @@ public class RegistryInstaller {
 		
 	private static void deleteRegistrySearchCollection() 
 	{
-		// Registry alias
-		String[] execCmd = new String[]
-		{
-			"curl", 
-			"http://" + solrHost + ":" + solrPort
-				+ "/solr/admin/collections?action=DELETEALIAS&name=registry-blob&collection=.system"
-		};
-
-		execDeleteCommand(execCmd, "registry collection alias");
-		
-		// Xpath alias
-		execCmd = new String[]
-		{
-			"curl", 
-			"http://" + solrHost + ":" + solrPort
-				+ "/solr/admin/collections?action=DELETEALIAS&name=registry-xpath&collections=xpath"
-		};
-
-		execDeleteCommand(execCmd, "xpath collection alias");
-		
         // Registry collection
-        execCmd = new String[] 
+		String[] execCmd = new String[]
         { 
         	solrBin + SEP + solrCmd, 
         	"delete", 

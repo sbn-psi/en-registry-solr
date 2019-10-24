@@ -1,5 +1,35 @@
 #!/usr/bin/env bash
 
+# Copyright 2019, California Institute of Technology ("Caltech").
+# U.S. Government sponsorship acknowledged.
+#
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# * Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+# * Redistributions must reproduce the above copyright notice, this list of
+# conditions and the following disclaimer in the documentation and/or other
+# materials provided with the distribution.
+# * Neither the name of Caltech nor its operating division, the Jet Propulsion
+# Laboratory, nor the names of its contributors may be used to endorse or
+# promote products derived from this software without specific prior written
+# permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
 SOLR_HEAP=2048m
 
 maxShardsPerNode=3
@@ -134,9 +164,9 @@ create_solr_collections() {
     print_status $?
 
     # Create XPath collection
-    echo -ne "Creating a Registry Service XPath collection (xpath)          " | tee -a $LOG
-    check=$(curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=xpath&maxShardsPerNode=${maxShardsPerNode}&numShards=${numShards}&replicationFactor=${replicationFactor}" 2>>$LOG | tee -a $LOG)
-    print_solr_status "$check"
+    echo -ne "Creating a XPath collection (xpath)                           " | tee -a $LOG
+    docker exec --user=solr ${DOCKER_IMAGE} solr create -c xpath -d xpath -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
+    print_status $?
 
     # Create the Search collection 
     echo -ne "Creating a Search collection (pds)                            " | tee -a $LOG

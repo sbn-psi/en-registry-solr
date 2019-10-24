@@ -28,12 +28,13 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-FROM solr:7.7.2
+FROM solr:8.2.0
 MAINTAINER Jordan Padams <jordan.padams@jpl.nasa.gov>
 ADD VERSION.txt .
 # Config sets
 COPY conf/registry /opt/solr/server/solr/configsets/registry/conf
 COPY conf/pds /opt/solr/server/solr/configsets/pds/conf
+COPY conf/xpath /opt/solr/server/solr/configsets/xpath/conf
 # Plugins
 COPY dist /opt/solr/contrib/pds/lib
 # Libs
