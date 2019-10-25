@@ -85,8 +85,8 @@ done
 # Version
 if [ -f "$VERSION_FILE" ]; then
   VERSION=$(head -n 1 "$VERSION_FILE")
-  if [[ $VERSION == '${project.version}' ]]; then
-    echo "WARNING: Invalid version '\${project.version}'. Will use default version 'latest'"
+  if [[ $VERSION != '${project.version}' ]]; then
+    echo "WARNING: Invalid version '${project.version}'. Will use default version 'latest'"
     VERSION="latest"
   fi
 else
@@ -169,8 +169,8 @@ create_solr_collections() {
     print_status $?
 
     # Create the Search collection 
-    echo -ne "Creating a Search collection (pds)                            " | tee -a $LOG
-    docker exec --user=solr ${DOCKER_IMAGE} solr create -c pds -d pds -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
+    echo -ne "Creating a Search collection (data)                           " | tee -a $LOG
+    docker exec --user=solr ${DOCKER_IMAGE} solr create -c data -d data -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
     print_status $?
 }
 
@@ -197,9 +197,9 @@ remove_solr_collections() {
     echo "Removing the Registry XPath collection.                           " | tee -a $LOG
     docker exec -it --user=solr ${DOCKER_IMAGE} solr delete -c xpath  >>$LOG 2>&1
 
-    # Remove 'pds' collection
+    # Remove 'data' collection
     echo "Removing the Search collection.                                   " | tee -a $LOG
-    docker exec -it --user=solr ${DOCKER_IMAGE} solr delete -c pds >>$LOG 2>&1
+    docker exec -it --user=solr ${DOCKER_IMAGE} solr delete -c data >>$LOG 2>&1
 
     echo "Stopping the SOLR instance.                                       " | tee -a $LOG
     docker exec -it ${DOCKER_IMAGE} solr stop >>$LOG 2>&1

@@ -142,9 +142,9 @@ $SOLR_HOME/bin/post -c xpath -d '&lt;delete&gt;&lt;query&lt;lidvid:"urn:nasa:pds
       </p>
 
       <ul>
-        <li><a href="https://lucene.apache.org/solr/guide/7_7/overview-of-the-solr-admin-ui.html" target="_blank">Overview of the Solr Admin UI</a>
+        <li><a href="https://lucene.apache.org/solr/guide/8_2/overview-of-the-solr-admin-ui.html" target="_blank">Overview of the Solr Admin UI</a>
         </li>
-        <li><a href="https://lucene.apache.org/solr/guide/6_6/using-the-solr-administration-user-interface.html" target="_blank">Using the Solr Administration User Interface</a>
+        <li><a href="https://lucene.apache.org/solr/guide/8_2/using-the-solr-administration-user-interface.html" target="_blank">Using the Solr Administration User Interface</a>
         </li>
       </ul>
 
@@ -155,53 +155,6 @@ $SOLR_HOME/bin/post -c xpath -d '&lt;delete&gt;&lt;query&lt;lidvid:"urn:nasa:pds
     <section name="Configuration">
       <p>The Registry comes preconfigured for supporting common PDS search terms and facets. That said, it can be tailored to support Discipline Node specific search requirements. See the <a href="http://lucene.apache.org/solr/" target="_blank">Apache Solr website</a> and <a href="http://wiki.apache.org/solr/" target="_blank">wiki</a> for more information on configuring Apache Solr. The sub-sections that follow detail the steps for performing some common configuration changes.
       </p>
-
-      <subsection name="Add A Facet">
-        <p>The following steps will allow a new facet to be added to the Registry output. The facets are the categories in the left sidebar of the Search UI that provide a means for browsing through the data. The name for the facet should not yet be a field in the schema, because a new field specifically dedicated to the faceting will be created. For instance, if you wanted to facet on <i>agency_name</i>, we will create a facet named <i>facet_agency</i>. These steps assume that the Registry was installed at <i>$REGISTRY_HOME</i>. If not, substitute the installation directory as needed. For the following example, we will be creating a facet on the <i>node_id</i> field.
-        </p>
-
-        <ol>
-          <li><p>Add the following to the <i>$REGISTRY_HOME/conf/xslt/facets.xml</i> file:</p>
-            <source>
-&lt;facet name="facet node id" caption="Node" /&gt;
-            </source>
-          </li>
-          <li><p>Update the <i>$REGISTRY_HOME/conf/xslt/add-hierarchy.xsl</i> file:</p>
-            <source>
-&lt;xsl:template match="field[@name = 'node_id']"&gt;
-  &lt;xsl:copy-of select="." &gt;
-  &lt;field name="facet_node_id"&gt;&lt;xsl:value-of select="concat('1,',.)" /&gt;&lt;/field&gt;
-&lt;/xsl:template&gt;
-            </source>
-          </li>
-          <li><p>Update the <i>$REGISTRY_HOME/conf/solrconfig.xml</i> file:</p>
-            <source>
-&lt;str name="facet.field"&gt;facet_node_id&lt;/str&gt;
-
-&lt;str name="f.facet_node_id.facet.prefix"&gt;1,&lt;/str&gt;
-            </source>
-          </li>
-          <li><p>Update the <i>$REGISTRY_HOME/conf/managed-schema</i> file by finding the area where facet fields are being declared (search for facet_) and add the following:</p>
-            <source>
-&lt;field name="facet_node" type="string_lc" indexed="true" stored="false" \
-  multiValued="false" /&gt;
-            </source>
-          </li>
-          <li>Execute the appropriate registry_uninstall and registry_install scripts (dependent upon operating system) to re-install the Registry with the new facets.</li>
-        </ol>
-      </subsection>
-
-      <subsection name="Update Output Format">
-        <p>The user interface components of the Registry may also be modified to tailor the look-and-feel of the search results.
-        </p>
-
-        <ul>
-          <li>To update the output queried through the Search UI (<i>archive-filter</i> end point), make updates to the <i>$REGISTRY_HOME/conf/xslt/data-search.xsl</i> file.
-          </li>
-          <li>To update the output queried through the Product Search UI (<i>product-search</i> end point), make updates to the <i>$REGISTRY_HOME/conf/xslt/product-search.xsl</i> file.
-          </li>
-        </ul>
-      </subsection>
 
       <subsection name="Add a Field to the Schema">
         <p>In order to add a field to the schema, modify the <i>$REGISTRY_HOME/conf/schema.xml</i> file. The following example will add the field <i>my_field</i>:

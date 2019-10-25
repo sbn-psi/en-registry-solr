@@ -66,7 +66,6 @@ public class RegistryInstaller {
 	// Number of bytes per gigabyte
 	public static final long BYTES_PER_GIG = (long)1e+9;
 	private static String solrCmd = "solr";
-	private static String dockerCmd = "deploy-docker.sh";
 	private static String envStr = null;
 	private static String prompt = null;
 
@@ -79,12 +78,10 @@ public class RegistryInstaller {
 	private static String registry_root;
 	private static String solrRoot;
 	private static String solrBin;
-	private static String registry_docker_build;
 
 	private static String installType;
 
-	private static boolean docker_mode = false;
-	private static boolean delete = false;
+	private static boolean uninstall = false;
 
 	private static String maxShardsPerNode;
 	private static String numShards;
@@ -94,19 +91,21 @@ public class RegistryInstaller {
 
 	public static void main(String args[]) {
 		for (String arg : args) {
-            if (arg.equals("--delete") || arg.equals("-d")) {
-                delete = true;
+            if (arg.equals("--uninstall") || arg.equals("-u")) {
+                uninstall = true;
+                break;
+            }
+            if (arg.equals("--install") || arg.equals("-i")) {
                 break;
             }
         }
 		Scanner reader = new Scanner(System.in);  // Reading from System.in
 //		harvest_home = reader.next();
 
-		System.out.print("Enter an installation mode (docker or standalone): ");
-		installType = reader.next(); // Scans the next token of the input as a string.			
+//		System.out.print("Enter an installation mode (docker or standalone): ");
 
-		if (installType.equalsIgnoreCase("docker"))
-			docker_mode = true;
+		// Defaulting to standalone after separate Docker script was created
+		installType = "standalone"; // Scans the next token of the input as a string.			
 
 		Path currentRelativePath = Paths.get("");
 		registry_root = currentRelativePath.toAbsolutePath().toString() + SEP + "..";
@@ -124,60 +123,36 @@ public class RegistryInstaller {
 			ex.printStackTrace();
 		}	
 
-		if (!docker_mode) {  // standalone mode
-			System.out.print("Enter location of SOLR installation: ");
-			solrRoot = reader.next();
+		System.out.print("Enter location of SOLR installation: ");
+		solrRoot = reader.next();
 
-			init();
-			if (osName.contains("Windows")) {
-				solrCmd = "solr.cmd";
-			}
-
-			if (delete) {
-				deleteRegistrySearchCollection();
-				stopSOLRServer();
-				exit(1); // to test for now.
-			}
-
-			// copy search service confs, *jar and lib into SOLR directories
-			setupSOLRDirs();
-			startSOLRServer();
-
-			maxShardsPerNode = getPreset("maxShardsPerNode");
-			numShards = getPreset("numShards");
-			replicationFactor = getPreset("replicationFactor");
-
-			// Create 'registry' collection
-			createRegistryCollection();
-
-			// Create 'xpath' collection
-			createRegistryXpathCollection();
-
-			// Create 'pds' collection
-			createSearchCollection();
+		init();
+		if (osName.contains("Windows")) {
+			solrCmd = "solr.cmd";
 		}
-		else {
-			registry_docker_build = registry_root+SEP+"build";
-			prompt = "noPrompt";
-            //print("termName = " + termName);
-			if (osName.contains("Windows") && termName.contains("cygwin")) {
-				envStr = "bash";
-				String tmpCmd = FilenameUtils.separatorsToUnix(SEP + registry_docker_build+SEP+dockerCmd);
-				print("tmpCmd = " + tmpCmd);
-				dockerCmd = tmpCmd.replace(":", "");
-				dockerCmd = FilenameUtils.normalize(dockerCmd, true);
-			}
-			else {
-				dockerCmd = FilenameUtils.separatorsToSystem(registry_docker_build+SEP+dockerCmd);
-			}
-			
-			if (delete) {				
-				executeDockerBuild("uninstall", envStr);
-			}
-			else { 
-				executeDockerBuild("install", envStr);
-			}
+
+		if (uninstall) {
+			deleteRegistrySearchCollection();
+			stopSOLRServer();
+			exit(1); // to test for now.
 		}
+
+		// copy search service confs, *jar and lib into SOLR directories
+		setupSOLRDirs();
+		startSOLRServer();
+
+		maxShardsPerNode = getPreset("maxShardsPerNode");
+		numShards = getPreset("numShards");
+		replicationFactor = getPreset("replicationFactor");
+
+		// Create 'registry' collection
+		createRegistryCollection();
+
+		// Create 'xpath' collection
+		createRegistryXpathCollection();
+
+		// Create 'data' collection
+		createSearchCollection();
 		
 		reader.close();
 	}
@@ -235,13 +210,13 @@ public class RegistryInstaller {
 			String solrConfigsets = solrRoot + SEP + "server" + SEP + "solr" + SEP + "configsets";
 			
 			// Copy config sets
-			copyDir(registry_root + SEP + "conf" + SEP + "pds", 
-					solrConfigsets + SEP + "pds" + SEP + "conf");
+			copyDir(registry_root + SEP + "collections" + SEP + "data", 
+					solrConfigsets + SEP + "data" + SEP + "conf");
 			
-			copyDir(registry_root + SEP + "conf" + SEP + "registry", 
+			copyDir(registry_root + SEP + "collections" + SEP + "registry", 
 					solrConfigsets + SEP + "registry" + SEP + "conf");
 			
-			copyDir(registry_root + SEP + "conf" + SEP + "xpath", 
+			copyDir(registry_root + SEP + "collections" + SEP + "xpath", 
 					solrConfigsets + SEP + "xpath" + SEP + "conf");
 		} 
         catch (IOException ex) 
@@ -396,12 +371,12 @@ public class RegistryInstaller {
 			solrBin + SEP + solrCmd, 
 			"create", 
 			"-p", String.valueOf(solrPort), 
-			"-c", "pds", "-d", "pds",
+			"-c", "data", "-d", "data",
 			"-shards", numShards,
 			"-replicationFactor", replicationFactor
 		};
 						
-		execCreateCommand(execCmd, "search collection (pds)");
+		execCreateCommand(execCmd, "search collection (data)");
 	}
 	
 	private static void createRegistryCollection() 
@@ -548,60 +523,10 @@ public class RegistryInstaller {
         	solrBin + SEP + solrCmd, 
         	"delete", 
         	"-p", String.valueOf(solrPort), 
-        	"-c", "pds"
+        	"-c", "data"
         };
         
-        execDeleteCommand(execCmd, "search collection (pds)");
-	}
-
-	
-	private static void executeDockerBuild(String mode, String envStr) {
-		print("Execute to " + mode + " Registry in Docker...");
-		Process progProcess = null;
-        int returnVal = -1;
-		try {
-			String[] execCmd = null;
-			if (envStr==null) {
-				if (prompt==null)
-					execCmd = new String[] { dockerCmd, mode, registry_root};
-				else
-					execCmd = new String[] { dockerCmd, mode, prompt, registry_root};
-			}
-			else {
-				if (prompt==null)
-					execCmd = new String[] { envStr, dockerCmd, mode, registry_root};
-				else
-					execCmd = new String[] { envStr, dockerCmd, mode, prompt, registry_root};
-
-			}
-
-			progProcess = Runtime.getRuntime().exec(execCmd);
-			BufferedReader in = new BufferedReader(
-                                new InputStreamReader(progProcess.getInputStream()));
-			String line = null;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
-            try{
-                returnVal = progProcess.waitFor();
-                if (returnVal!=0) {
-                    print("Failed to " + mode + " Registry in Docker.");
-                    exit(1);
-                }
-                else  {
-                	Thread.sleep(5000);
-               		print("Completed to " + mode + " Registry in Docker.");
-                }
-
-            } catch(Exception ex){
-               ex.printStackTrace();
-            }
-			in.close();
-		} catch (Exception err) {
-			err.printStackTrace();
-		} finally {
-	        RegistryInstallerUtils.safeClose(progProcess);
-        }
+        execDeleteCommand(execCmd, "search collection (data)");
 	}
 	
 }

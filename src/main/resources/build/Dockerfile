@@ -32,9 +32,9 @@ FROM solr:8.2.0
 MAINTAINER Jordan Padams <jordan.padams@jpl.nasa.gov>
 ADD VERSION.txt .
 # Config sets
-COPY conf/registry /opt/solr/server/solr/configsets/registry/conf
-COPY conf/pds /opt/solr/server/solr/configsets/pds/conf
-COPY conf/xpath /opt/solr/server/solr/configsets/xpath/conf
+COPY collections/registry /opt/solr/server/solr/configsets/registry/conf
+COPY collections/data /opt/solr/server/solr/configsets/data/conf
+COPY collections/xpath /opt/solr/server/solr/configsets/xpath/conf
 # Plugins
 COPY dist /opt/solr/contrib/pds/lib
 # Libs

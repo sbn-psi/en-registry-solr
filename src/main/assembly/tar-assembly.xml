@@ -57,16 +57,16 @@
       <lineEnding>keep</lineEnding>
     </fileSet>
     <fileSet>
-      <directory>src/main/resources</directory>
-      <outputDirectory>/</outputDirectory>
-      <excludes>
+      <directory>src/main/resources/collections</directory>
+      <outputDirectory>/collections/</outputDirectory>
+<!--      <excludes>
         <exclude>**/VERSION.txt</exclude>
         <exclude>**/deploy-docker.sh</exclude>
         <exclude>**/deploy-docker-win.sh</exclude>
         <exclude>**/registry_install.sh</exclude>
         <exclude>**/registry_uninstall.sh</exclude>
         <exclude>**/search-post</exclude>
-      </excludes>
+      </excludes>-->
       <fileMode>664</fileMode>
       <lineEnding>keep</lineEnding>
     </fileSet>
@@ -84,8 +84,9 @@
       <directory>src/main/resources/bin</directory>
       <outputDirectory>/bin/</outputDirectory>
       <includes>
-        <include>**/registry_install.sh</include>
-        <include>**/registry_uninstall.sh</include>
+      	<include>**/registry.properties</include>
+        <include>**/registry_installer_standalone.sh</include>
+        <include>**/registry_installer_docker.sh</include>
         <include>**/search-post</include>
       </includes>
       <fileMode>775</fileMode>
