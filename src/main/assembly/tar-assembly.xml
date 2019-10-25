@@ -59,14 +59,6 @@
     <fileSet>
       <directory>src/main/resources/collections</directory>
       <outputDirectory>/collections/</outputDirectory>
-<!--      <excludes>
-        <exclude>**/VERSION.txt</exclude>
-        <exclude>**/deploy-docker.sh</exclude>
-        <exclude>**/deploy-docker-win.sh</exclude>
-        <exclude>**/registry_install.sh</exclude>
-        <exclude>**/registry_uninstall.sh</exclude>
-        <exclude>**/search-post</exclude>
-      </excludes>-->
       <fileMode>664</fileMode>
       <lineEnding>keep</lineEnding>
     </fileSet>
@@ -74,8 +66,7 @@
       <directory>src/main/resources/build</directory>
       <outputDirectory>/build/</outputDirectory>
       <includes>
-        <include>**/deploy-docker.sh</include>
-        <include>**/deploy-docker-win.sh</include>
+        <include>**/Dockerfile</include>
       </includes>
       <fileMode>775</fileMode>
       <lineEnding>unix</lineEnding>
