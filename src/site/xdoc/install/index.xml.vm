@@ -48,14 +48,17 @@
       <ul>
         <li><a href="#System_Requirements">System Requirements</a></li>
         <li><a href="#Unpacking_the_Package">Unpacking the Package</a></li>
+        <li><a href="#Configuring_the_Environment">Configuringt he Environment</a></li>
         <li><a href="#Install_Solr_and_Registry_-_Docker">Install Solr and Registry - Docker</a></li>
         <li><a href="#Install_Solr_and_Registry_-_Standalone">Install Solr and Registry - Standalone</a></li>
         <li><a href="#Operational_Deployment">Operational Deployment</a></li>
+        <li><a href="#Verifying_Successful_Installation">Verifying Successful Installation</a></li>
         <li><a href="#Next_Steps">Next Steps</a></li>
         <li><a href="#Common_Errors">Common Errors</a></li>
       </ul>
     </section>
 
+    <hr />
     <section name="System Requirements">
       <p>This section details the system requirements for installing and operating the Registry.
       </p>
@@ -81,12 +84,13 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode)
       </subsection>
       
       <subsection name="Memory Requirements">
-	<ol>
-	  <ul>The Registry requires >2GB memory available in order to perform normal operations</ul>
-	</ol>
+      	<ol>
+      	  <ul>The Registry requires >2GB memory available in order to perform normal operations</ul>
+      	</ol>
       </subsection>
     </section>
 
+    <hr />
     <section name="Unpacking the Package">
       <p>Download the <i>${project.artifactId}</i> package from Github (<a href="https://github.com/NASA-PDS-Incubator/${project.artifactId}/releases/download/v${project.version}/${project.artifactId}-${project.version}-bin.tar.gz" target="_blank">TAR.GZ</a> <a href="https://github.com/NASA-PDS-Incubator/${project.artifactId}/releases/download/v${project.version}/${project.artifactId}-${project.version}-bin.tar.gz" target="_blank">ZIP</a>). The binary distribution is available in identical zip or tar/gzip packages. The installation directory may vary from environment to environment but in UNIX-based environments it is typical to install software packages in the <i>/home/pds</i> directory and in Windows-based environments it is typical to install software packages in the <i>C:\Program Files</i> directory. Unpack the selected binary distribution file with one of the following commands:
       </p>
@@ -96,15 +100,6 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.101-b13, mixed mode)
 % unzip ${project.artifactId}-${project.version}-bin.zip
 or
 % tar -xzvf ${project.artifactId}-${project.version}-bin.tar.gz
-
-# Set the REGISTRY_HOME variable.
-% cd ${project.artifactId}-${project.version}
-
-# On Linux and Mac (Bash shell only. Update accordingly for other shells.)
-% export REGISTRY_HOME=$(pwd)
-
-# On Windows
-% set "REGISTRY_HOME=%cd%"
       </source>
 
       <p>Note: Depending on the platform, the native version of <i>tar</i> may produce an error when attempting to unpack the distribution file because many of the file paths are greater than 100 characters. If available, the GNU version of tar will resolve this problem. If that is not available or cannot be installed, the zipped package will work just fine in a UNIX environment.
@@ -135,7 +130,7 @@ or
         <li><b>dist/</b><br />
           <p>This directory contains the jar for the Registry API (PDS Search Protocol).</p>
         </li>
-        <li><b>collection/</b><br />
+        <li><b>collections/</b><br />
           <p>This directory contains the Apache Solr configuration for collections installed by default by the Registry.
           </p>
         </li>
@@ -143,6 +138,63 @@ or
           <p>This directory contains JARs used by some of the registry utility tools.</p>
         </li>
       </ul>
+    </section>
+    
+    <hr />
+    <section name="Configuring the Environment">
+      <p>In order to execute the Harvest Tool, the local environment must first be configured appropriately. This section describes how to setup the user environment on UNIX-based and Windows machines.
+      </p>
+      
+      <subsection name="UNIX-Based Environment">
+        <p>This section details the environment setup for UNIX-based machines. The binary distribution includes a couple shell scripts that must be executed from the command-line. 
+          Setting the <i>REGISTRY_HOME</i> environment variable to where the Registry is installed can help when using Harvest in the future, but 
+          is not required.
+        </p>
+        
+        <p>The following command demonstrates how to set the <i>REGISTRY_HOME</i> environment variable (in Bourne shell), by appending to its current setting. You may want to append this to 
+          the end of your <i>$HOME/.bash_profile</i> (or equivalent) to avoid having to reset this in the future:
+        </p>
+        
+        <source>
+          % export REGISTRY_HOME=/path/to/${project.artifactId}-${project.version}
+        </source>
+        
+        <p>In addition, the shell scripts require that the Java be installed on the machine, you can both check it is installed or set the <i>JAVA_HOME</i> environment variable:
+        </p>
+        
+        <source>
+          # Check if it is installed globally
+          % which java
+          
+          # If not, you can set JAVA_HOME
+          % export JAVA_HOME=/path/to/java/home
+        </source>
+        
+        <p>The system administrator for the local machine may need to be consulted for this location. The path specified should have a <i>bin</i> sub-directory that contains the <i>java</i> executable. This variable may also be defined within the scripts. Edit the scripts (files without the .bat extension) and change the line in the example above to represent the local Java installation.
+        </p>
+      </subsection>
+      
+      <subsection name="Windows Environment">
+        <p>This section details the environment setup for Windows machines. The binary distribution includes a couple batch scripts that must be executed from the command-line. Setting the <i>PATH</i> environment variable to the location of the files, enables the batch scripts to be executed from any location on the local machine.
+        </p>
+        
+        <p>The following command demonstrates how to set the <i>PATH</i> environment variable, by appending to its current setting:
+        </p>
+        
+        <source>
+          C:\&gt; set PATH = %PATH%;C:\Program Files\\${project.artifactId}-${project.version}\bin
+        </source>
+        
+        <p>In addition, the batch scripts require that the <i>JAVA_HOME</i> environment variable be set to the appropriate location of the Java installation on the local machine. This may have already been set when Java was installed. However, if it hasn't, then run the following command to set the <i>JAVA_HOME</i> environment variable:
+        </p>
+        
+        <source>
+          C:\&gt; set JAVA_HOME = C:\path\to\java\home
+        </source>
+        
+        <p>The system administrator for the local machine may need to be consulted for this location. The path specified should have a <i>bin</i> sub-directory that contains the <i>java</i> executable. This variable may also be defined within the scripts. Edit the scripts (files with the .bat extension) and change the line in the example above to represent the local Java installation. Additional methods for setting Windows environment variables can be found in the <a href="index-win.html">Windows System Properties</a> document.
+        </p>
+      </subsection>
     </section>
 
     <section name="Install Solr and Registry - Docker">
@@ -157,7 +209,7 @@ or
 
       <ol>
         <li>
-          <p>Install and Run Docker Desktop for Mac as indicated in <a href="https://docs.docker.com/docker-for-mac/install/" target="_blank">Install Docker Desktop for Mac</a> website if your system doesn't have Docker.</p>
+          <p>Install and Run Docker from <a href="https://docs.docker.com/v17.12/install/" target="_blank">Docker Installation Guide</a> website if your system doesn't have Docker.</p>
         </li>
         
         <li>Move to the directory that registry installer script resides.
@@ -229,16 +281,16 @@ Enter location of Solr installation: /usr/local/solr-8.2.0
 STARTING Registry Installer in standalone mode.
 
   Registry   .....
-       ( v 2.2.0 )
+       ( v ${project.version} )
        ( installing on platform: Mac OS X )
        ( IP Address:- 192.168.1.120 )
        ( Host Name:- MY HOST )
 
 Enter location of SOLR installation: /usr/local/solr-8.2.0
- Copied a directory from /usr/local/registry/registry-2.2.0-SNAPSHOT/bin/../dist to /usr/local/solr-8.2.0/contrib/pds/lib
- Copied a directory from /usr/local/registry/registry-2.2.0-SNAPSHOT/bin/../collections/data to /usr/local/solr-8.2.0/server/solr/configsets/data/conf
- Copied a directory from /usr/local/registry/registry-2.2.0-SNAPSHOT/bin/../collections/registry to /usr/local/solr-8.2.0/server/solr/configsets/registry/conf
- Copied a directory from /usr/local/registry/registry-2.2.0-SNAPSHOT/bin/../collections/xpath to /usr/local/solr-8.2.0/server/solr/configsets/xpath/conf
+Copied a directory from /usr/local/registry/registry-${project.version}/bin/../dist to /usr/local/solr-8.2.0/contrib/pds/lib
+Copied a directory from /usr/local/registry/registry-${project.version}/bin/../collections/data to /usr/local/solr-8.2.0/server/solr/configsets/data/conf
+Copied a directory from /usr/local/registry/registry-${project.version}/bin/../collections/registry to /usr/local/solr-8.2.0/server/solr/configsets/registry/conf
+Copied a directory from /usr/local/registry/registry-${project.version}/bin/../collections/xpath to /usr/local/solr-8.2.0/server/solr/configsets/xpath/conf
 
 Starting a SOLR server... Waiting up to 180 seconds to see Solr running on port 8983...
 *** [WARN] *** Your open file limit is currently 10240.
@@ -272,93 +324,97 @@ Search collection (data) is created successfully.
     </section>
 
     <section name="Verifying Successful Installation">
-      <li>To verify installation, first, check the docker image is running:
-        <source>
+      <ul>
+        <li>To verify installation, first, check the docker image is running:
+          <source>
 % docker ps
 
 CONTAINER ID        IMAGE                     COMMAND                  CREATED             STATUS              PORTS                    NAMES
 0ee274f1fa5f        registry:2.2.0   "/bin/bash -c 'solr …"   5 minutes ago       Up 5 minutes        0.0.0.0:8983->8983/tcp   registry
-        </source>
-      </li> 
-      <li>Next, you can check the solr endpoint is up, however, how to test that will depend upon your server configuration:
-        <ul>
-          <li>If running on your local machine, open up your favorite browser and go to <i>http://localhost:8983/solr</i> to view the Solr admin interface.</li>
-          <li>If running on a server and the port is open, replace local host with your domain, e.g. <i>http://pds.nasa.gov:8983/solr</i></li>
-          <li>If running on a server and the port is not open, you can run a <a href="https://curl.haxx.se/">curl</a> command to verify Solr is active:
-            <source>
+          </source>
+        </li> 
+        <li>Next, you can check the solr endpoint is up, however, how to test that will depend upon your server configuration:
+          <ul>
+            <li>If running on your local machine, open up your favorite browser and go to <i>http://localhost:8983/solr</i> to view the Solr admin interface.</li>
+            <li>If running on a server and the port is open, replace local host with your domain, e.g. <i>http://pds.nasa.gov:8983/solr</i></li>
+            <li>If running on a server and the port is not open, you can run a <a href="https://curl.haxx.se/">curl</a> command to verify Solr is active:
+              <source>
 % curl http://localhost:8983/solr/admin/cores?action=STATUS
 
 {
 "responseHeader":{
-  "status":0,
-  "QTime":4},
+"status":0,
+"QTime":4},
 "initFailures":{},
 "status":{
-  "data_shard1_replica_n1":{
-    "name":"data_shard1_replica_n1",
-    "instanceDir":"/var/solr/data/data_shard1_replica_n1",
-    "dataDir":"/var/solr/data/data_shard1_replica_n1/data/",
-    "config":"solrconfig.xml",
-    "schema":"managed-schema",
-    "startTime":"2019-10-25T04:06:13.058Z",
-    "uptime":551826,
-    "lastPublished":"active",
-    "configVersion":0,
-    "cloud":{
-      "collection":"data",
-      "shard":"shard1",
-      "replica":"core_node3"},
-    "index":{
-      "numDocs":0,
-      "maxDoc":0,
-      "deletedDocs":0,
-      "indexHeapUsageBytes":0,
-      "version":2,
-      "segmentCount":0,
-      "current":true,
-      "hasDeletions":false,
-      "directory":"org.apache.lucene.store.NRTCachingDirectory:NRTCachingDirectory(MMapDirectory@/var/solr/data/data_shard1_replica_n1/data/index lockFactory=org.apache.lucene.store.NativeFSLockFactory@5566110; maxCacheMB=48.0 maxMergeSizeMB=4.0)",
-      "segmentsFile":"segments_1",
-      "segmentsFileSizeInBytes":69,
-      "userData":{},
-      "sizeInBytes":69,
-      "size":"69 bytes"}},
-      .
-      .
-      .
-            </source>
-          </li>
-        </ul>
-      </li>
-      <li>You are now ready to move onto <a href="#Next_Steps">Next Steps</a> installing Harvest and trying out a tutorial</li>
+"data_shard1_replica_n1":{
+  "name":"data_shard1_replica_n1",
+  "instanceDir":"/var/solr/data/data_shard1_replica_n1",
+  "dataDir":"/var/solr/data/data_shard1_replica_n1/data/",
+  "config":"solrconfig.xml",
+  "schema":"managed-schema",
+  "startTime":"2019-10-25T04:06:13.058Z",
+  "uptime":551826,
+  "lastPublished":"active",
+  "configVersion":0,
+  "cloud":{
+    "collection":"data",
+    "shard":"shard1",
+    "replica":"core_node3"},
+  "index":{
+    "numDocs":0,
+    "maxDoc":0,
+    "deletedDocs":0,
+    "indexHeapUsageBytes":0,
+    "version":2,
+    "segmentCount":0,
+    "current":true,
+    "hasDeletions":false,
+    "directory":"org.apache.lucene.store.NRTCachingDirectory:NRTCachingDirectory(MMapDirectory@/var/solr/data/data_shard1_replica_n1/data/index lockFactory=org.apache.lucene.store.NativeFSLockFactory@5566110; maxCacheMB=48.0 maxMergeSizeMB=4.0)",
+    "segmentsFile":"segments_1",
+    "segmentsFileSizeInBytes":69,
+    "userData":{},
+    "sizeInBytes":69,
+    "size":"69 bytes"}},
+    .
+    .
+    .
+              </source>
+            </li>
+          </ul>
+        </li>
+        <li>You can learn more about the <a href="../operate/index.html#Registry_Solr_Collections">Registry Solr Collections</a> installed, or continue onto <a href="#Next_Steps">Next Steps</a>.</li>
+      </ul>
 
     </section>
-
+    <hr />
     <section name="Operational Deployment">
       <p>Once you are ready to deploy the Registry operationally, you will want to secure Solr by setting up a reverse proxy in your Apache HTTP Server <i>httpd.conf</i> file:</p>
       <source>
-        ProxyPass /services/registry/ http://localhost:8983/solr/
-        ProxyPassReverse /services/registry/ http://localhost:8983/solr/
-        ProxyPass /services/registry http://localhost:8983/solr
-        ProxyPassReverse /services/registry http://localhost:8983/solr
-        
-        &lt;!-- Secures the Solr admin interface to your local subnet. Change your IP/subnet information accordingly. --&gt;
-        &lt;Location "/services/registry/#/"&gt;
-        Order Deny,Allow
-        Deny from all
-        Allow from 123.45.0.0/255.255.0.0 123.56.0.0/255.255.0.0 .jpl.nasa.gov
-        &lt;/Location&gt;
+ProxyPass /services/registry/ http://localhost:8983/solr/
+ProxyPassReverse /services/registry/ http://localhost:8983/solr/
+ProxyPass /services/registry http://localhost:8983/solr
+ProxyPassReverse /services/registry http://localhost:8983/solr
+
+&lt;!-- Secures the Solr admin interface to your local subnet. Change your IP/subnet information accordingly. --&gt;
+&lt;Location "/services/registry/#/"&gt;
+Order Deny,Allow
+Deny from all
+Allow from 123.45.0.0/255.255.0.0 123.56.0.0/255.255.0.0 .jpl.nasa.gov
+&lt;/Location&gt;
       </source>
       
       <p>You should now be able to go to http://my.website.com/services/registry and see the Solr Admin interface.</p>
     </section>
 
+    <hr />
     <section name="Next Steps">
       <subsection name="Install Harvest Tool">
         <p><a href="../../../ingest/harvest/index.html">The Harvest Tool</a> can be used to populate the Registry with data. The Harvest Tool runs locally at the Discipline Node to crawl the local data repository in order to discover products and index associated metadata with the Registry.</p>
       </subsection>
     </section>
 
+    <hr />
     <section name="Uninstall">
       <p>In the event you want to uninstall the Registry either to install a newer version or for another reason:</p>
       <ul>
@@ -384,12 +440,12 @@ $ ./registry_installer_standalone.sh uninstall
 STARTING Registry Installer in standalone mode.
 
   Registry   .....
-       ( v 2.2.0-SNAPSHOT )
+       ( v ${project.version} )
        ( installing on platform: Mac OS X )
        ( IP Address:- 192.168.1.120 )
-       ( Host Name:- LMC-060585 )
+       ( Host Name:- MY_HOST )
 
-Enter location of SOLR installation: /Users/jpadams/Documents/proj/pds/pdsen/workspace/solr-8.2.0
+Enter location of SOLR installation: /usr/local/solr-8.2.0
 Deleting registry collection...
 {
   "responseHeader":{
@@ -401,7 +457,7 @@ Deleting registry collection...
 
 
 Deleted collection 'registry' using command:
-http://192.168.1.120:8983/solr/admin/collections?action=DELETE&name=registry
+http://192.168.1.120:8983/solr/admin/collections?action=DELETE&amp;name=registry
 Return status from deleting registry collection = 0
 Registry collection is deleted successfully.
 Deleting xpath collection...
@@ -415,7 +471,7 @@ Deleting xpath collection...
 
 
 Deleted collection 'xpath' using command:
-http://192.168.1.120:8983/solr/admin/collections?action=DELETE&name=xpath
+http://192.168.1.120:8983/solr/admin/collections?action=DELETE&amp;name=xpath
 Return status from deleting xpath collection = 0
 Xpath collection is deleted successfully.
 Deleting search collection (data)...
@@ -429,7 +485,7 @@ Deleting search collection (data)...
 
 
 Deleted collection 'data' using command:
-http://192.168.1.120:8983/solr/admin/collections?action=DELETE&name=data
+http://192.168.1.120:8983/solr/admin/collections?action=DELETE&amp;name=data
 Return status from deleting search collection (data) = 0
 Search collection (data) is deleted successfully.
 
@@ -437,7 +493,7 @@ Found 1 Solr nodes:
 
 Solr process 6007 running on port 8983
 {
-  "solr_home":"/Users/jpadams/Documents/proj/pds/pdsen/workspace/solr-8.2.0/server/solr",
+  "solr_home":"/usr/local/solr-8.2.0/server/solr",
   "version":"8.2.0 31d7ec7bbfdcd2c4cc61d9d35e962165410b65fe - ivera - 2019-07-19 15:11:04",
   "startTime":"2019-10-25T04:41:04.215Z",
   "uptime":"0 days, 0 hours, 20 minutes, 2 seconds",
@@ -457,6 +513,7 @@ The SOLR server is stopped successfully.
       </ul>
     </section>
 
+    <hr />
     <section name="Common Errors">
       <subsection name="Failed to create a registry service collection (.system)...">
 	<p>This issue could happen for several reasons, but we will need to look through the logs to determine the issue:
