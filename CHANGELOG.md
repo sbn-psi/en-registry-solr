@@ -1,5 +1,28 @@
 # Change Log
 
+## [v2.2.0](https://github.com/NASA-PDS-Incubator/registry/tree/v2.2.0) (2019-10-25)
+[Full Changelog](https://github.com/NASA-PDS-Incubator/registry/compare/v2.1.2...v2.2.0)
+
+**Implemented enhancements:**
+
+- Add schema for XPath to prevent failure on ingestions with differing data types [\#28](https://github.com/NASA-PDS-Incubator/registry/issues/28)
+- Update search-post tool to accomplish all functionality that Solr Post Tool does [\#27](https://github.com/NASA-PDS-Incubator/registry/issues/27)
+- Upgrade to Solr 8.2.0 [\#25](https://github.com/NASA-PDS-Incubator/registry/issues/25)
+- Add new search\_post utility for posting Solr Docs to the search index [\#23](https://github.com/NASA-PDS-Incubator/registry/issues/23)
+
+**Fixed bugs:**
+
+- Fix docker and standalone installers to work with new collections [\#22](https://github.com/NASA-PDS-Incubator/registry/issues/22)
+
+**Merged pull requests:**
+
+- Update docker installer and search-post to allow for help command [\#30](https://github.com/NASA-PDS-Incubator/registry/pull/30) ([jordanpadams](https://github.com/jordanpadams))
+- Upgrade to Solr 8.2.0 and create explicit XPath collection config [\#29](https://github.com/NASA-PDS-Incubator/registry/pull/29) ([jordanpadams](https://github.com/jordanpadams))
+- Add new search\_post utility for posting Solr Docs to the search index [\#21](https://github.com/NASA-PDS-Incubator/registry/pull/21) ([tdddblog](https://github.com/tdddblog))
+
+## [v2.1.2](https://github.com/NASA-PDS-Incubator/registry/tree/v2.1.2) (2019-10-19)
+[Full Changelog](https://github.com/NASA-PDS-Incubator/registry/compare/v2.1.1...v2.1.2)
+
 ## [v2.1.1](https://github.com/NASA-PDS-Incubator/registry/tree/v2.1.1) (2019-10-17)
 [Full Changelog](https://github.com/NASA-PDS-Incubator/registry/compare/v2.1.0...v2.1.1)
 
