@@ -9,6 +9,7 @@
 - Update search-post tool to accomplish all functionality that Solr Post Tool does [\#27](https://github.com/NASA-PDS-Incubator/registry/issues/27)
 - Upgrade to Solr 8.2.0 [\#25](https://github.com/NASA-PDS-Incubator/registry/issues/25)
 - Add new search\_post utility for posting Solr Docs to the search index [\#23](https://github.com/NASA-PDS-Incubator/registry/issues/23)
+- Update Registry documentation per collection updates and report-mgr tool [\#20](https://github.com/NASA-PDS-Incubator/registry/issues/20)
 
 **Fixed bugs:**
 
