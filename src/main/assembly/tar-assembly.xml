@@ -78,7 +78,7 @@
       	<include>**/registry.properties</include>
         <include>**/registry_installer_standalone.sh</include>
         <include>**/registry_installer_docker.sh</include>
-        <include>**/search-post</include>
+        <include>**/registry-mgr</include>
       </includes>
       <fileMode>775</fileMode>
       <lineEnding>unix</lineEnding>
