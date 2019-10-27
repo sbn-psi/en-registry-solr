@@ -217,19 +217,14 @@ $ curl 'http://localhost:8983/solr/data/update/' --data-binary @C:\\path\to\solr
 	    <p>Using <a href="https://curl.haxx.se/">curl</a> (update host/port and as needed):
 	      <source>
 # Delete a specific Registry Package (aka Harvest run) from all collections
-$ curl 'http://localhost:8983/solr/data/update/' --data-binary "&lt;delete&gt;&lt;query&gt;package_id:86037219-aa7d-4a70-a239-4501e0c675a4&lt;/query&gt;&lt;/delete&gt;"
-$ curl 'http://localhost:8983/solr/data/update/' --data-binary "&lt;delete&gt;&lt;query&gt;package_id:86037219-aa7d-4a70-a239-4501e0c675a4&lt;/query&gt;&lt;/delete&gt;"
+$ curl 'http://localhost:8983/solr/registry/update/' --data-binary "&lt;delete&gt;&lt;query&gt;package_id:86037219-aa7d-4a70-a239-4501e0c675a4&lt;/query&gt;&lt;/delete&gt;"
+$ curl 'http://localhost:8983/solr/xpath/update/' --data-binary "&lt;delete&gt;&lt;query&gt;package_id:86037219-aa7d-4a70-a239-4501e0c675a4&lt;/query&gt;&lt;/delete&gt;"
 $ curl 'http://localhost:8983/solr/data/update/' --data-binary "&lt;delete&gt;&lt;query&gt;package_id:86037219-aa7d-4a70-a239-4501e0c675a4&lt;/query&gt;&lt;/delete&gt;"
 
 # Delete all data from all collections
+$ curl 'http://localhost:8983/solr/registry/update/' --data-binary "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;"
+$ curl 'http://localhost:8983/solr/xpath/update/' --data-binary "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;"
 $ curl 'http://localhost:8983/solr/data/update/' --data-binary "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;"
-$ curl 'http://localhost:8983/solr/data/update/' --data-binary "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;"
-$ curl 'http://localhost:8983/solr/data/update/' --data-binary "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;"
-
-# Remove collection with LIDVID = urn:nasa:pds:insight_rad:data_raw::1.0
-$ curl 'http://localhost:8983/solr/data/update/' --data-binary "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;" '&lt;delete&gt;&lt;query&gt;lidvid:"urn:nasa:pds:insight_rad:data_raw::1.0"&lt;/query&gt;&lt;/delete&gt;'
-$ curl 'http://localhost:8983/solr/data/update/' --data-binary "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;" '&lt;delete&gt;&lt;query&gt;lidvid:"urn:nasa:pds:insight_rad:data_raw::1.0"&lt;/query&gt;&lt;/delete&gt;'
-$ curl 'http://localhost:8983/solr/data/update/' --data-binary "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;" '&lt;delete&gt;&lt;query&gt;lidvid:"urn:nasa:pds:insight_rad:data_raw::1.0"&lt;/query&gt;&lt;/delete&gt;'
 	      </source>
 	    </p>
 	  </subsection>
