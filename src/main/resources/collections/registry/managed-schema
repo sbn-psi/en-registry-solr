@@ -8,7 +8,11 @@
     <field name="lidvid" type="string" indexed="true" stored="true" required="true" multiValued="false" />
     <uniqueKey>lidvid</uniqueKey>
 
-    <field name="name" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+    <field name="file_path" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+    <field name="file_name" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+    <field name="file_type" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+    <field name="file_size" type="plong" indexed="true" stored="true" required="true" multiValued="false" />
+
     <field name="content" type="binary" indexed="false" stored="true" required="true" multiValued="false" />
     <field name="md5" type="string" indexed="true" stored="true" required="true" multiValued="false" />
     <field name="package_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
