@@ -5,8 +5,10 @@
     <!-- IDs -->
     <field name="lid" type="string" indexed="true" stored="true" required="true" multiValued="false" />
     <field name="vid" type="pfloat" indexed="true" stored="true" required="true" multiValued="false" />
-    <field name="lidvid" type="string" indexed="true" stored="true" required="true" multiValued="false" />
-    <uniqueKey>lidvid</uniqueKey>
+    <field name="local_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+    <!-- id = lid + :: + vid + :: + local_id -->
+    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+    <uniqueKey>id</uniqueKey>
 
     <!-- File Info -->
     <field name="file_name" type="string" indexed="true" stored="true" required="true" multiValued="false" />
@@ -20,15 +22,6 @@
     <!-- Package / transaction ID -->
     <field name="package_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
 
-    <!-- Metadata -->
-    <field name="product_class" type="string" indexed="true" stored="true" required="true" multiValued="false" />
-    <field name="investigation_name" type="text_general" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="instrument_name" type="text_general" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="instrument_host_name" type="text_general" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="target_name" type="text_general" indexed="true" stored="true" required="false" multiValued="true" />
-
-    <field name="file_inventory_ids" type="string" indexed="true" stored="true" required="false" multiValued="true" />
-
     <!-- Timestamp, etc. -->
     <field name="timestamp" type="pdate" indexed="true" stored="true" default="NOW" multiValued="false"/>
     <field name="_version_" type="plong" indexed="false" stored="false"/>
@@ -41,16 +34,5 @@
     <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
     <fieldType name="pdate" class="solr.DatePointField" docValues="true"/>
     <fieldType name="binary" class="solr.BinaryField"/>
-
-    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" multiValued="true">
-      <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-      <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-    </fieldType>
 
 </schema>
