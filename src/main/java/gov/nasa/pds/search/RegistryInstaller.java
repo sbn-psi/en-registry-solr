@@ -30,9 +30,6 @@
 
 package gov.nasa.pds.search;
 
-import static java.lang.System.getProperty;
-import static java.lang.System.getenv;
-
 import static gov.nasa.pds.search.util.RegistryInstallerUtils.copyDir;
 import static gov.nasa.pds.search.util.RegistryInstallerUtils.getPreset;
 import static gov.nasa.pds.search.util.RegistryInstallerUtils.print;
@@ -51,8 +48,6 @@ import org.slf4j.LoggerFactory;
 
 import gov.nasa.pds.search.util.RegistryInstallerUtils;
 
-import org.apache.commons.io.FilenameUtils;
-
 
 /*
  * @author hyunlee
@@ -66,8 +61,6 @@ public class RegistryInstaller {
 	// Number of bytes per gigabyte
 	public static final long BYTES_PER_GIG = (long)1e+9;
 	private static String solrCmd = "solr";
-	private static String envStr = null;
-	private static String prompt = null;
 
 	private static String osName;
 	private static String termName = null;
@@ -89,7 +82,8 @@ public class RegistryInstaller {
 
 	public RegistryInstaller() {}
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception 
+	{
 		for (String arg : args) {
             if (arg.equals("--uninstall") || arg.equals("-u")) {
                 uninstall = true;
@@ -99,29 +93,21 @@ public class RegistryInstaller {
                 break;
             }
         }
+		
 		Scanner reader = new Scanner(System.in);  // Reading from System.in
-//		harvest_home = reader.next();
 
-//		System.out.print("Enter an installation mode (docker or standalone): ");
-
-		// Defaulting to standalone after separate Docker script was created
 		installType = "standalone"; // Scans the next token of the input as a string.			
 
 		Path currentRelativePath = Paths.get("");
 		registry_root = currentRelativePath.toAbsolutePath().toString() + SEP + "..";
 
-		print("STARTING Registry Installer in " + installType + " mode.");
 		getVersion();
 		getOsName();
 		getTerminal();
 		getSolrPort();
 		getSolrHost();
 
-		try {
-			printWelcomeMessage();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}	
+		printWelcomeMessage();
 
 		System.out.print("Enter location of SOLR installation: ");
 		solrRoot = reader.next();
@@ -131,10 +117,15 @@ public class RegistryInstaller {
 			solrCmd = "solr.cmd";
 		}
 
-		if (uninstall) {
-			deleteRegistrySearchCollection();
+		if(uninstall) 
+		{
+		    deleteCollection("data");
+		    deleteCollection("xpath");
+			deleteCollection("registry_inventory");
+			deleteCollection("registry");
+			
 			stopSOLRServer();
-			exit(1); // to test for now.
+			exit(0);
 		}
 
 		// copy search service confs, *jar and lib into SOLR directories
@@ -145,15 +136,12 @@ public class RegistryInstaller {
 		numShards = getPreset("numShards");
 		replicationFactor = getPreset("replicationFactor");
 
-		// Create 'registry' collection
-		createRegistryCollection();
+		// Create collections
+		createCollection("registry");
+		createCollection("registry_inventory");
+		createCollection("xpath");
+		createCollection("data");		
 
-		// Create 'xpath' collection
-		createRegistryXpathCollection();
-
-		// Create 'data' collection
-		createSearchCollection();
-		
 		reader.close();
 	}
 
@@ -166,18 +154,19 @@ public class RegistryInstaller {
 	}
 
 	private static void getVersion() {
-		//System.out.println("getenv(REGISTRY_VER) = " + getenv("REGISTRY_VER"));
-		registry_version = getenv("REGISTRY_VER");
-
+		registry_version = System.getenv("REGISTRY_VER");
 	}
 
 	private static void getOsName() {
-		osName = getProperty("os.name");
+		osName = System.getProperty("os.name");
 	}
 
-	private static void getTerminal() {
-		if (System.getenv("TERM")!=null)
+	private static void getTerminal() 
+	{
+		if (System.getenv("TERM") != null) 
+		{
 			termName = System.getenv("TERM");
+		}
 	}
 
 	private static void getSolrPort() {
@@ -188,43 +177,44 @@ public class RegistryInstaller {
 		solrHost = getPreset("solr.host");
 	}
 
-	private static void printWelcomeMessage() throws Exception {
+	private static void printWelcomeMessage() throws Exception 
+	{
 		print ("");
-		print ("  Registry   .....   ");
-		print ("       ( v " + registry_version + " )");
-		print ("       ( installing on platform: " + osName + " )");
+		print ("PDS Registry");
+		print ("  Version:     " + registry_version);
+		print ("  Platform:    " + osName);		
 		InetAddress inetAddress = InetAddress.getLocalHost();
-        print ("       ( IP Address:- " + inetAddress.getHostAddress() + " )");
-        print ("       ( Host Name:- " + inetAddress.getHostName() + " )");
+        print ("  IP Address:  " + inetAddress.getHostAddress());
+        print ("  Host Name:   " + inetAddress.getHostName());
         print ("");
 	}
 
-	private static void setupSOLRDirs() 
+	
+	private static void copyConfigSet(String name) throws IOException
 	{
-        try 
-        {
-			// Copy PDS plugins
-    		String solrLib  = solrRoot + SEP + "contrib" + SEP + "pds" + SEP + "lib";
-        	copyDir(registry_root + SEP + "dist", solrLib);
+        String solrConfigsets = solrRoot + SEP + "server" + SEP + "solr" + SEP + "configsets";
 
-			String solrConfigsets = solrRoot + SEP + "server" + SEP + "solr" + SEP + "configsets";
-			
-			// Copy config sets
-			copyDir(registry_root + SEP + "collections" + SEP + "data", 
-					solrConfigsets + SEP + "data" + SEP + "conf");
-			
-			copyDir(registry_root + SEP + "collections" + SEP + "registry", 
-					solrConfigsets + SEP + "registry" + SEP + "conf");
-			
-			copyDir(registry_root + SEP + "collections" + SEP + "xpath", 
-					solrConfigsets + SEP + "xpath" + SEP + "conf");
-		} 
-        catch (IOException ex) 
-        {
-			ex.printStackTrace();
-		}
+        String fromDir = registry_root + SEP + "collections" + SEP + name;
+        String toDir = solrConfigsets + SEP + name + SEP + "conf";
+        
+        copyDir(fromDir, toDir);
+	}
+	
+	
+	private static void setupSOLRDirs() throws Exception 
+	{
+		// Copy PDS plugins
+		String toDir  = solrRoot + SEP + "contrib" + SEP + "pds" + SEP + "lib";
+    	copyDir(registry_root + SEP + "dist", toDir);
+
+		// Copy config sets
+		copyConfigSet("registry");
+		copyConfigSet("registry_inventory");
+		copyConfigSet("xpath");
+		copyConfigSet("data");
 	}
 
+	
 	private static void startSOLRServer() {		
         Process progProcess = null;
         int returnVal = -1;
@@ -364,22 +354,7 @@ public class RegistryInstaller {
 	}
 
 	
-	private static void createSearchCollection() 
-	{
-		String[] execCmd = new String[] 
-		{
-			solrBin + SEP + solrCmd, 
-			"create", 
-			"-p", String.valueOf(solrPort), 
-			"-c", "data", "-d", "data",
-			"-shards", numShards,
-			"-replicationFactor", replicationFactor
-		};
-						
-		execCreateCommand(execCmd, "search collection (data)");
-	}
-	
-	private static void createRegistryCollection() 
+	private static void createCollection(String name)
 	{
 		// Create collection
 		String[] execCmd = new String[] 
@@ -387,29 +362,14 @@ public class RegistryInstaller {
 			solrBin + SEP + solrCmd, 
 			"create", 
 			"-p", String.valueOf(solrPort), 
-			"-c", "registry", "-d", "registry",
+			"-c", name, "-d", name,
 			"-shards", numShards,
 			"-replicationFactor", replicationFactor
 		};
 				
-		execCreateCommand(execCmd, "registry collection");
+		execCreateCommand(execCmd, name + " collection");
 	}
 	
-	private static void createRegistryXpathCollection() 
-	{
-		// Create collection
-		String[] execCmd = new String[] 
-		{
-			solrBin + SEP + solrCmd, 
-			"create", 
-			"-p", String.valueOf(solrPort), 
-			"-c", "xpath", "-d", "xpath",
-			"-shards", numShards,
-			"-replicationFactor", replicationFactor
-		};
-				
-		execCreateCommand(execCmd, "xpath collection");
-	}
 	
 	private static void execCreateCommand(String[] cmd, String name)
 	{
@@ -493,40 +453,18 @@ public class RegistryInstaller {
 	}
 
 		
-	private static void deleteRegistrySearchCollection() 
+	private static void deleteCollection(String name)
 	{
         // Registry collection
 		String[] execCmd = new String[]
         { 
-        	solrBin + SEP + solrCmd, 
+        	solrBin + SEP + solrCmd,
         	"delete", 
         	"-p", String.valueOf(solrPort), 
-        	"-c", "registry"
+        	"-c", name
         };
 
-        execDeleteCommand(execCmd, "registry collection");
-        
-        // XPath collection
-        execCmd = new String[] 
-        { 
-        	solrBin + SEP + solrCmd, 
-        	"delete", 
-        	"-p", String.valueOf(solrPort), 
-        	"-c", "xpath"
-        };
-
-        execDeleteCommand(execCmd, "xpath collection");
-        
-        // Search collection
-        execCmd = new String[] 
-        { 
-        	solrBin + SEP + solrCmd, 
-        	"delete", 
-        	"-p", String.valueOf(solrPort), 
-        	"-c", "data"
-        };
-        
-        execDeleteCommand(execCmd, "search collection (data)");
+        execDeleteCommand(execCmd, name + " collection");
 	}
 	
 }

@@ -79,6 +79,8 @@
         <include>**/registry_installer_standalone.sh</include>
         <include>**/registry_installer_docker.sh</include>
         <include>**/registry-mgr</include>
+        <include>**/registry_install.bat</include>
+        <include>**/registry_uninstall.bat</include>
       </includes>
       <fileMode>775</fileMode>
       <lineEnding>unix</lineEnding>

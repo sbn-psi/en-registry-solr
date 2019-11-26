@@ -49,28 +49,15 @@ set PARENT_DIR=%SCRIPT_DIR%..
 set LIB_DIR=%PARENT_DIR%\dist
 set EXTRA_LIB_DIR=%PARENT_DIR%\lib
 
-set CLASSPATH=
-
-:: Check for dependencies.
-if exist "%LIB_DIR%\registry*.jar" (
-   	set CLASSPATH=%LIB_DIR%\registry-2.0.0.jar
-) 
-
-::for %%i in ("%EXTRA_LIB_DIR%"\*.jar) do (
-::	set CLASSPATH=%CLASSPATH%;%%i
-::	echo %CLASSPATH%
-::)
-set CLASSPATH=%CLASSPATH%;%EXTRA_LIB_DIR%\log4j-1.2.16.jar;%EXTRA_LIB_DIR%\slf4j-api-1.6.6.jar;%EXTRA_LIB_DIR%\slf4j-log4j12-1.6.6.jar;%EXTRA_LIB_DIR%\commons-io-2.5.jar;%EXTRA_LIB_DIR%\commons-logging-1.0.4.jar
-echo %CLASSPATH%
+set CP=%EXTRA_LIB_DIR%\*;%LIB_DIR%\*
 
 set /p REGISTRY_VER=<%PARENT_DIR%/VERSION.txt
 
 if exist "%SCRIPT_DIR%\registry.properties" (
-	set REGISTRY_INSTALLER_PRESET_FILE=%SCRIPT_DIR%\registry.properties
-	echo %REGISTRY_INSTALLER_PRESET_FILE%
+    set REGISTRY_INSTALLER_PRESET_FILE=%SCRIPT_DIR%\registry.properties
 )
 
 :: Executes Registry Installer via the executable jar file
-"%JAVA_HOME%"\bin\java gov.nasa.pds.search.RegistryInstaller  %*
+"%JAVA_HOME%"\bin\java -cp "%CP%" gov.nasa.pds.search.RegistryInstaller  %*
 
 :END
