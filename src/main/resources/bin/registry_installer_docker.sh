@@ -159,17 +159,22 @@ start_registry_container() {
 
 create_solr_collections() {
     # Create the Registry collections
-    echo -ne "Creating a Registry Service Blob collection (registry)        " | tee -a $LOG
+    echo -ne "Creating Registry collection (registry)                       " | tee -a $LOG
     docker exec --user=solr ${DOCKER_IMAGE} solr create -c registry -d registry -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
     print_status $?
 
+    # Create the Registry collections
+    echo -ne "Creating Registry Inventory collection (registry_inventory)   " | tee -a $LOG
+    docker exec --user=solr ${DOCKER_IMAGE} solr create -c registry_inventory -d registry_inventory -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
+    print_status $?
+
     # Create XPath collection
-    echo -ne "Creating a XPath collection (xpath)                           " | tee -a $LOG
+    echo -ne "Creating XPath collection (xpath)                             " | tee -a $LOG
     docker exec --user=solr ${DOCKER_IMAGE} solr create -c xpath -d xpath -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
     print_status $?
 
     # Create the Search collection 
-    echo -ne "Creating a Search collection (data)                           " | tee -a $LOG
+    echo -ne "Creating Search collection (data)                             " | tee -a $LOG
     docker exec --user=solr ${DOCKER_IMAGE} solr create -c data -d data -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
     print_status $?
 }
@@ -190,17 +195,23 @@ confirm_uninstall() {
 
 remove_solr_collections() {
     # Remove 'registry' collection
-    echo "Removing the Registry Blob collection from the SOLR.              " | tee -a $LOG
-    docker exec -it --user=solr ${DOCKER_IMAGE} solr delete -c registry  >>$LOG 2>&1
+    echo "Removing the Registry collection.                                 " | tee -a $LOG
+    docker exec -it --user=solr ${DOCKER_IMAGE} solr delete -c registry >>$LOG 2>&1
+
+    # Remove 'registry_inventory' collection
+    echo "Removing the Registry Inventory collection.                       " | tee -a $LOG
+    docker exec -it --user=solr ${DOCKER_IMAGE} solr delete -c registry_inventory >>$LOG 2>&1
 
     # Remove 'xpath' collection
     echo "Removing the Registry XPath collection.                           " | tee -a $LOG
-    docker exec -it --user=solr ${DOCKER_IMAGE} solr delete -c xpath  >>$LOG 2>&1
+    docker exec -it --user=solr ${DOCKER_IMAGE} solr delete -c xpath >>$LOG 2>&1
 
     # Remove 'data' collection
     echo "Removing the Search collection.                                   " | tee -a $LOG
     docker exec -it --user=solr ${DOCKER_IMAGE} solr delete -c data >>$LOG 2>&1
+}
 
+stop_solr() {
     echo "Stopping the SOLR instance.                                       " | tee -a $LOG
     docker exec -it ${DOCKER_IMAGE} solr stop >>$LOG 2>&1
 }
@@ -233,6 +244,7 @@ elif [[ $COMMAND == "uninstall" ]]; then
   echo "Uninstalling..."
   confirm_uninstall
   remove_solr_collections
+  stop_solr
   remove_registry_container
   remove_registry_image
   remove_docker_volumes
