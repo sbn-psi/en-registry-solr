@@ -33,9 +33,7 @@ MAINTAINER Jordan Padams <jordan.padams@jpl.nasa.gov>
 ADD VERSION.txt .
 # Config sets
 COPY collections/registry /opt/solr/server/solr/configsets/registry/conf
-COPY collections/registry_inventory /opt/solr/server/solr/configsets/registry_inventory/conf
 COPY collections/data /opt/solr/server/solr/configsets/data/conf
-COPY collections/xpath /opt/solr/server/solr/configsets/xpath/conf
 # Plugins
 COPY dist /opt/solr/contrib/pds/lib
 # Libs

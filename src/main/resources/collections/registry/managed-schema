@@ -27,8 +27,6 @@
     <field name="instrument_host_name" type="text_general" indexed="true" stored="true" required="false" multiValued="true" />
     <field name="target_name" type="text_general" indexed="true" stored="true" required="false" multiValued="true" />
 
-    <field name="file_inventory_ids" type="string" indexed="true" stored="true" required="false" multiValued="true" />
-
     <!-- Timestamp, etc. -->
     <field name="timestamp" type="pdate" indexed="true" stored="true" default="NOW" multiValued="false"/>
     <field name="_version_" type="plong" indexed="false" stored="false"/>
