@@ -120,8 +120,6 @@ public class RegistryInstaller {
 		if(uninstall) 
 		{
 		    deleteCollection("data");
-		    deleteCollection("xpath");
-			deleteCollection("registry_inventory");
 			deleteCollection("registry");
 			
 			stopSOLRServer();
@@ -138,8 +136,6 @@ public class RegistryInstaller {
 
 		// Create collections
 		createCollection("registry");
-		createCollection("registry_inventory");
-		createCollection("xpath");
 		createCollection("data");		
 
 		reader.close();
@@ -209,8 +205,6 @@ public class RegistryInstaller {
 
 		// Copy config sets
 		copyConfigSet("registry");
-		copyConfigSet("registry_inventory");
-		copyConfigSet("xpath");
 		copyConfigSet("data");
 	}
 
