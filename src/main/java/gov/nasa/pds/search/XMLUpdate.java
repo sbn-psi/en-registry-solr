@@ -32,6 +32,9 @@ package gov.nasa.pds.search;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Properties;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
@@ -58,13 +61,7 @@ public class XMLUpdate {
 	}
 
 	protected int doUpdate(FileReader reader) {
-		try {
-			/* Solr 4.3 */
-			// NOTE: env "solr.solr.home" must be set or passed as JVM argument
-			//CoreContainer.Initializer initializer = new CoreContainer.Initializer();
-			//CoreContainer coreContainer = initializer.initialize();
-			
-			/* Updated for solr 7.5 */
+		try {			
 			String solrHome = System.getProperty("solr.pds.home");			
 			CoreContainer coreContainer = new CoreContainer(solrHome);
 	        coreContainer.load();
