@@ -307,6 +307,11 @@ POSSIBILITY OF SUCH DAMAGE.
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
     </dependency>
+    <dependency>
+      <groupId>net.sf.saxon</groupId>
+      <artifactId>Saxon-HE</artifactId>
+      <version>9.9.1-7</version>
+    </dependency>
   </dependencies>
 
   <reporting>
