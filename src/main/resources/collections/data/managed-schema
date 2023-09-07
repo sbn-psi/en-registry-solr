@@ -91,6 +91,7 @@
    <field name="class_term_entry_language" type="text_general" indexed="true" stored="true" multiValued="true" />
     
    <field name="collection_name" type="text_en_splitting" indexed="true" stored="true" multiValued="true" />
+   <field name="collection_ref" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="collection_type" type="text_en_splitting" indexed="true" stored="true" multiValued="true" />
    <field name="collection_member_count" type="pint" indexed="true" stored="true" multiValued="false" />
    <field name="confidence_level_note" type="text_general" indexed="false" stored="true" multiValued="true" />
