@@ -120,17 +120,20 @@
    <field name="instrument_host_serial_number" type="lowercase" indexed="false" stored="true" multiValued="true" />
    <field name="instrument_host_type" type="text_en_splitting" indexed="true" stored="true" multiValued="true" />
    <field name="instrument_host_description" type="text_general" indexed="false" stored="true" multiValued="true" />
+   <field name="instrument_host_ref" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="instrument_id" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="instrument_name" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="instrument_serial_number" type="lowercase" indexed="false" stored="true" multiValued="true" />
    <field name="instrument_type" type="text_en_splitting" indexed="true" stored="true" multiValued="true" />
    <field name="instrument_description" type="text_general" indexed="false" stored="true" multiValued="true" />
+   <field name="instrument_ref" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="investigation_name" type="text_en_splitting" indexed="true" stored="true" multiValued="true" />
    <field name="investigation_name_or_alias" type="text_en_splitting" indexed="false" stored="true" multiValued="true" />
    <field name="investigation_objectives_summary" type="text_general" indexed="false" stored="true" multiValued="true" />
    <field name="investigation_start_date" type="pdate" indexed="true" stored="true" multiValued="true" />
    <field name="investigation_stop_date" type="pdate" indexed="true" stored="true" multiValued="true" />
    <field name="investigation_type" type="text_en_splitting_tight" indexed="true" stored="true" multiValued="true" />
+   <field name="investigation_ref" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="language" type="text_en_splitting_tight" indexed="false" stored="true" multiValued="true" />
    <field name="modification_date" type="pdate" indexed="false" stored="true" multiValued="true" />
    <field name="modification_description" type="text_general" indexed="false" stored="true" multiValued="true" />
@@ -173,6 +176,7 @@
    <field name="resource_link" type="string" indexed="false" stored="true" multiValued="true"/>
    <field name="resource_name" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="resource_type" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="resource_ref" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="search_engine_type" type="text_general" indexed="true" stored="true" multiValued="true" />
 
    <!-- Product_Service fields -->
@@ -192,6 +196,7 @@
    <field name="start_time" type="pdate" indexed="true" stored="true" multiValued="true" />
    <field name="stop_time" type="pdate" indexed="true" stored="true" multiValued="true" />
    <field name="target_name" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="target_ref" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="target_ref_target_type" type="text_en_splitting_tight" indexed="true" stored="true" multiValued="true" />
    <field name="target_type" type="text_en_splitting_tight" indexed="true" stored="true" multiValued="true" />
    <field name="telephone_number" type="string" indexed="false" stored="true" multiValued="true" />
