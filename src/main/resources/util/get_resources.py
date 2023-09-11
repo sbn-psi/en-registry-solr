@@ -45,7 +45,8 @@ import traceback
 import sys
 
 
-SEARCH_URL = 'https://pds.nasa.gov/services/search'
+# SEARCH_URL = 'https://pds.nasa.gov/services/search'
+SEARCH_URL = 'http://localhost:8983/solr/data/search'
 OUTPUT_FILE_NAME = 'registered_resources.json'
 ENDPOINT = "search"
 QUERY = "q=product_class:Product_Context%20AND%20data_class:Resource&wt=json"

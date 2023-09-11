@@ -89,7 +89,7 @@
       <directory>src/main/resources/util</directory>
       <outputDirectory>resources</outputDirectory>
       <includes>
-        <include>registered_resources.json</include>
+        <include>*</include>
       </includes>
       <fileMode>664</fileMode>
       <lineEnding>keep</lineEnding>
