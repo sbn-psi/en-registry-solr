@@ -1,8 +1,8 @@
-# PDS Registry
-The PDS Registry provides functionality for tracking, searching, auditing, locating, and maintaining artifacts within the system. These artifacts can range from data files and label files, schemas, dictionary definitions for objects and elements, services, etc. The core functionality for this component is satisfied by Apache Solr.
+# PDS Legacy Registry Manager
+The PDS Legacy Registry provides functionality for tracking, searching, auditing, locating, and maintaining artifacts within the system using our legacy Apache Solr capabilities. These artifacts can range from data files and label files, schemas, dictionary definitions for objects and elements, services, etc. Future implementations are already underway for the PDS Search API.
 
 # Documentation
-The documentation for the latest release of the PDS Registry, including release notes, installation and operation of the software are online at https://nasa-pds-incubator.github.io/registry/.
+The documentation for the latest release of the PDS Registry, including release notes, installation and operation of the software are online at https://nasa-pds.github.io/registry-mgr-legacy/.
 
 If you would like to get the latest documentation, including any updates since the last release, you can execute the "mvn site:run" command and view the documentation locally at http://localhost:8080.
 
@@ -71,9 +71,6 @@ mvn clean site deploy
 ```
 
 # Maven JAR Dependency Reference
-
-## Official Releases
-https://search.maven.org/search?q=g:gov.nasa.pds%20AND%20a:registry&core=gav
 
 ## Snapshots
 https://oss.sonatype.org/content/repositories/snapshots/gov/nasa/pds/registry/
