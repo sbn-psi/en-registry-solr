@@ -80,33 +80,17 @@ public class SearchDocGenerator {
 
 	private DocWriter writer = null;
 	private HashMap<String, JsonElement> resources;
-	private File resourceFile;  
   
 	
-	public SearchDocGenerator(File configDirectory, File outputDirectory, File resource)
+	public SearchDocGenerator(File configDirectory, File outputDirectory)
 			throws SearchCoreException, SearchCoreFatalException 
 	{
 		SearchConfigManager.getInstance().loadConfigs(configDirectory);
 		
 		this.outputDirectory = outputDirectory;
 		this.resources = new HashMap<String, JsonElement>();
-		this.resourceFile = resource;
-		
-		try {
-			setResources(this.resourceFile);
-		} catch (Exception e) {
-			throw new SearchCoreFatalException("Error while parsing registered " + "resources: " + e.getMessage());
-		}
 	}
 
-	
-	private void setResources(File resource) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-		Gson gson = new Gson();
-		JsonObject json = gson.fromJson(new FileReader(resource), JsonObject.class);
-		for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-			this.resources.put(entry.getKey(), entry.getValue());
-		}
-	}
   
   /**
    * Generate the Solr document file for the given extrinsic object.

@@ -91,7 +91,6 @@ public class HarvesterSearch {
 	private SearchIngester ingester;
 	private String searchUrl;
 	private SearchDocState searchDocState;
-	private File registeredResources;
 
 	/**
 	 * Constructor.
@@ -113,7 +112,6 @@ public class HarvesterSearch {
 		this.ingester = new SearchIngester();
 		this.searchUrl = searchUrl;
 		this.searchDocState = new SearchDocState();
-		this.registeredResources = resources;
 	}
 
 	/**
@@ -172,7 +170,7 @@ public class HarvesterSearch {
 			ca.remove(fileObjectRegistrationAction);
 		}
 		CreateSearchDocAction createSearchDoc = new CreateSearchDocAction(configDir, outputDir,
-				this.registeredResources, this.searchDocState);
+				this.searchDocState);
 		if (crawler instanceof CollectionCrawler) {
 			createSearchDoc.setCacheCollection(true);
 		}
