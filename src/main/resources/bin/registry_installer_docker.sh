@@ -36,7 +36,7 @@ maxShardsPerNode=3
 numShards=3
 replicationFactor=1
 
-DOCKER_IMAGE=registry
+DOCKER_IMAGE=registry-legacy
 DOCKER_VOLUMES="solrdata"
 
 PROMPT=true
