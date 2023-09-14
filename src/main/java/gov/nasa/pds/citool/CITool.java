@@ -13,9 +13,31 @@
 // $Id$
 package gov.nasa.pds.citool;
 
-import gov.nasa.pds.citool.CIToolComparator;
-import gov.nasa.pds.citool.CIToolIngester;
-import gov.nasa.pds.citool.CIToolValidator;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.configuration.AbstractConfiguration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
+import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 import gov.nasa.pds.citool.commandline.options.ConfigKey;
 import gov.nasa.pds.citool.commandline.options.Flag;
 import gov.nasa.pds.citool.commandline.options.InvalidOptionException;
@@ -32,30 +54,6 @@ import gov.nasa.pds.citool.target.Target;
 import gov.nasa.pds.citool.util.ToolInfo;
 import gov.nasa.pds.citool.util.Utility;
 import gov.nasa.pds.tools.constants.Constants.Severity;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Logger;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.configuration.AbstractConfiguration;
-import org.apache.commons.configuration.ConfigurationException;
-
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.Priority;
 
 /**
  * Front end class for the Catalog Ingestion Tool.
@@ -461,9 +459,20 @@ public class CITool
             report.setOutput(reportFile);
         }
         //This removes the log4j messages
-        ConsoleAppender ca = new ConsoleAppender(new PatternLayout("%-5p %m%n"));
-        ca.setThreshold(Priority.FATAL);
-        BasicConfigurator.configure(ca);
+        // ConsoleAppender ca = new ConsoleAppender(new PatternLayout("%-5p %m%n"));
+        // ca.setThreshold(Priority.FATAL);
+        // BasicConfigurator.configure(ca);
+
+        ConfigurationBuilder<BuiltConfiguration> builder =
+            ConfigurationBuilderFactory.newConfigurationBuilder();
+        builder.setStatusLevel(Level.FATAL);
+
+        AppenderComponentBuilder appenderBuilder = builder.newAppender("Stdout", "CONSOLE")
+            .addAttribute("target", ConsoleAppender.Target.SYSTEM_OUT);
+        appenderBuilder
+            .add(builder.newLayout("PatternLayout").addAttribute("pattern", "%-5p %m%n"));
+        LoggerContext ctx = Configurator.initialize(builder.build());
+        ctx.updateLoggers();
     }
 
     private void printReportHeader() throws MalformedURLException {
@@ -504,10 +513,16 @@ public class CITool
     }
 
     public void processMain(String[] args) {
-        //This removes the log4j messages
-        ConsoleAppender ca = new ConsoleAppender(new PatternLayout("%-5p %m%n"));
-        ca.setThreshold(Priority.FATAL);
-        BasicConfigurator.configure(ca);
+      // This removes the log4j messages
+      ConfigurationBuilder<BuiltConfiguration> builder =
+          ConfigurationBuilderFactory.newConfigurationBuilder();
+      builder.setStatusLevel(Level.FATAL);
+
+      AppenderComponentBuilder appenderBuilder = builder.newAppender("Stdout", "CONSOLE")
+          .addAttribute("target", ConsoleAppender.Target.SYSTEM_OUT);
+      appenderBuilder.add(builder.newLayout("PatternLayout").addAttribute("pattern", "%-5p %m%n"));
+      LoggerContext ctx = Configurator.initialize(builder.build());
+      ctx.updateLoggers();
         if (args.length == 0) {
             System.out.println("\nType 'catalog -h' for usage");
             System.exit(0);

@@ -15,16 +15,6 @@
 
 package gov.nasa.pds.citool.report;
 
-import gov.nasa.pds.tools.LabelParserException;
-import gov.nasa.pds.tools.constants.Constants.Severity;
-import gov.nasa.pds.tools.label.Label;
-import gov.nasa.pds.tools.label.ManualPathResolver;
-import gov.nasa.pds.tools.label.parser.DefaultLabelParser;
-import gov.nasa.pds.tools.label.validate.Validator;
-import gov.nasa.pds.tools.util.MessageUtils;
-import gov.nasa.pds.citool.status.Status;
-//import gov.nasa.pds.citool.util.Utility;
-
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URL;
@@ -32,11 +22,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.PatternLayout;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
+import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
+import gov.nasa.pds.citool.status.Status;
+//import gov.nasa.pds.citool.util.Utility;
+import gov.nasa.pds.tools.LabelParserException;
+import gov.nasa.pds.tools.constants.Constants.Severity;
+import gov.nasa.pds.tools.label.Label;
+import gov.nasa.pds.tools.label.ManualPathResolver;
+import gov.nasa.pds.tools.label.parser.DefaultLabelParser;
+import gov.nasa.pds.tools.label.validate.Validator;
+import gov.nasa.pds.tools.util.MessageUtils;
 
 /**
  * This class represents a full report for the Vtool command line. This is the
@@ -196,10 +198,16 @@ public class IngestReport extends Report {
   }
 
   public static void main(String[] args) throws Exception {
-    ConsoleAppender console = new ConsoleAppender(
-        new PatternLayout("%-5p %m%n"));
-    console.setThreshold(Level.FATAL);
-    BasicConfigurator.configure(console);
+    ConfigurationBuilder<BuiltConfiguration> builder =
+        ConfigurationBuilderFactory.newConfigurationBuilder();
+    builder.setStatusLevel(Level.FATAL);
+
+    AppenderComponentBuilder appenderBuilder = builder.newAppender("Stdout", "CONSOLE")
+        .addAttribute("target", ConsoleAppender.Target.SYSTEM_OUT);
+    appenderBuilder.add(builder.newLayout("PatternLayout").addAttribute("pattern", "%-5p %m%n"));
+    LoggerContext ctx = Configurator.initialize(builder.build());
+    ctx.updateLoggers();
+
     Report report = new ValidateReport();
     report.printHeader();
     ManualPathResolver resolver = new ManualPathResolver();
