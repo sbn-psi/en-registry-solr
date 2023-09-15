@@ -18,6 +18,11 @@
 
 <project>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>gov.nasa.pds.2010</groupId>
+    <artifactId>ingest</artifactId>
+    <version>0.0.0</version>
+  </parent>
 
   <groupId>gov.nasa.pds.2010.ingest</groupId>
   <artifactId>catalog</artifactId>
@@ -210,28 +215,50 @@
     </plugins>
   </build>
 
+  <repositories>
+    <!-- Hosts the PDS and OODT artifacts. -->
+    <repository>
+      <id>pds-repo</id>
+      <name>PDS Repository</name>
+      <url>https://pds-cm.jpl.nasa.gov/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
   <dependencies>
 
     <!-- Java 11 support -->
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
-      <version>2.3.0.1</version>
+      <version>2.3.1</version>
     </dependency>
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
       <artifactId>jaxb-core</artifactId>
-      <version>2.3.0.1</version>
+      <version>2.3.0</version>
     </dependency>
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
       <artifactId>jaxb-impl</artifactId>
-      <version>2.3.4</version>
+      <version>3.0.2</version>
     </dependency>
     <dependency>
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
       <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>2.3.5</version>
     </dependency>
 
     <dependency>
@@ -244,7 +271,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>1.4</version>
+      <version>2.8.0</version>
       <scope>compile</scope>
     </dependency>
 
@@ -258,7 +285,7 @@
     <dependency>
       <groupId>gov.nasa.pds</groupId>
       <artifactId>pds3-product-tools</artifactId>
-      <version>4.3.0</version>
+      <version>4.0.1</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
