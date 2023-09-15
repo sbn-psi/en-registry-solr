@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
-
 import gov.nasa.pds.citool.registry.model.RegistryObject;
 import gov.nasa.pds.citool.registry.model.Slots;
 import gov.nasa.pds.citool.util.RegistryObjectCache;
@@ -59,7 +58,9 @@ public class DocGenerator
 	
 	public void close() throws Exception
 	{
+      if (writer != null) {
 		writer.close();
+      }
 	}
 	
 	
