@@ -77,11 +77,9 @@ public class CreateSearchDocAction extends CrawlerAction {
   
   private SearchDocState searchDocState;
   
-  public CreateSearchDocAction(File configDir, File outputDir, 
-      File registeredResources, SearchDocState searchDocState) 
+  public CreateSearchDocAction(File configDir, File outputDir, SearchDocState searchDocState)
           throws SearchCoreException, SearchCoreFatalException {
-    generator = new SearchDocGenerator(configDir, outputDir, 
-        registeredResources);
+    generator = new SearchDocGenerator(configDir, outputDir);
     String []phases = {CrawlerActionPhases.POST_INGEST_SUCCESS};
     setPhases(Arrays.asList(phases));
     setId(ID);

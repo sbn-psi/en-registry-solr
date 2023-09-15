@@ -59,11 +59,7 @@
       <directory>src/main/resources/bin</directory>
       <outputDirectory>bin</outputDirectory>
       <includes>
-        <include>harvest</include>
-        <include>harvest.bat</include>
-        <include>harvest-ctrl</include>
-        <include>harvest-ctrl.bat</include>
-        <include>registry-mgr</include>
+        <include>harvest-legacy</include>
       </includes>
       <fileMode>775</fileMode>
       <lineEnding>keep</lineEnding>
@@ -93,7 +89,7 @@
       <directory>src/main/resources/util</directory>
       <outputDirectory>resources</outputDirectory>
       <includes>
-        <include>registered_resources.json</include>
+        <include>*</include>
       </includes>
       <fileMode>664</fileMode>
       <lineEnding>keep</lineEnding>
