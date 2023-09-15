@@ -1,3 +1,5 @@
+# 📀 Code Owners
+#
 # Copyright © 2021, California Institute of Technology ("Caltech").
 # U.S. Government sponsorship acknowledged.
 #
@@ -28,78 +30,17 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Items for Git to ignore
+#
+# Each line is a file pattern followed by one or more owners.
+#
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# @global-owner1 and @global-owner2 will be requested for
+# review when someone opens a pull request.
+#
+# Go to https://github.com/orgs/NASA-PDS/teams to find out about our teams
 
-# Object files
-*.o
-*.pkl
-*.pyc
+* @jordanpadams @tloubrieu-jpl @nutjob4life @al-niessner
 
-# Libraries
-*.lib
-*.a
-
-# Eclipse files
-.settings/
-*.project
-*.classpath
-
-# IntelliJ files
-.idea/
-*.iml
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# Temporary files
-*~
-src/test/temp/
-
-# other stuff
-*.xpr
-*.swp
-/bin/
-.*.swp
-*.sublime-*
-*.DS_Store
-pom.xml.versionsBackup
-
-# Java stuff
-*.javac
-.gwt/
-target/
-validate_stack_traces*
-
-# macOS specific stuff
-.DS_Store
-
-# Validate output
-*.csv
-
-# Local .terraform state files, directories and crash logs
-**/.terraform/*
-*.tfstate
-*.tfstate.*
-*.tfvars
-*.tfvars.json
-crash.log
-crash.*.log
-
-# Ignore Terraform CLI configuration files
-.terraformrc
-terraform.rc
-
-# Ignore Terraform override files as they are usually used to override resources locally and so
-# are not checked in
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
+# For more information on populating this file, check out
+# https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
