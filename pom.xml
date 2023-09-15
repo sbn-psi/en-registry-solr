@@ -36,15 +36,15 @@ POSSIBILITY OF SUCH DAMAGE.
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>gov.nasa.pds</groupId>
-  <artifactId>registry</artifactId>
+  <artifactId>registry-mgr-legacy</artifactId>
   <version>2.3.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>Registry</name>
+  <name>Legacy Registry Manager Solr</name>
   <description>
-    The Registry provides provides the PDS-specific search protocol and the search capability for the PDS search index generated through the Search Core software. The core functionality for this service is satisfied by Apache Solr.
+    The Legacy Registry provides provides the PDS-specific search protocol and the search capability for the PDS search index generated through the Search Core software. The core functionality for this service is satisfied by Apache Solr.
   </description>
-  <url>https://nasa-pds-incubator.github.io/registry/</url>
+  <url>https://nasa-pds.github.io/registry-mgr-legacy/</url>
 
   <licenses>
     <license>
@@ -171,14 +171,6 @@ POSSIBILITY OF SUCH DAMAGE.
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5.3</version>
         <configuration>
@@ -249,9 +241,9 @@ POSSIBILITY OF SUCH DAMAGE.
   </profiles>
 
   <scm>
-    <url>https://github.com/NASA-PDS-Incubator/registry</url>
-    <connection>scm:git:git://github.com/NASA-PDS-Incubator/registry.git</connection>
-    <developerConnection>scm:git:git@github.com:NASA-PDS-Incubator/registry.git</developerConnection>
+    <url>https://github.com/NASA-PDS/registry-mgr-legacy</url>
+    <connection>scm:git:git://github.com/NASA-PDS/registry-mgr-legacy.git</connection>
+    <developerConnection>scm:git:git@github.com:NASA-PDS/registry-mgr-legacy.git</developerConnection>
   </scm>
   
   <distributionManagement>
@@ -279,7 +271,7 @@ POSSIBILITY OF SUCH DAMAGE.
   </repositories>
   
   <properties>
-    <solr.version>8.2.0</solr.version>
+    <solr.version>8.11.2</solr.version>
   </properties>
 
   <dependencies>
@@ -300,17 +292,7 @@ POSSIBILITY OF SUCH DAMAGE.
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
-      <version>1.18</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.6.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.6.6</version>
+      <version>1.21</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
@@ -318,9 +300,9 @@ POSSIBILITY OF SUCH DAMAGE.
       <version>1.0.4</version>
     </dependency>
     <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
+      <groupId>net.sf.saxon</groupId>
+      <artifactId>Saxon-HE</artifactId>
+      <version>9.9.1-7</version>
     </dependency>
   </dependencies>
 

@@ -36,8 +36,8 @@ maxShardsPerNode=3
 numShards=3
 replicationFactor=1
 
-DOCKER_IMAGE=registry
-DOCKER_VOLUMES="solr_data"
+DOCKER_IMAGE=registry-legacy
+DOCKER_VOLUMES="solrdata"
 
 PROMPT=true
 COMMAND=""
@@ -149,7 +149,7 @@ wait_for_solr() {
 start_registry_container() {
     echo -ne "Starting Registry Docker Container                            " | tee -a $LOG
     docker run --name ${DOCKER_IMAGE} -u solr\
-      -v solr_data:/opt/solr/server/solr/ \
+      -v solrdata:/var/solr/ \
       -d -p 8983:8983 \
       -e SOLR_HEAP=$SOLR_HEAP \
       $DOCKER_IMAGE:$VERSION >>$LOG 2>&1

@@ -28,14 +28,18 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-FROM solr:8.2.0
+FROM solr:8.11.2
 MAINTAINER Jordan Padams <jordan.padams@jpl.nasa.gov>
 ADD VERSION.txt .
+
 # Config sets
 COPY collections/registry /opt/solr/server/solr/configsets/registry/conf
 COPY collections/data /opt/solr/server/solr/configsets/data/conf
+
 # Plugins
 COPY dist /opt/solr/contrib/pds/lib
+
 # Libs
-#COPY lib /opt/solr/server/solr-webapp/webapp/WEB-INF/lib
-ENTRYPOINT ["/bin/bash", "-c", "solr start -c -f -Dsolr.pds.home=/opt/solr/server/solr/"]
+COPY lib/Saxon* /opt/solr/server/solr-webapp/webapp/WEB-INF/lib
+
+ENTRYPOINT ["/bin/bash", "-c", "solr start -c -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl -Dsolr.pds.home=/opt/solr/server/solr/ && tail -f /dev/null"]

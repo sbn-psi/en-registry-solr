@@ -32,7 +32,7 @@
 
 DATA_COLLECTION="data"
 ALL_COLLECTIONS="registry xpath data"
-PROPS=("-Dauto=yes")
+PROPS=("-Dauto=yes" "-Dparams=tr=add-hierarchy.xsl")
 RECURSIVE=""
 FILES=()
 DELETE=
