@@ -58,9 +58,7 @@ public class DocGenerator
 	
 	public void close() throws Exception
 	{
-      if (writer != null) {
 		writer.close();
-      }
 	}
 	
 	
