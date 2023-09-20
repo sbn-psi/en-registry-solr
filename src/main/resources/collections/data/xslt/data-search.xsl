@@ -271,7 +271,7 @@
   
 	<xsl:template match="doc">
 		<xsl:variable name="ds_name">
-			<xsl:value-of select="str[@name='title']" />
+		  <xsl:value-of select="(arr|str)[@name='title']" />
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="(arr|str)[@name='data_product_type'] = 'Product_Context_Search_Tool'">
