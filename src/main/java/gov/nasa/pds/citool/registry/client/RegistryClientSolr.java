@@ -70,14 +70,32 @@ public class RegistryClientSolr implements RegistryClient
         ContentStreamUpdateRequest req = new ContentStreamUpdateRequest(endPoint);
         req.addFile(file, "application/octet-stream");
         req.setAction(AbstractUpdateRequest.ACTION.COMMIT, true, true);
-        NamedList<Object> resp = solrClient.request(req);
-        
-        Object error = resp.get("error"); 
-        if(error != null)
+
+        try
         {
-        	log.warning("Blob: " + blobName + ": " + error.toString());
-        }
-        
+	        NamedList<Object> resp = solrClient.request(req);
+	        Object error = resp.get("error"); 
+	        if(error != null)
+	        {
+	        	log.warning("Blob: " + blobName + ": " + error.toString());
+	        }
+	    }
+		catch (HttpSolrClient.RemoteSolrException ex)
+		{
+			// For some reason, RemoteSolrException is a sublcass of RuntimeException, even though
+			// that's typically for unchecked exceptions of failures in the JVM itself, hence a
+			// separate `catch` here.
+			return false;
+		}
+	    catch (RuntimeException ex)
+	    {
+	    	throw ex;
+	    }
+	    catch (Exception ex)
+	    {
+	    	return false;
+	    }
+
         return true;
 	}
 
@@ -94,18 +112,37 @@ public class RegistryClientSolr implements RegistryClient
 		query.add("fl", "identifier");
 		query.add("rows", "100");
 		
-		QueryResponse resp = solrClient.query(PDS_COLLECTION, query);
-		SolrDocumentList res = resp.getResults();		
-		
-		for(SolrDocument doc: res)
+		try
 		{
-			Object obj = doc.getFirstValue("identifier");
-			if(obj != null)
+			QueryResponse resp = solrClient.query(PDS_COLLECTION, query);
+			SolrDocumentList res = resp.getResults();		
+			
+			for(SolrDocument doc: res)
 			{
-				ids.add(obj.toString());
+				Object obj = doc.getFirstValue("identifier");
+				if(obj != null)
+				{
+					ids.add(obj.toString());
+				}
 			}
+			
 		}
-		
+		catch (HttpSolrClient.RemoteSolrException ex)
+		{
+			// For some reason, RemoteSolrException is a sublcass of RuntimeException, even though
+			// that's typically for unchecked exceptions of failures in the JVM itself, hence a
+			// separate `catch` here.
+			return ids;
+		}
+		catch (RuntimeException ex)
+		{
+			throw ex;
+		}
+		catch (Exception ex)
+		{
+			// Ignore
+		}
+
 		return ids;
 	}
 	
@@ -117,9 +154,28 @@ public class RegistryClientSolr implements RegistryClient
 		String md5 = fi.md5.startsWith("0") ? fi.md5.substring(1) : fi.md5;
 				
 		SolrQuery query = new SolrQuery("md5:\"" + md5 + "\"");
-		QueryResponse resp = solrClient.query(FILE_COLLECTION, query);
-		SolrDocumentList res = resp.getResults();
-		return res.getNumFound() > 0;
+		try
+		{
+			QueryResponse resp = solrClient.query(FILE_COLLECTION, query);
+			SolrDocumentList res = resp.getResults();
+			return res.getNumFound() > 0;
+		}
+		catch (HttpSolrClient.RemoteSolrException ex)
+		{
+			// For some reason, RemoteSolrException is a sublcass of RuntimeException, even though
+			// that's typically for unchecked exceptions of failures in the JVM itself, hence a
+			// separate `catch` here.
+			return false;
+		}
+		catch (RuntimeException ex)
+		{
+			throw ex;
+		}
+		catch (Exception ex)
+		{
+			// Ignore
+		}
+		return false;
 	}
 	
 	
