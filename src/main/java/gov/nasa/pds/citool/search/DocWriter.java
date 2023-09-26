@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -44,6 +45,7 @@ public class DocWriter
 	public void write(Map<String, List<String>> fields) throws Exception
 	{
 		writer.write("<doc>\n");
+		writer.write("<field name=\"package_id\">" + UUID.randomUUID().toString() + "</field>\n");
 		
 		for(Map.Entry<String, List<String>> field: fields.entrySet())
 		{
