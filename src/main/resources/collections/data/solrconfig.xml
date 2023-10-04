@@ -786,7 +786,7 @@
        <str name="f.facet_primary_result_processing_level.facet.prefix">1,</str>
 
        <!-- Update params to include filter query restricting to latest product versions -->
-      <str name="fq">{!collapse field=lid max=version_id}</str>
+      <str name="fq">{!collapse field=lid max=version_id_normalized}</str>
     </lst>
 
     <lst name="appends">
@@ -845,7 +845,7 @@
        <str name="f.facet_primary_result_processing_level.facet.prefix">1,</str>
 
       <!-- Update params to include filter query restricting to latest product versions -->
-      <str name="fq">{!collapse field=lid max=version_id}</str>
+      <str name="fq">{!collapse field=lid max=version_id_normalized}</str>
     </lst>
 
     <!-- Ignore superseded data sets by appending a filter to the query -->

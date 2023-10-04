@@ -51,7 +51,16 @@
   <xsl:template match="field[@name = 'data_set_name']">
     <field name="data_set_name"><xsl:value-of select="pds:clean(.)" /></field>
   </xsl:template>
-
+  
+  <xsl:template match="field[@name = 'version_id']">
+    <field name="version_id"><xsl:value-of select="." /></field>
+    <xsl:variable name="major-version-string" select="substring-before(., '.')" />
+    <xsl:variable name="minor-version-string" select="substring-after(., '.')" />
+    <xsl:variable name="padded-minor-version-string" select="substring(string(100000 + xs:numeric($minor-version-string)), 2)" />
+    <xsl:variable name="normalized-numeric" select="number(concat($major-version-string, '.', $padded-minor-version-string))" />
+    <field name="version_id_normalized"><xsl:value-of select="number(format-number($normalized-numeric, '0.0000000'))" /></field>
+  </xsl:template>
+  
   <xsl:template match="field[@name = 'instrument_type']">
     <field name="instrument_type"><xsl:value-of select="pds:clean(.)" /></field>
   </xsl:template>
