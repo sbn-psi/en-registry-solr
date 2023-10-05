@@ -149,7 +149,7 @@ if [[ -n "$RECURSIVE" ]]; then
 fi
 
 # Call Solr post tool
-echo "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.util.SimplePostTool "${FILES[@]}"
-"$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.util.SimplePostTool "${FILES[@]}"
+echo "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.cli.SimplePostTool "${FILES[@]}"
+"$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.cli.SimplePostTool "${FILES[@]}"
 
 exit 0
