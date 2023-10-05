@@ -31,7 +31,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 DATA_COLLECTION="data"
-ALL_COLLECTIONS="registry xpath data"
+ALL_COLLECTIONS="registry data"
 PROPS=("-Dauto=yes" "-Dparams=tr=add-hierarchy.xsl")
 RECURSIVE=""
 FILES=()
@@ -107,15 +107,15 @@ fi
 if [ ! -z "$DELETE" ]; then
   for collection in $ALL_COLLECTIONS; do
   	#PROPS=("-Dc=$collection" "-Ddata=files")
-  	PROPS=("-Dc=$collection" "-Ddata=args")
-    echo "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.util.SimplePostTool ${DELETE}
-    "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.util.SimplePostTool ${DELETE}
+  	PROPS=("-Dc=$collection" "-Ddata=args" "-Durl=http://localhost:8983/solr/$collection/update")
+    echo "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.cli.SimplePostTool ${DELETE}
+    "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.cli.SimplePostTool ${DELETE}
   done
   
   rm -f $DELETE_FILE
   exit 0
 fi
-
+echo "FOOO"
 # No file / directory parameter
 if [[ "${#FILES[@]}" -eq 0 ]]; then
   DEFAULT_DOCS_DIR=${HOME}/registry-data/solr-docs
@@ -143,7 +143,7 @@ if [[ "${#FILES[@]}" -eq 0 ]]; then
 fi
 
 # Parameters for Solr post tool
-PROPS+=("-Dc=$DATA_COLLECTION" "-Ddata=files")
+PROPS+=("-Dc=$DATA_COLLECTION" "-Ddata=files" "-Durl=http://localhost:8983/solr/$DATA_COLLECTION/update")
 if [[ -n "$RECURSIVE" ]]; then
   PROPS+=("-Drecursive=yes")
 fi
