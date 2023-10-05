@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.0](https://github.com/NASA-PDS/registry-pds3-catalog/tree/2.2.0) (2023-10-05)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-pds3-catalog/compare/release/2.2.0...2.2.0)
+
+**Improvements:**
+
+- Upgrade to latest Solr 9.3.x [\#6](https://github.com/NASA-PDS/registry-pds3-catalog/issues/6)
+
 ## [release/2.2.0](https://github.com/NASA-PDS/registry-pds3-catalog/tree/release/2.2.0) (2023-10-05)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-pds3-catalog/compare/v2.1.0...release/2.2.0)
