@@ -32,8 +32,8 @@
 
 SOLR_HEAP=2048m
 
-maxShardsPerNode=3
-numShards=3
+maxShardsPerNode=1
+numShards=1
 replicationFactor=1
 
 DOCKER_IMAGE=registry-legacy
