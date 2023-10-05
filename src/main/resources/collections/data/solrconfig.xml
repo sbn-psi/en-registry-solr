@@ -913,6 +913,15 @@
       <str name="fmap.content">_text_</str>
     </lst>
   </requestHandler>
+  
+  <!--
+    Changes to XSLT transforms are taken into account
+    every xsltCacheLifetimeSeconds at most.
+  -->
+  <requestHandler name="/update/xslt"
+                       class="solr.scripting.xslt.XSLTUpdateRequestHandler">
+    <int name="xsltCacheLifetimeSeconds">5</int>
+  </requestHandler>
 
   <!-- Search Components
 
