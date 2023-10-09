@@ -31,11 +31,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 DATA_COLLECTION="data"
-ALL_COLLECTIONS="registry xpath data"
+ALL_COLLECTIONS="registry data"
 PROPS=("-Dauto=yes" "-Dparams=tr=add-hierarchy.xsl")
 RECURSIVE=""
 FILES=()
 DELETE=
+SOLR_HOST=localhost
+SOLR_PORT=8983
 
 SCRIPT_DIR=$(cd "$( dirname $0 )" && pwd)
 PARENT_DIR=$(cd ${SCRIPT_DIR}/.. && pwd)
@@ -48,8 +50,8 @@ function print_usage() {
   echo ""
   echo "Options:"
   echo "  -h                              Print Help"
-  echo "  -host <host>                    Solr server host (default: localhost)"
-  echo "  -port <port>                    Solr server port (default: 8983)"
+  echo "  -host <host>                    Solr server host (default: $SOLR_HOST)"
+  echo "  -port <port>                    Solr server port (default: $SOLR_PORT)"
   echo "  -delete-pkg <package_id>        Delete a specific Harvest ingestion package"
   echo "  -delete-all                     Delete all data from all Registry collections"
   echo ""
@@ -71,9 +73,11 @@ while [ $# -gt 0 ]; do
     if [[ "$1" == "-port" ]]; then
       shift
       PROPS+=("-Dport=$1")
+      SOLR_PORT=$1
     elif [[ "$1" == "-host" ]]; then
       shift
       PROPS+=("-Dhost=$1")
+      SOLR_HOST=$1
     elif [[ "$1" == "-delete-pkg" ]]; then
       shift
       DELETE="<delete><query>package_id:$1</query></delete>"
@@ -93,6 +97,8 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+SOLR_URL="https://$SOLR_HOST:SOLR_PORT/solr"
+
 # Setup Java
 if [ -n "$JAVA_HOME" ]; then
   JAVA="$JAVA_HOME/bin/java"
@@ -106,16 +112,15 @@ fi
 # If delete request, let's delete and exit
 if [ ! -z "$DELETE" ]; then
   for collection in $ALL_COLLECTIONS; do
-  	#PROPS=("-Dc=$collection" "-Ddata=files")
-  	PROPS=("-Dc=$collection" "-Ddata=args")
-    echo "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.util.SimplePostTool ${DELETE}
-    "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.util.SimplePostTool ${DELETE}
+  	PROPS=("-Dc=$collection" "-Ddata=args" "-Durl=$SOLR_URL/$collection/update")
+    echo "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.cli.SimplePostTool ${DELETE}
+    "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.cli.SimplePostTool ${DELETE}
   done
   
   rm -f $DELETE_FILE
   exit 0
 fi
-
+echo "FOOO"
 # No file / directory parameter
 if [[ "${#FILES[@]}" -eq 0 ]]; then
   DEFAULT_DOCS_DIR=${HOME}/registry-data/solr-docs
@@ -143,13 +148,16 @@ if [[ "${#FILES[@]}" -eq 0 ]]; then
 fi
 
 # Parameters for Solr post tool
-PROPS+=("-Dc=$DATA_COLLECTION" "-Ddata=files")
+PROPS+=("-Dc=$DATA_COLLECTION" "-Ddata=files" "-Durl=$SOLR_URL/$DATA_COLLECTION/update")
 if [[ -n "$RECURSIVE" ]]; then
   PROPS+=("-Drecursive=yes")
 fi
 
 # Call Solr post tool
-echo "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.util.SimplePostTool "${FILES[@]}"
-"$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.util.SimplePostTool "${FILES[@]}"
+for file in $(find ${FILES[@]} -type f -name "*.xml"); do
+  echo curl -X POST -H "Content-Type: text/xml" -d @$file "$SOLR_URL/$DATA_COLLECTION/update/xslt?commit=true&tr=add-hierarchy.xsl"
+  curl -X POST -H "Content-Type: text/xml" -d @$file "$SOLR_URL/$DATA_COLLECTION/update/xslt?commit=true&tr=add-hierarchy.xsl"
+  wait 5
+done
 
 exit 0

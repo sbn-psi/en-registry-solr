@@ -37,7 +37,7 @@ numShards=1
 replicationFactor=1
 
 DOCKER_IMAGE=registry-legacy
-DOCKER_VOLUMES="solrdata"
+DOCKER_VOLUME="solrdata"
 
 PROMPT=true
 COMMAND=""
@@ -82,6 +82,12 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+# Check DATA_HOME is set
+if [ -z "$DATA_HOME" ]; then
+  echo "ERROR: $DATA_HOME environment variable must be set for maintaining Solr index."
+  exit 1
+fi
+
 # Version
 if [ -f "$VERSION_FILE" ]; then
   VERSION=$(head -n 1 "$VERSION_FILE")
@@ -112,14 +118,14 @@ print_solr_status() {
 build_docker_image() {
     echo -ne "Building Registry Docker Image.                               " | tee -a $LOG
     cd ${PARENT_DIR}/build
-    docker build -t $DOCKER_IMAGE:$VERSION -f Dockerfile ../ >>$LOG 2>&1
+    docker build -t $DOCKER_IMAGE:$VERSION -f Dockerfile ../ | tee -a $LOG 2>&1
     print_status $?
 }
 
 create_docker_volumes() {
-    for vol in $DOCKER_VOLUMES; do
-        docker volume create $vol >>$LOG 2>&1
-    done
+    echo "Creating docker volumes and associated data directory        " | tee -a $LOG
+    mkdir -p $DATA_HOME/$DOCKER_VOLUME/data
+    docker volume create $DOCKER_VOLUME >>$LOG 2>&1
 }
 
 remove_registry_container() {
@@ -148,11 +154,12 @@ wait_for_solr() {
 
 start_registry_container() {
     echo -ne "Starting Registry Docker Container                            " | tee -a $LOG
-    docker run --name ${DOCKER_IMAGE} -u solr\
-      -v solrdata:/var/solr/ \
+    docker run --name ${DOCKER_IMAGE} \
+      -u solr \
       -d -p 8983:8983 \
+      -v ${DATA_HOME}/${DOCKER_VOLUME}:/var/solr/ \
       -e SOLR_HEAP=$SOLR_HEAP \
-      $DOCKER_IMAGE:$VERSION >>$LOG 2>&1
+      $DOCKER_IMAGE:$VERSION | tee -a $LOG 2>&1
 
     print_status $?
 }
@@ -204,10 +211,8 @@ remove_registry_image() {
 }
 
 remove_docker_volumes() {
-    for vol in $DOCKER_VOLUMES; do
-	echo "Removing '"$vol"' volume                   " | tee -a $LOG
-	docker volume rm $vol  >>$LOG 2>&1
-    done
+	echo "Removing '"$DOCKER_VOLUME"' volume                   " | tee -a $LOG
+	docker volume rm $DOCKER_VOLUME  >>$LOG 2>&1
 }
 
 
@@ -220,7 +225,7 @@ if [[ $COMMAND == "install" ]]; then
   wait_for_solr
   create_solr_collections
   # Print solr status
-  docker exec ${DOCKER_IMAGE} solr status >>$LOG 2>&1
+  docker exec ${DOCKER_IMAGE} solr status | tee -a $LOG 2>&1
 
 elif [[ $COMMAND == "uninstall" ]]; then
   echo "Uninstalling..."

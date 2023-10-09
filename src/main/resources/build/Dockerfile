@@ -22,14 +22,13 @@
 # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
 # LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
 # CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# SUBSTI TUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
 # INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-FROM solr:8.11.2
-MAINTAINER Jordan Padams <jordan.padams@jpl.nasa.gov>
+FROM solr:9.3.0
 ADD VERSION.txt .
 
 # Config sets
@@ -42,4 +41,4 @@ COPY dist /opt/solr/contrib/pds/lib
 # Libs
 COPY lib/Saxon* /opt/solr/server/solr-webapp/webapp/WEB-INF/lib
 
-ENTRYPOINT ["/bin/bash", "-c", "solr start -c -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl -Dsolr.pds.home=/opt/solr/server/solr/ && tail -f /dev/null"]
+ENTRYPOINT ["/bin/bash", "-c", "solr start -c -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl -Dsolr.pds.home=/opt/solr/server/solr/ -Dsolr.modules=scripting && tail -f /dev/null"]
