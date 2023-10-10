@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2019, California Institute of Technology ("Caltech").
+# Copyright 2019–2023, California Institute of Technology ("Caltech").
 # U.S. Government sponsorship acknowledged.
 #
 # All rights reserved.
@@ -38,6 +38,7 @@ FILES=()
 DELETE=
 SOLR_HOST=localhost
 SOLR_PORT=8983
+SOLR_PROTO=http
 
 SCRIPT_DIR=$(cd "$( dirname $0 )" && pwd)
 PARENT_DIR=$(cd ${SCRIPT_DIR}/.. && pwd)
@@ -52,6 +53,7 @@ function print_usage() {
   echo "  -h                              Print Help"
   echo "  -host <host>                    Solr server host (default: $SOLR_HOST)"
   echo "  -port <port>                    Solr server port (default: $SOLR_PORT)"
+  echo "  -proto <proto>                  Solr protocl (default: $SOLR_PROTO)"
   echo "  -delete-pkg <package_id>        Delete a specific Harvest ingestion package"
   echo "  -delete-all                     Delete all data from all Registry collections"
   echo ""
@@ -78,6 +80,9 @@ while [ $# -gt 0 ]; do
       shift
       PROPS+=("-Dhost=$1")
       SOLR_HOST=$1
+    elif [[ "$1" == "-proto" ]]; then
+      shift
+      SOLR_PROTO=$1
     elif [[ "$1" == "-delete-pkg" ]]; then
       shift
       DELETE="<delete><query>package_id:$1</query></delete>"
@@ -97,7 +102,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-SOLR_URL="https://$SOLR_HOST:SOLR_PORT/solr"
+SOLR_URL="$SOLR_PROTO://$SOLR_HOST:$SOLR_PORT/solr"
 
 # Setup Java
 if [ -n "$JAVA_HOME" ]; then
@@ -120,7 +125,7 @@ if [ ! -z "$DELETE" ]; then
   rm -f $DELETE_FILE
   exit 0
 fi
-echo "FOOO"
+
 # No file / directory parameter
 if [[ "${#FILES[@]}" -eq 0 ]]; then
   DEFAULT_DOCS_DIR=${HOME}/registry-data/solr-docs
@@ -157,7 +162,7 @@ fi
 for file in $(find ${FILES[@]} -type f -name "*.xml"); do
   echo curl -X POST -H "Content-Type: text/xml" -d @$file "$SOLR_URL/$DATA_COLLECTION/update/xslt?commit=true&tr=add-hierarchy.xsl"
   curl -X POST -H "Content-Type: text/xml" -d @$file "$SOLR_URL/$DATA_COLLECTION/update/xslt?commit=true&tr=add-hierarchy.xsl"
-  wait 5
+  sleep 5
 done
 
 exit 0
