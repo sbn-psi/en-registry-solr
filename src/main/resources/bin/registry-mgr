@@ -125,7 +125,7 @@ if [ ! -z "$DELETE" ]; then
   rm -f $DELETE_FILE
   exit 0
 fi
-echo "FOOO"
+
 # No file / directory parameter
 if [[ "${#FILES[@]}" -eq 0 ]]; then
   DEFAULT_DOCS_DIR=${HOME}/registry-data/solr-docs
@@ -162,7 +162,7 @@ fi
 for file in $(find ${FILES[@]} -type f -name "*.xml"); do
   echo curl -X POST -H "Content-Type: text/xml" -d @$file "$SOLR_URL/$DATA_COLLECTION/update/xslt?commit=true&tr=add-hierarchy.xsl"
   curl -X POST -H "Content-Type: text/xml" -d @$file "$SOLR_URL/$DATA_COLLECTION/update/xslt?commit=true&tr=add-hierarchy.xsl"
-  wait 5
+  sleep 5
 done
 
 exit 0
