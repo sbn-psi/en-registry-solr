@@ -84,7 +84,7 @@ done
 
 # Check DATA_HOME is set
 if [ -z "$DATA_HOME" ]; then
-  echo "ERROR: $DATA_HOME environment variable must be set for maintaining Solr index."
+  echo "ERROR: DATA_HOME environment variable must be set for maintaining Solr index."
   exit 1
 fi
 
