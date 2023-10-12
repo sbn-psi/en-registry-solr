@@ -1,5 +1,13 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/registry-pds3-catalog/tree/«unknown») (2023-10-12)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-pds3-catalog/compare/v2.2.0...«unknown»)
+
+**Improvements:**
+
+- Upgrade Catalog Tool and dependencies to support Harvest/Registry upgrades [\#4](https://github.com/NASA-PDS/registry-pds3-catalog/issues/4)
+
 ## [v2.2.0](https://github.com/NASA-PDS/registry-pds3-catalog/tree/v2.2.0) (2023-10-05)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-pds3-catalog/compare/v2.1.0...v2.2.0)
