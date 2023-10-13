@@ -59,7 +59,7 @@
 
   <files>
     <file>
-      <source>LICENSE.txt</source>
+      <source>LICENSE.md</source>
       <outputDirectory>/</outputDirectory>
       <fileMode>644</fileMode>
       <lineEnding>unix</lineEnding>
