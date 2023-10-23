@@ -1,6 +1,6 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-mgr-legacy/tree/«unknown») (2023-10-11)
+## [«unknown»](https://github.com/NASA-PDS/registry-mgr-legacy/tree/«unknown») (2023-10-23)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/892db6f600770c0fdc8191c03fd16559127e37b6...«unknown»)
 
@@ -15,6 +15,7 @@
 
 **Other closed issues:**
 
+- Test all tools with Solr 9.3.0 locally [\#20](https://github.com/NASA-PDS/registry-mgr-legacy/issues/20)
 - Plan / implement solution for handling multiple versions of products in search results [\#6](https://github.com/NASA-PDS/registry-mgr-legacy/issues/6)
 
 
