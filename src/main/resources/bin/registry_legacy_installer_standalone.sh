@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2019, California Institute of Technology ("Caltech").
+# Copyright 2019-2023, California Institute of Technology ("Caltech").
 # U.S. Government sponsorship acknowledged.
 #
 # All rights reserved.
