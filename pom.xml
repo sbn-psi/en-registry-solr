@@ -48,7 +48,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
   <name>Legacy Registry Manager Solr</name>
   <description>
-    The Legacy Registry provides provides the PDS-specific search protocol and the search capability for the PDS search index generated through the Search Core software. The core functionality for this service is satisfied by Apache Solr.
+    The Legacy Registry provides the PDS-specific search protocol and the search capability for the PDS search index generated through the Search Core software. The core functionality for this service is satisfied by Apache Solr.
   </description>
   <url>https://nasa-pds.github.io/registry-mgr-legacy/</url>
 
