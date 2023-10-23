@@ -524,7 +524,7 @@ public class CITool
       LoggerContext ctx = Configurator.initialize(builder.build());
       ctx.updateLoggers();
         if (args.length == 0) {
-            System.out.println("\nType 'catalog -h' for usage");
+            System.out.println("\nType 'catalog-legacy -h' for usage");
             System.exit(0);
         }
         try {
