@@ -1,4 +1,4 @@
-// Copyright 2009, by the California Institute of Technology.
+// Copyright 2009-2023, by the California Institute of Technology.
 // ALL RIGHTS RESERVED. United States Government sponsorship acknowledged.
 // Any commercial use must be negotiated with the Office of Technology Transfer
 // at the California Institute of Technology.
@@ -524,7 +524,7 @@ public class CITool
       LoggerContext ctx = Configurator.initialize(builder.build());
       ctx.updateLoggers();
         if (args.length == 0) {
-            System.out.println("\nType 'catalog -h' for usage");
+            System.out.println("\nType 'catalog-legacy -h' for usage");
             System.exit(0);
         }
         try {
