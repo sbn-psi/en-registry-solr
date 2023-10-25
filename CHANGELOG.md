@@ -1,8 +1,12 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-mgr-legacy/tree/«unknown») (2023-10-25)
+## [release/2.3.1](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.3.1) (2023-10-25)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/892db6f600770c0fdc8191c03fd16559127e37b6...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/release/2.3.0...release/2.3.1)
+
+## [release/2.3.0](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.3.0) (2023-10-25)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/892db6f600770c0fdc8191c03fd16559127e37b6...release/2.3.0)
 
 **Improvements:**
 
