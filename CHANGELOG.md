@@ -1,12 +1,24 @@
 # Changelog
 
+## [release/2.3.5](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.3.5) (2023-10-27)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/release/2.3.4...release/2.3.5)
+
+## [release/2.3.4](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.3.4) (2023-10-27)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/release/2.3.3...release/2.3.4)
+
+## [release/2.3.3](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.3.3) (2023-10-27)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/release/2.3.2...release/2.3.3)
+
+## [release/2.3.2](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.3.2) (2023-10-27)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.1...release/2.3.2)
+
 ## [v2.3.1](https://github.com/NASA-PDS/registry-mgr-legacy/tree/v2.3.1) (2023-10-25)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/release/2.3.0...v2.3.1)
-
-## [release/2.3.0](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.3.0) (2023-10-25)
-
-[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/892db6f600770c0fdc8191c03fd16559127e37b6...release/2.3.0)
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/892db6f600770c0fdc8191c03fd16559127e37b6...v2.3.1)
 
 **Improvements:**
 
