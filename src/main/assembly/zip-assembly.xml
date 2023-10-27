@@ -22,8 +22,8 @@
       <directory>src/main/resources/bin</directory>
       <outputDirectory>bin</outputDirectory>
       <includes>
-        <include>catalog</include>
-        <include>catalog.bat</include>
+        <include>catalog-legacy</include>
+        <include>catalog-legacy.bat</include>
       </includes>
       <fileMode>755</fileMode>
       <lineEnding>keep</lineEnding>
