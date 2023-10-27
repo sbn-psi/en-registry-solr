@@ -1,8 +1,12 @@
 # Changelog
 
-## [release/3.0.1](https://github.com/NASA-PDS/registry-pds3-catalog/tree/release/3.0.1) (2023-10-25)
+## [release/3.0.2](https://github.com/NASA-PDS/registry-pds3-catalog/tree/release/3.0.2) (2023-10-27)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-pds3-catalog/compare/release/3.0.0...release/3.0.1)
+[Full Changelog](https://github.com/NASA-PDS/registry-pds3-catalog/compare/v3.0.1...release/3.0.2)
+
+## [v3.0.1](https://github.com/NASA-PDS/registry-pds3-catalog/tree/v3.0.1) (2023-10-25)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-pds3-catalog/compare/release/3.0.0...v3.0.1)
 
 ## [release/3.0.0](https://github.com/NASA-PDS/registry-pds3-catalog/tree/release/3.0.0) (2023-10-25)
 
