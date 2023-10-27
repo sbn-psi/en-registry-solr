@@ -1,8 +1,20 @@
 # Changelog
 
-## [release/3.0.2](https://github.com/NASA-PDS/registry-harvest-legacy/tree/release/3.0.2) (2023-10-25)
+## [release/3.0.5](https://github.com/NASA-PDS/registry-harvest-legacy/tree/release/3.0.5) (2023-10-27)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/release/3.0.1...release/3.0.2)
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/release/3.0.4...release/3.0.5)
+
+## [release/3.0.4](https://github.com/NASA-PDS/registry-harvest-legacy/tree/release/3.0.4) (2023-10-27)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/release/3.0.3...release/3.0.4)
+
+## [release/3.0.3](https://github.com/NASA-PDS/registry-harvest-legacy/tree/release/3.0.3) (2023-10-25)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/v3.0.2...release/3.0.3)
+
+## [v3.0.2](https://github.com/NASA-PDS/registry-harvest-legacy/tree/v3.0.2) (2023-10-25)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/release/3.0.1...v3.0.2)
 
 ## [release/3.0.1](https://github.com/NASA-PDS/registry-harvest-legacy/tree/release/3.0.1) (2023-10-25)
 
