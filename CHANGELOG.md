@@ -1,8 +1,8 @@
 # Changelog
 
-## [release/2.3.6](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.3.6) (2023-10-31)
+## [v2.3.6](https://github.com/NASA-PDS/registry-mgr-legacy/tree/v2.3.6) (2023-10-31)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.5...release/2.3.6)
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.5...v2.3.6)
 
 ## [v2.3.5](https://github.com/NASA-PDS/registry-mgr-legacy/tree/v2.3.5) (2023-10-27)
 
