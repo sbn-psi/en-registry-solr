@@ -21,9 +21,6 @@
 
   This policy file includes inline documentation for many of the sections along with commented out
   sections that are optional. See the Harvest Operation Documentation for more details.
-  
-  Online: https://pds-engineering.jpl.nasa.gov/development/pds4/current/ingest/harvest/index.html
-  In Package: harvest-x.x.x/docs
 -->
 
 <policy xmlns="https://pds.nasa.gov/software/pds4/harvest/v1"
@@ -60,9 +57,6 @@
   Specify the base URL of where the physical data products are located. This 
   allows Harvest to provide links to the physical data products in the slots
   of each registered product in the Registry.
-  
-  https://pds-engineering.jpl.nasa.gov/development/pds4/current/ingest/harvest/operate-pds4/index.html#Access_URLs
-
   -->
   <accessUrls harvest:registerFileUrls="false">
     <accessUrl>
@@ -81,16 +75,12 @@
   -->
 
   
-  <!-- Candidate Products
-  https://pds-engineering.jpl.nasa.gov/development/pds4/current/ingest/harvest/operate-pds4/index.html#Candidate_Products
-  -->
+  <!-- Candidate Products -->
   <candidates>
     <!-- Namespaces
     In order to extract metadata from Local Data Dictionaries, you must
     specify the applicable namespaces here. List are some common discipline
     dictionaries. Add additional as needed.
-    
-    https://pds-engineering.jpl.nasa.gov/development/pds4/current/ingest/harvest/operate-pds4/index.html#Namespaces
     -->
     <namespace harvest:prefix="disp" harvest:uri="http://pds.nasa.gov/pds4/disp/v1"/>
     <namespace harvest:prefix="sp" harvest:uri="http://pds.nasa.gov/pds4/sp/v1"/>
