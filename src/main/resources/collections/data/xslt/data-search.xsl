@@ -16,7 +16,7 @@
   <xsl:variable name="title">PDS: Search Results</xsl:variable>
   <xsl:variable name="ds_result_range">
     <xsl:choose>
-      <xsl:when test="//int/@ngroups &lt; 1">
+      <xsl:when test="//result/@numFound &lt; 1">
         <xsl:text />
       </xsl:when>
       <xsl:otherwise>
@@ -28,11 +28,11 @@
     </xsl:choose>
   </xsl:variable>
   <xsl:variable name="ds_result_count">
-    <xsl:value-of select="//int/@ngroups" />
+    <xsl:value-of select="//result/@numFound" />
   </xsl:variable>
   <xsl:variable name="ds_result_caption">
     <xsl:choose>
-      <xsl:when test="//int/@ngroups = 1">result</xsl:when>
+      <xsl:when test="//result/@numFound = 1">result</xsl:when>
       <xsl:otherwise>results</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -218,10 +218,10 @@
         
       </ul>
 
-      <xsl:if test="//lst/int/@ngroups &gt; count(//result/doc)">
+      <xsl:if test="//result/@numFound &gt; count(//result/doc)">
         <p style="margin-top: 1.5em; font-size: 120%;">Result pages:
           <xsl:variable name="q" select="response/lst[@name='responseHeader']/lst[@name='params']/str[@name='q']" />
-          <xsl:for-each select="pds:page-range(//lst/int/@ngroups,$start,$rows)">
+          <xsl:for-each select="pds:page-range(//result/@numFound,$start,$rows)">
             <xsl:text> &#160;</xsl:text>
             <xsl:choose>
               <xsl:when test=". = $start">
@@ -260,7 +260,7 @@
 
   </xsl:when>
   <xsl:otherwise>
-    <p>There are not results matching your query.</p>
+    <p>There are no results matching your query.</p>
   </xsl:otherwise>
 </xsl:choose>
 
