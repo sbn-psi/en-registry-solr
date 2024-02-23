@@ -1,5 +1,9 @@
 # Changelog
 
+## [release/3.0.8](https://github.com/NASA-PDS/registry-harvest-legacy/tree/release/3.0.8) (2024-02-23)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/v3.0.7...release/3.0.8)
+
 ## [v3.0.7](https://github.com/NASA-PDS/registry-harvest-legacy/tree/v3.0.7) (2023-11-07)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/v3.0.6...v3.0.7)
