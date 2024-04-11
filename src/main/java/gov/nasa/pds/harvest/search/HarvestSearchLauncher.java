@@ -1,5 +1,30 @@
 package gov.nasa.pds.harvest.search;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FileUtils;
+import org.apache.oodt.cas.filemgr.structs.exceptions.ConnectionException;
 import gov.nasa.pds.harvest.search.commandline.options.Flag;
 import gov.nasa.pds.harvest.search.commandline.options.InvalidOptionException;
 import gov.nasa.pds.harvest.search.constants.Constants;
@@ -25,36 +50,7 @@ import gov.nasa.pds.harvest.search.util.Utility;
 import gov.nasa.pds.harvest.search.util.XMLExtractor;
 import gov.nasa.pds.search.core.exception.SearchCoreException;
 import gov.nasa.pds.search.core.exception.SearchCoreFatalException;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-
 import net.sf.saxon.trans.XPathException;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FileUtils;
-import org.apache.oodt.cas.filemgr.structs.exceptions.ConnectionException;
 
 /**
  * Wrapper class of the Harvest tool that handles the command-line processing.
@@ -473,7 +469,7 @@ public class HarvestSearchLauncher {
 		
 		// Display config parameters in the report log
 		logHeader(policy);
-		log.log(new ToolsLogRecord(ToolsLevel.INFO,
+        log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
 				"XML extractor set to the " + "following default namespace: " + XMLExtractor.getDefaultNamespace()));
 
 		harvester.harvest(policy);

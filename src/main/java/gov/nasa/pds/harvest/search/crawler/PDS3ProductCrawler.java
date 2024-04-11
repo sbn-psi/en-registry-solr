@@ -2,7 +2,6 @@ package gov.nasa.pds.harvest.search.crawler;
 
 import java.io.File;
 import java.util.logging.Logger;
-
 import gov.nasa.jpl.oodt.cas.metadata.Metadata;
 import gov.nasa.jpl.oodt.cas.metadata.exceptions.MetExtractionException;
 import gov.nasa.pds.harvest.search.crawler.metadata.extractor.Pds3MetExtractor;
@@ -89,7 +88,7 @@ public class PDS3ProductCrawler extends PDSProductCrawler {
         touchedFiles.put(product, product.lastModified());
       }
     }
-    log.log(new ToolsLogRecord(ToolsLevel.INFO, "Begin processing.",
+    log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Begin processing.",
         product));
     boolean passFlag = true;
     ManualPathResolver resolver = new ManualPathResolver();

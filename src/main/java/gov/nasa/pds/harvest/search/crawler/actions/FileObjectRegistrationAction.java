@@ -14,15 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-
 import javax.xml.bind.JAXBException;
-
-import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.tree.tiny.TinyElementImpl;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-
 import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerAction;
 import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionPhases;
 import gov.nasa.jpl.oodt.cas.crawl.structs.exceptions.CrawlerActionException;
@@ -49,6 +43,8 @@ import gov.nasa.pds.tools.label.ManualPathResolver;
 import gov.nasa.pds.tools.label.PointerStatement;
 import gov.nasa.pds.tools.label.parser.DefaultLabelParser;
 import gov.nasa.pds.tools.util.MessageUtils;
+import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.tree.tiny.TinyElementImpl;
 
 
 /**
@@ -330,7 +326,8 @@ public class FileObjectRegistrationAction extends CrawlerAction {
     // Create a file object of the label file
     String lastModified = format.format(new Date(product.lastModified()));
     try {
-      log.log(new ToolsLogRecord(ToolsLevel.INFO, "Capturing file information "
+      log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
+          "Capturing file information "
           + "for " + product.getName(), product));
       String checksum = handleChecksum(product, product);
       FileObject fileObject = new FileObject(product.getName(),
@@ -355,7 +352,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
     List<String> xincludes = extractor.getAttributeValuesFromDoc("//@xml:base");
     for (String xinclude : xincludes) {
       File xincludeFile = new File(product.getParent(), xinclude).getCanonicalFile();
-      log.log(new ToolsLogRecord(ToolsLevel.INFO,
+      log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
           "Capturing file information for " + xincludeFile.getName(),
           product));
       try {
@@ -418,8 +415,8 @@ public class FileObjectRegistrationAction extends CrawlerAction {
               product.toString(), file.getLineNumber()));
           throw new Exception("Missing file_name tag");
         }
-        log.log(new ToolsLogRecord(ToolsLevel.INFO, "Capturing file "
-            + "object metadata for " + name, product));
+        log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
+            "Capturing file object metadata for " + name, product));
         File f = new File(fileLocation, name);
         if (!f.exists()) {
           log.log(new ToolsLogRecord(ToolsLevel.WARNING, "File object does "
@@ -448,7 +445,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
           if (containsFileTypes()) {
             if (getFileType(parent.getLocalPart()) != null) {
               fileType = getFileType(parent.getLocalPart());
-              log.log(new ToolsLogRecord(ToolsLevel.INFO,
+              log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
                   "Setting file type for the file object '" + f.getName()
                   + "' to '" + fileType + "'", product.toString(),
                   file.getLineNumber()));
@@ -480,8 +477,8 @@ public class FileObjectRegistrationAction extends CrawlerAction {
     // Create a file object of the label file
     String lastModified = format.format(new Date(product.lastModified()));
     try {
-      log.log(new ToolsLogRecord(ToolsLevel.INFO, "Capturing file object "
-          + "metadata for " + product.getName(), product));
+      log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
+          "Capturing file object metadata for " + product.getName(), product));
       String checksum = handleChecksum(product, product);
       FileObject fileObject = new FileObject(product.getName(),
           product.getParent(), new FileSize(product.length(), Constants.BYTE),
@@ -515,8 +512,8 @@ public class FileObjectRegistrationAction extends CrawlerAction {
           if (file != null) {
             if (!file.getName().equals(product.getName())
                 && !uniqueFiles.contains(file)) {
-              log.log(new ToolsLogRecord(ToolsLevel.INFO, "Capturing file "
-                + "object metadata for " + file.getName(), product));
+              log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
+                  "Capturing file object metadata for " + file.getName(), product));
               long size = file.length();
               String creationDateTime = format.format(new Date(
                 file.lastModified()));
@@ -580,7 +577,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
               + fileObject.toString() + "'.", product));
             ++HarvestSolrStats.numGeneratedChecksumsDiffInManifest;
           } else {
-            log.log(new ToolsLogRecord(ToolsLevel.INFO,
+            log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
               "Generated checksum '" + generatedChecksum
               + "' matches the supplied checksum '" + suppliedChecksum
               + "' in the manifest for file object '" + fileObject.toString()
@@ -603,7 +600,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
               + fileObject.toString() + "'.", product));
             ++HarvestSolrStats.numGeneratedChecksumsDiffInLabel;
         } else {
-          log.log(new ToolsLogRecord(ToolsLevel.INFO,
+          log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
               "Generated checksum '" + generatedChecksum
               + "' matches the supplied checksum '" + checksumInLabel
               + "' in the product label for file object '"
@@ -611,7 +608,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
             ++HarvestSolrStats.numGeneratedChecksumsSameInLabel;
         }
       } else {
-        log.log(new ToolsLogRecord(ToolsLevel.INFO,
+        log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
             "No checksum to compare against in the product label "
             + "for file object '" + fileObject.toString() + "'.", product));
         ++HarvestSolrStats.numGeneratedChecksumsNotCheckedInLabel;
@@ -622,7 +619,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
       if (!checksumManifest.isEmpty()) {
         if (checksumManifest.containsKey(fileObject)) {
           String suppliedChecksum = checksumManifest.get(fileObject);
-          log.log(new ToolsLogRecord(ToolsLevel.INFO, "Found checksum in "
+          log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Found checksum in "
               + "the manifest for file object '" + fileObject.toString()
               + "': " + suppliedChecksum, product));
           if (!checksumInLabel.isEmpty()) {
@@ -634,7 +631,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
                   + fileObject.toString() + "'.", product));
                 ++HarvestSolrStats.numManifestChecksumsDiffInLabel;
             } else {
-              log.log(new ToolsLogRecord(ToolsLevel.INFO,
+              log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
                   "Checksum in the manifest '" + suppliedChecksum
                   + "' matches the checksum in the product label '"
                   + checksumInLabel + "' for file object '"
@@ -642,7 +639,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
                 ++HarvestSolrStats.numManifestChecksumsSameInLabel;
             }
           } else {
-            log.log(new ToolsLogRecord(ToolsLevel.INFO,
+            log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
                 "No checksum to compare against in the product label "
                 + "for file object '"
                 + fileObject.toString() + "'.", product));
@@ -656,7 +653,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
         }
       } else {
         if (!checksumInLabel.isEmpty()) {
-          log.log(new ToolsLogRecord(ToolsLevel.INFO,
+          log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
               "Found checksum in the product label for file object '"
               + fileObject.toString() + "': " + checksumInLabel, product));
           result = checksumInLabel;
