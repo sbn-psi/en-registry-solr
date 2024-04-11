@@ -1,5 +1,13 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/registry-mgr-legacy/tree/«unknown») (2024-04-11)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.6...«unknown»)
+
+**Defects:**
+
+- Hit count and pagination not working in XSLT response [\#42](https://github.com/NASA-PDS/registry-mgr-legacy/issues/42) [[s.high](https://github.com/NASA-PDS/registry-mgr-legacy/labels/s.high)]
+
 ## [v2.3.6](https://github.com/NASA-PDS/registry-mgr-legacy/tree/v2.3.6) (2023-10-31)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.5...v2.3.6)
