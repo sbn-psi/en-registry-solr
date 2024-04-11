@@ -1,5 +1,18 @@
 package gov.nasa.pds.harvest.search.crawler;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+import org.apache.commons.io.filefilter.AndFileFilter;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
+import org.xml.sax.SAXParseException;
 import gov.nasa.jpl.oodt.cas.crawl.ProductCrawler;
 import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerAction;
 import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionRepo;
@@ -21,23 +34,7 @@ import gov.nasa.pds.harvest.search.policy.FileFilter;
 import gov.nasa.pds.harvest.search.stats.HarvestSolrStats;
 import gov.nasa.pds.harvest.search.util.LidVid;
 import gov.nasa.pds.harvest.search.util.XMLExtractor;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import net.sf.saxon.trans.XPathException;
-
-import org.apache.commons.io.filefilter.AndFileFilter;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.NotFileFilter;
-import org.xml.sax.SAXParseException;
 
 /**
  * Class that extends the Cas-Crawler to crawl a directory or
@@ -263,7 +260,7 @@ public class PDSProductCrawler extends ProductCrawler {
     if (Constants.collections.contains(product)) {
       return false;
     }
-    log.log(new ToolsLogRecord(ToolsLevel.INFO, "Begin processing.", product));
+    log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Begin processing.", product));
     boolean passFlag = true;
     objectType = "";
     XMLExtractor extractor = new XMLExtractor();

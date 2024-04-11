@@ -1,5 +1,16 @@
 package gov.nasa.pds.harvest.search.crawler;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.AndFileFilter;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
 import gov.nasa.jpl.oodt.cas.metadata.Metadata;
 import gov.nasa.jpl.oodt.cas.metadata.exceptions.MetExtractionException;
 import gov.nasa.pds.harvest.search.crawler.metadata.extractor.Pds3FileMetExtractor;
@@ -7,19 +18,6 @@ import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
 import gov.nasa.pds.harvest.search.policy.FileFilter;
 import gov.nasa.pds.harvest.search.stats.HarvestSolrStats;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.AndFileFilter;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.NotFileFilter;
 
 /**
  * Crawler class intended to be used for registering PDS3 files as
@@ -89,7 +87,7 @@ public class PDS3FileCrawler extends PDS3ProductCrawler {
         touchedFiles.put(product, product.lastModified());
       }
     }
-    log.log(new ToolsLogRecord(ToolsLevel.INFO, "Begin processing.",
+    log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Begin processing.",
         product));
     boolean passFlag = true;
     try {

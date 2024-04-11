@@ -3,17 +3,12 @@ package gov.nasa.pds.harvest.search.crawler.metadata.extractor;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
 import javax.xml.xpath.XPathExpressionException;
-
 import org.apache.commons.lang.exception.ExceptionUtils;
-
-import net.sf.saxon.tree.tiny.TinyElementImpl;
 import gov.nasa.jpl.oodt.cas.metadata.MetExtractor;
 import gov.nasa.jpl.oodt.cas.metadata.MetExtractorConfig;
 import gov.nasa.jpl.oodt.cas.metadata.Metadata;
@@ -26,6 +21,7 @@ import gov.nasa.pds.harvest.search.policy.XPath;
 import gov.nasa.pds.harvest.search.util.LidVid;
 import gov.nasa.pds.harvest.search.util.XMLExtractor;
 import gov.nasa.pds.registry.model.Slot;
+import net.sf.saxon.tree.tiny.TinyElementImpl;
 
 /**
  * Class to extract metadata from a PDS4 XML file.
@@ -254,7 +250,7 @@ public class Pds4MetExtractor implements MetExtractor {
           if (config.containsReferenceTypeMap()) {
             refTypeMap = config.getReferenceTypeMap(value);
             if (refTypeMap != null) {
-              log.log(new ToolsLogRecord(ToolsLevel.INFO,
+              log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
                   "Mapping reference type '" + value + "' to '"
                   + refTypeMap + "'.", product.toString(),
                   child.getLineNumber()));

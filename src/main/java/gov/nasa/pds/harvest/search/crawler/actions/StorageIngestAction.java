@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
-
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.oodt.cas.filemgr.datatransfer.InPlaceDataTransferFactory;
 import org.apache.oodt.cas.filemgr.structs.Product;
@@ -15,7 +14,6 @@ import org.apache.oodt.cas.filemgr.structs.exceptions.RepositoryManagerException
 import org.apache.oodt.cas.filemgr.system.XmlRpcFileManagerClient;
 import org.apache.oodt.cas.filemgr.util.GenericFileManagerObjectFactory;
 import org.apache.oodt.cas.filemgr.versioning.VersioningUtils;
-
 import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerAction;
 import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionPhases;
 import gov.nasa.jpl.oodt.cas.crawl.structs.exceptions.CrawlerActionException;
@@ -109,7 +107,7 @@ public class StorageIngestAction extends CrawlerAction {
     // Are we doing a local/remote data transfer of the ingested product?
     try {
       String productId = fmClient.ingestProduct(prod, prodMet, true);
-      log.log(new ToolsLogRecord(ToolsLevel.INFO, "Ingested '" + lidvid
+      log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Ingested '" + lidvid
           + "' to the Storage Service with product ID: " + productId, product)
       );
       metadata.addMetadata(Constants.STORAGE_SERVICE_PRODUCT_ID, productId);
@@ -161,7 +159,7 @@ public class StorageIngestAction extends CrawlerAction {
     String productId = null;
     try {
       productId = fmClient.ingestProduct(prod, prodMet, true);
-      log.log(new ToolsLogRecord(ToolsLevel.INFO, "Ingested '" + lidvid
+      log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Ingested '" + lidvid
           + "' to the Storage Service with product ID: " + productId, product)
       );
     } catch (Exception e) {

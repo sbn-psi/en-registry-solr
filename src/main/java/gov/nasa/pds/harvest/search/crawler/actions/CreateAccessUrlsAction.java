@@ -1,21 +1,16 @@
 package gov.nasa.pds.harvest.search.crawler.actions;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-
 import javax.ws.rs.core.UriBuilder;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-
 import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerAction;
 import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionPhases;
 import gov.nasa.jpl.oodt.cas.crawl.structs.exceptions.CrawlerActionException;
@@ -158,7 +153,7 @@ public class CreateAccessUrlsAction extends CrawlerAction {
       }
       try {
         URI uri = new URI(uriString);
-        log.log(new ToolsLogRecord(ToolsLevel.INFO, "Created access url: "
+        log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Created access url: "
           + uri, source));
         urls.add(uri.toString());
       } catch (URISyntaxException u) {
@@ -171,7 +166,7 @@ public class CreateAccessUrlsAction extends CrawlerAction {
       URI uri = UriBuilder.fromPath("file://"
           + FilenameUtils.separatorsToUnix(product.toString())).build();
       urls.add(uri.toString());
-      log.log(new ToolsLogRecord(ToolsLevel.INFO, "Created access url: "
+      log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Created access url: "
           + uri, source));
     }
     return urls;
