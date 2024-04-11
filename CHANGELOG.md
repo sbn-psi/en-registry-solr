@@ -1,8 +1,16 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-mgr-legacy/tree/«unknown») (2024-04-11)
+## [2.3.7](https://github.com/NASA-PDS/registry-mgr-legacy/tree/2.3.7) (2024-04-11)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.6...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/release/2.3.7...2.3.7)
+
+**Defects:**
+
+- Faceting is not working properly for counts and overall functions [\#49](https://github.com/NASA-PDS/registry-mgr-legacy/issues/49) [[s.high](https://github.com/NASA-PDS/registry-mgr-legacy/labels/s.high)]
+
+## [release/2.3.7](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.3.7) (2024-04-11)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.6...release/2.3.7)
 
 **Defects:**
 
