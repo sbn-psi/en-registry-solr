@@ -1,13 +1,11 @@
 package gov.nasa.pds.harvest.search.registry;
 
 import java.io.File;
-
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-
 import gov.nasa.pds.harvest.search.util.SolrManager;
 import gov.nasa.pds.harvest.search.util.TransactionManager;
 

@@ -3,20 +3,15 @@ package gov.nasa.pds.harvest.search.ingest;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
-
 import java.util.logging.Logger;
-
 import gov.nasa.jpl.oodt.cas.filemgr.ingest.Ingester;
 import gov.nasa.jpl.oodt.cas.filemgr.structs.exceptions.CatalogException;
 import gov.nasa.jpl.oodt.cas.filemgr.structs.exceptions.IngestException;
 import gov.nasa.jpl.oodt.cas.metadata.MetExtractor;
 import gov.nasa.jpl.oodt.cas.metadata.Metadata;
 import gov.nasa.pds.harvest.search.constants.Constants;
-
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
-import gov.nasa.pds.harvest.search.registry.FileData;
-import gov.nasa.pds.harvest.search.registry.FileDataLoader;
 import gov.nasa.pds.harvest.search.registry.MetadataExtractor;
 import gov.nasa.pds.harvest.search.registry.RegistryDAO;
 import gov.nasa.pds.harvest.search.registry.RegistryMetadata;
@@ -116,42 +111,16 @@ public class SearchIngester implements Ingester
 				
 		try 
 		{
-			if(!hasProduct(searchUrl, lid, vid)) 
-			{
-			    RegistryMetadata registryMeta = metaExtractor.extract(prodFile.getAbsolutePath());
+          RegistryMetadata registryMeta = metaExtractor.extract(prodFile.getAbsolutePath());
 			    
-			    // Save product file
-			    registryDAO.saveProduct(registryMeta, prodFile);
-			    
-				log.log(new ToolsLogRecord(ToolsLevel.SUCCESS, "Successfully registered product: " + lidvid, prodFile));
-				++HarvestSolrStats.numProductsRegistered;
-		
-				// Save XPaths
-				/*
-				try
-				{
-					XPathDAO.postXPaths(prodFile, lid, vid);
-		            log.log(new ToolsLogRecord(ToolsLevel.SUCCESS,
-		                    "Successfully posted document of XPaths of entire label to the xpath Solr collection", prodFile));
-					++HarvestSolrStats.numXPathDocsRegistered;
-				} 
-				catch (Exception e) 
-				{
-					log.log(new ToolsLogRecord(ToolsLevel.INFO,
-							"Error posting to xpath Solr Collection endpoint: " + e.getMessage()));
-					++HarvestSolrStats.numXPathDocsNotRegistered;
-				}
-				*/
-				
-				return lidvid;
-			} 
-			else 
-			{
-				++HarvestSolrStats.numProductsNotRegistered;
-				String message = "Product already exists: " + lidvid;
-				log.log(new ToolsLogRecord(ToolsLevel.WARNING, message, prodFile));
-				return null;
-			}
+          // Save product file
+          registryDAO.saveProduct(registryMeta, prodFile);
+
+          log.log(new ToolsLogRecord(ToolsLevel.SUCCESS,
+              "Successfully registered product: " + lidvid, prodFile));
+          ++HarvestSolrStats.numProductsRegistered;
+
+          return lidvid;
 		} 
 		catch(CatalogException c)
 		{

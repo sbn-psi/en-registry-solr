@@ -5,7 +5,6 @@ import java.util.Map.Entry;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
-
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
 import gov.nasa.pds.harvest.search.stats.HarvestSolrStats;
@@ -74,37 +73,29 @@ public class HarvestFormatter extends Formatter {
   private void processSummary() 
   {
     int totalFiles = HarvestSolrStats.numGoodFiles + HarvestSolrStats.numBadFiles;
-    int totalProducts = HarvestSolrStats.numProductsRegistered + HarvestSolrStats.numProductsNotRegistered;    
-    int totalDocuments = HarvestSolrStats.numDocumentsCreated + HarvestSolrStats.numDocumentsNotCreated;
 
     summary.append(HarvestSolrStats.numGoodFiles + " of " + totalFiles
         + " file(s) processed, " + HarvestSolrStats.numFilesSkipped
         + " other file(s) skipped" + lineFeed);
     summary.append(numErrors + " error(s), " + numWarnings + " warning(s)"
         + doubleLineFeed);
-    
+
+
     // Registry collection (Labels)
     summary.append("Product Labels:" + lineFeed);
-    summary.append(String.format("%-10d %-25s", HarvestSolrStats.numProductsRegistered, "Successfully registered"));
+    summary.append(String.format("%-10d %-25s", HarvestSolrStats.numProductsRegistered,
+        "Successfully registered"));
     summary.append(lineFeed);
-    summary.append(String.format("%-10d %-25s", HarvestSolrStats.numProductsNotRegistered, "Failed to register"));
+    summary.append(String.format("%-10d %-25s", HarvestSolrStats.numProductsNotRegistered,
+        "Failed to register"));
     summary.append(doubleLineFeed);
     
-    // Search collection
-    summary.append("Search Service Solr Documents:" + lineFeed);
+    // Registry Search collection
+    summary.append("Registry Search Solr Documents:" + lineFeed);
     summary.append(String.format("%-10d %-25s", HarvestSolrStats.numDocumentsCreated, "Successfully created"));
     summary.append(lineFeed);
     summary.append(String.format("%-10d %-25s", HarvestSolrStats.numDocumentsNotCreated, "Failed to get created"));
     summary.append(doubleLineFeed);
-    
-    // XPath
-    /*
-    summary.append("XPath Solr Documents (Quick Look Only, Ignore Failed Ingestions):" + lineFeed);
-    summary.append(String.format("%-10d %-25s", HarvestSolrStats.numXPathDocsRegistered, "Successfully registered"));
-    summary.append(lineFeed);
-    summary.append(String.format("%-10d %-25s", HarvestSolrStats.numXPathDocsNotRegistered, "Failed to register"));
-    summary.append(doubleLineFeed);
-    */
     
     summary.append("Product Types Handled:" + lineFeed);
     for (Entry<String, BigInteger> entry :
