@@ -1,8 +1,8 @@
 # Changelog
 
-## [release/2.3.9](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.3.9) (2024-04-11)
+## [v2.3.9](https://github.com/NASA-PDS/registry-mgr-legacy/tree/v2.3.9) (2024-04-11)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.6...release/2.3.9)
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.6...v2.3.9)
 
 **Defects:**
 
