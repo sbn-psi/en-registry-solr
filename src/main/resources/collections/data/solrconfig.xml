@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>9.5.0</luceneMatchVersion>
+  <luceneMatchVersion>9.6.0</luceneMatchVersion>
 
   <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
@@ -689,7 +689,7 @@
        of SearchComponents (see below) and supports distributed
        queries across multiple shards
     -->
-  <requestHandler name="/select" class="solr.SearchHandler">
+  <requestHandler name="/all" class="solr.SearchHandler">
     <!-- default values for query parameters can be specified, these
          will be overridden by parameters in the request
       -->
@@ -754,6 +754,27 @@
        </arr>
       -->
   </requestHandler>
+  
+  <!-- NOTE: This the default endpoint for query responses from SolrJ -->
+  <requestHandler name="/select" class="solr.SearchHandler">
+    <!-- default values for query parameters can be specified, these
+         will be overridden by parameters in the request
+      -->
+    <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <int name="rows">10</int>
+      <!-- Default search field -->
+      <str name="df">text</str> 
+       <!-- -->
+      <str name="wt">json</str>     
+    </lst>
+    
+    <lst name="appends">
+       <!-- Update params to include filter query restricting to latest product versions -->
+      <str name="fq">{!collapse field=lid max=version_id_normalized}</str>     
+    </lst>
+
+  </requestHandler>
 
   <requestHandler name="/search" class="gov.nasa.pds.search.PDSSearchProtocol" default="true">
     <!-- could eventually move this to initParams if desired -->
@@ -784,13 +805,12 @@
        <str name="f.facet_instrument.facet.prefix">1,</str>
        <str name="f.facet_primary_result_purpose.facet.prefix">1,</str>
        <str name="f.facet_primary_result_processing_level.facet.prefix">1,</str>
-
-       <!-- Update params to include filter query restricting to latest product versions -->
-      <str name="fq">{!collapse field=lid max=version_id_normalized}</str>
     </lst>
 
     <lst name="appends">
        <str name="tr">data-search.xsl</str>
+      <!-- Update params to include filter query restricting to latest product versions -->
+      <str name="fq">{!collapse field=lid max=version_id_normalized}</str>
        <str name="bq">data_product_type:Product_Context_Search_Tool^100</str>
        <str name="bq">data_product_type:Resource^10</str>
     </lst>
@@ -843,14 +863,13 @@
        <str name="f.facet_instrument.facet.prefix">1,</str>
        <str name="f.facet_primary_result_purpose.facet.prefix">1,</str>
        <str name="f.facet_primary_result_processing_level.facet.prefix">1,</str>
-
-      <!-- Update params to include filter query restricting to latest product versions -->
-      <str name="fq">{!collapse field=lid max=version_id_normalized}</str>
     </lst>
 
     <!-- Ignore superseded data sets by appending a filter to the query -->
     <lst name="appends">
       <str name="tr">data-search.xsl</str>
+      <!-- Update params to include filter query restricting to latest product versions -->
+      <str name="fq">{!collapse field=lid max=version_id_normalized}</str>
       <str name="fq">-archive_status:SUPERSEDED</str>
       <!-- Filter out Observational and Document products and all of the various  -->
       <str name="fq">-data_product_type:Product_Observational</str>
