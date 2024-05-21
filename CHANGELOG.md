@@ -1,5 +1,13 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/registry-harvest-legacy/tree/«unknown») (2024-05-21)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/v3.0.11...«unknown»)
+
+**Other closed issues:**
+
+- Updated `registry` index functionality to automatically overwrite by default [\#66](https://github.com/NASA-PDS/registry-harvest-legacy/issues/66)
+
 ## [v3.0.11](https://github.com/NASA-PDS/registry-harvest-legacy/tree/v3.0.11) (2024-04-11)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/v3.0.7...v3.0.11)
