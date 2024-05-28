@@ -1,12 +1,23 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/registry-mgr-legacy/tree/«unknown») (2024-05-28)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.9...«unknown»)
+
+**Defects:**
+
+- Faceting is not working properly for counts and overall functions [\#49](https://github.com/NASA-PDS/registry-mgr-legacy/issues/49) [[s.high](https://github.com/NASA-PDS/registry-mgr-legacy/labels/s.high)]
+
+**Other closed issues:**
+
+- Error attempting to run `-delete-all` on indexes [\#50](https://github.com/NASA-PDS/registry-mgr-legacy/issues/50)
+
 ## [v2.3.9](https://github.com/NASA-PDS/registry-mgr-legacy/tree/v2.3.9) (2024-04-11)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.6...v2.3.9)
 
 **Defects:**
 
-- Faceting is not working properly for counts and overall functions [\#49](https://github.com/NASA-PDS/registry-mgr-legacy/issues/49) [[s.high](https://github.com/NASA-PDS/registry-mgr-legacy/labels/s.high)]
 - Hit count and pagination not working in XSLT response [\#42](https://github.com/NASA-PDS/registry-mgr-legacy/issues/42) [[s.high](https://github.com/NASA-PDS/registry-mgr-legacy/labels/s.high)]
 
 ## [v2.3.6](https://github.com/NASA-PDS/registry-mgr-legacy/tree/v2.3.6) (2023-10-31)
