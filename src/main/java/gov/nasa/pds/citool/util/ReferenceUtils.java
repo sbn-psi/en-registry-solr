@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
-import gov.nasa.pds.citool.CIToolIngester;
 import gov.nasa.pds.citool.ingestor.CatalogObject;
 import gov.nasa.pds.citool.ingestor.CatalogVolumeIngester;
 import gov.nasa.pds.citool.ingestor.Constants;
@@ -328,31 +326,31 @@ public class ReferenceUtils
 			refs.put(Constants.HAS_RESOURCE, values);   
 		}
 		
-		key = "CURATING_NODE_ID";
-		if (md.containsKey(key)) {
-			if (refs.get(Constants.HAS_NODE) != null) {
-				values = refs.get(Constants.HAS_NODE);
-			} else {
-				values = new ArrayList<String>();
-			}
-			if (md.isMultiValued(key)) {
-				List<String> tmpValues = md.getAllMetadata(key);
-				for (String aVal : tmpValues) {
-					lidValue = aVal;
-					lidValue = Utility.collapse(lidValue);
-					lidValue = lidValue.toLowerCase();
-					if (!Utility.valueExists(Constants.LID_PREFIX + "node:node." + lidValue, values))
-						values.add(Constants.LID_PREFIX + "node:node." + lidValue);
-				}
-			} else {
-				lidValue = md.getMetadata(key);
-				lidValue = Utility.collapse(lidValue);
-				lidValue = lidValue.toLowerCase();
-				if (!Utility.valueExists(Constants.LID_PREFIX + "node:node." + lidValue, values))
-					values.add(Constants.LID_PREFIX + "node:node." + lidValue);
-			}
-			refs.put(Constants.HAS_NODE, values);  
-		}
+        key = "CURATING_NODE_ID";
+        if (md.containsKey(key)) {
+          if (refs.get(Constants.HAS_NODE) != null) {
+            values = refs.get(Constants.HAS_NODE);
+          } else {
+            values = new ArrayList<String>();
+          }
+          if (md.isMultiValued(key)) {
+            List<String> tmpValues = md.getAllMetadata(key);
+            for (String aVal : tmpValues) {
+              lidValue = aVal;
+              lidValue = Utility.collapse(lidValue);
+              lidValue = lidValue.toLowerCase();
+              if (!Utility.valueExists(Constants.LID_PREFIX + "node:node." + lidValue, values))
+                values.add(Constants.LID_PREFIX + "node:node." + lidValue);
+            }
+          } else {
+            lidValue = md.getMetadata(key);
+            lidValue = Utility.collapse(lidValue);
+            lidValue = lidValue.toLowerCase();
+            if (!Utility.valueExists(Constants.LID_PREFIX + "node:node." + lidValue, values))
+              values.add(Constants.LID_PREFIX + "node:node." + lidValue);
+          }
+          refs.put(Constants.HAS_NODE, values);
+        }
 	}
 
 	

@@ -108,11 +108,14 @@
       <registryPath>target_ref.target_type</registryPath>
     </field>
 
-    <field name="resource_ref" type="string">
-      <registryPath>resource_ref</registryPath>
+    <field name="resource_url" type="string">
+      <registryPath>resource_ref.resource_url</registryPath>
+    </field>
+    <field name="resource_name" type="string">
+      <registryPath>resource_ref.resource_name</registryPath>
     </field>
     <field name="node_id" type="string">
-      <registryPath>node_ref.node_name</registryPath>
+      <registryPath>resource_ref.node_id</registryPath>
     </field>
 
     <field name="external_reference_text" type="string">

@@ -4,9 +4,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
-
+import java.util.Set;
+import java.util.logging.Logger;
 import gov.nasa.pds.citool.file.FileObject;
 import gov.nasa.pds.citool.registry.model.FileInfo;
 import gov.nasa.pds.citool.registry.model.Metadata;
@@ -20,6 +20,9 @@ import gov.nasa.pds.tools.label.ObjectStatement;
 
 public class ProductFactory 
 {
+
+  private static Logger log = Logger.getLogger(ProductFactory.class.getName());
+
 	/**
 	 * Create an extrinsic object
 	 * 
@@ -167,7 +170,48 @@ public class ProductFactory
 				slots.put("name", product.getName());
 				
 				slots.put(getKey("product_class"), Constants.VOLUME_PROD);
-			}
+              }
+
+              if (objType.equalsIgnoreCase(Constants.HK_OBJ)
+                  && key.equals("RESOURCE_ID")) {
+
+                String dsId = md.getMetadata("DATA_SET_ID");
+                dsId = Utility.collapse(dsId);
+                value = md.getMetadata(key);
+                value = dsId + "__" + value;
+                value = Utility.collapse(value);
+                String tmpValue = value;
+                tmpValue = Utility.replaceChars(value);
+                String productLid = Constants.LID_PREFIX + "resource:resource." + tmpValue;
+                productLid = productLid.toLowerCase();
+                product.setLid(productLid);
+                slots.put("lid", productLid);
+
+                product.setObjectType(Constants.RESOURCE_PROD);
+                slots.put("objectType", product.getObjectType());
+
+                slots.put(getKey("product_class"), Constants.RESOURCE_PROD);
+
+                String name = md.getMetadata("RESOURCE_NAME");
+                name = Utility.collapse(name);
+                slots.put("resource_name", name);
+                
+                
+                String url = md.getMetadata("RESOURCE_LINK");
+                url = Utility.collapse(url);
+                slots.put("resource_url", url);
+
+                // TODO Refactor to support creation of multiple registry objects
+                // from one catalog objects
+
+                // Hack to include CURATING_NODE_ID in the resource information
+                // The original design appears to assume a 1 to 1 relationship
+                // between catalog objects and registry objects.
+                // DATA_SET_HOUSEKEEPING appears to be an exception.
+                String node_id = md.getMetadata("CURATING_NODE_ID");
+                node_id = Utility.collapse(node_id);
+                slots.put("node_id", getNodeId(node_id.toLowerCase()));
+              }
 			
 			if (objType.equalsIgnoreCase(Constants.DATASET_OBJ) && ingester.getArchiveStatus() !=null) 
 			{
@@ -355,5 +399,12 @@ public class ProductFactory
 		else 
 			return key.toLowerCase();
 	}
+
+    private static String getNodeId(String value) {
+      if (Constants.nodeValueToIdMap.containsKey(value)) {
+        return Constants.nodeValueToIdMap.get(value);
+      }
+      return value;
+    }
 
 }
