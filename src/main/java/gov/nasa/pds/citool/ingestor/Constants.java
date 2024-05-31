@@ -12,6 +12,8 @@ public class Constants {
    
     public static final String LID_PREFIX = "urn:nasa:pds:context_pds3:";
     
+    public static final String RESOURCE_LID_SUFFIX = "_resource_info";
+
     public static final String TARGET_PROD = "Product_Target_PDS3";
     
     public static final String MISSION_PROD = "Product_Mission_PDS3";
