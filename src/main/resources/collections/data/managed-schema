@@ -138,6 +138,7 @@
    <field name="language" type="text_en_splitting_tight" indexed="false" stored="true" multiValued="true" />
    <field name="modification_date" type="pdate" indexed="false" stored="true" multiValued="true" />
    <field name="modification_description" type="text_general" indexed="false" stored="true" multiValued="true" />
+   <field name="node_id" type="lowercase" indexed="true" stored="true" multiValued="true" />
    <field name="objectType" type="lowercase" indexed="true" stored="true" multiValued="true" />
    <field name="observation_local_mean_solar_time" type="string" indexed="false" stored="true" multiValued="true" />
    <field name="observation_local_true_solar_time" type="string" indexed="false" stored="true" multiValued="true" />
