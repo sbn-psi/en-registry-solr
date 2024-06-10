@@ -1,8 +1,8 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-mgr-legacy/tree/«unknown») (2024-06-05)
+## [release/2.4.0](https://github.com/NASA-PDS/registry-mgr-legacy/tree/release/2.4.0) (2024-06-05)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.9...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/registry-mgr-legacy/compare/v2.3.9...release/2.4.0)
 
 **Defects:**
 
