@@ -1,8 +1,8 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-harvest-legacy/tree/«unknown») (2024-05-28)
+## [release/3.1.0](https://github.com/NASA-PDS/registry-harvest-legacy/tree/release/3.1.0) (2024-06-10)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/v3.0.11...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-legacy/compare/v3.0.11...release/3.1.0)
 
 **Other closed issues:**
 
