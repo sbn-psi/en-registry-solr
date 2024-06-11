@@ -1,8 +1,16 @@
 # Changelog
 
-## [release/3.1.0](https://github.com/NASA-PDS/registry-pds3-catalog/tree/release/3.1.0) (2024-04-15)
+## [«unknown»](https://github.com/NASA-PDS/registry-pds3-catalog/tree/«unknown») (2024-06-11)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-pds3-catalog/compare/v3.0.7...release/3.1.0)
+[Full Changelog](https://github.com/NASA-PDS/registry-pds3-catalog/compare/v3.1.0...«unknown»)
+
+**Requirements:**
+
+- As a user, I want to provide search/access links using the hsk.cat files within the data set [\#16](https://github.com/NASA-PDS/registry-pds3-catalog/issues/16)
+
+## [v3.1.0](https://github.com/NASA-PDS/registry-pds3-catalog/tree/v3.1.0) (2024-06-10)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-pds3-catalog/compare/v3.0.7...v3.1.0)
 
 ## [v3.0.7](https://github.com/NASA-PDS/registry-pds3-catalog/tree/v3.0.7) (2023-11-06)
 
