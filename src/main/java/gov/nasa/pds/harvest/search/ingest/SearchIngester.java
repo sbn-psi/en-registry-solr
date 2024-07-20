@@ -4,14 +4,14 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Logger;
-import gov.nasa.jpl.oodt.cas.filemgr.ingest.Ingester;
-import gov.nasa.jpl.oodt.cas.filemgr.structs.exceptions.CatalogException;
-import gov.nasa.jpl.oodt.cas.filemgr.structs.exceptions.IngestException;
-import gov.nasa.jpl.oodt.cas.metadata.MetExtractor;
-import gov.nasa.jpl.oodt.cas.metadata.Metadata;
 import gov.nasa.pds.harvest.search.constants.Constants;
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
+import gov.nasa.pds.harvest.search.oodt.filemgr.Ingester;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.CatalogException;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.IngestException;
+import gov.nasa.pds.harvest.search.oodt.metadata.MetExtractor;
+import gov.nasa.pds.harvest.search.oodt.metadata.Metadata;
 import gov.nasa.pds.harvest.search.registry.MetadataExtractor;
 import gov.nasa.pds.harvest.search.registry.RegistryDAO;
 import gov.nasa.pds.harvest.search.registry.RegistryMetadata;
@@ -25,7 +25,7 @@ import gov.nasa.pds.harvest.search.stats.HarvestSolrStats;
  * @author mcayanan
  *
  */
-public class SearchIngester implements Ingester 
+public class SearchIngester implements Ingester
 {
 	private static Logger log = Logger.getLogger(SearchIngester.class.getName());
 
@@ -108,6 +108,10 @@ public class SearchIngester implements Ingester
 		String lid = met.getMetadata(Constants.LOGICAL_ID);
 		String vid = met.getMetadata(Constants.PRODUCT_VERSION);
 		String lidvid = lid + "::" + vid;
+
+        for (String key : met.getAllKeys()) {
+          log.info("ingest key: " + key);
+        }
 				
 		try 
 		{
@@ -152,8 +156,8 @@ public class SearchIngester implements Ingester
 	 * Method not implemented at this time.
 	 *
 	 */
-	public void ingest(URL fmUrl, List<String> prodFiles, MetExtractor extractor, File metConfFile)
-			throws IngestException {
+    public void ingest(URL fmUrl, List<String> prodFiles, MetExtractor extractor,
+        File metConfFile) {
 		// No need for this method at this time
 	}
 }

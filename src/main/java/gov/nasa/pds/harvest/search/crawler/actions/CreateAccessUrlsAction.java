@@ -11,14 +11,14 @@ import java.util.regex.Pattern;
 import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerAction;
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionPhases;
-import gov.nasa.jpl.oodt.cas.crawl.structs.exceptions.CrawlerActionException;
-import gov.nasa.jpl.oodt.cas.metadata.Metadata;
 import gov.nasa.pds.harvest.search.constants.Constants;
 import gov.nasa.pds.harvest.search.file.FileObject;
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
+import gov.nasa.pds.harvest.search.oodt.crawler.CrawlerAction;
+import gov.nasa.pds.harvest.search.oodt.filemgr.CrawlerActionPhases;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.CrawlerActionException;
+import gov.nasa.pds.harvest.search.oodt.metadata.Metadata;
 import gov.nasa.pds.harvest.search.policy.AccessUrl;
 import gov.nasa.pds.registry.model.Slot;
 
@@ -54,7 +54,7 @@ public class CreateAccessUrlsAction extends CrawlerAction {
     super();
     this.accessUrls = new ArrayList<AccessUrl>();
     this.accessUrls.addAll(accessUrls);
-    String []phases = {CrawlerActionPhases.PRE_INGEST};
+    String[] phases = {CrawlerActionPhases.PRE_INGEST.getName()};
     setPhases(Arrays.asList(phases));
     setId(ID);
     setDescription(DESCRIPTION);

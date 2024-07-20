@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_1B00.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<Product_Bundle xmlns="http://pds.nasa.gov/pds4/pds/v1"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://pds.nasa.gov/pds4/pds/v1 https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_1B00.xsd">
+
+  <Identification_Area>
+    <logical_identifier>urn:nasa:pds:a17leamcal</logical_identifier>
+    <version_id>1.0</version_id>
+    <title>Apollo 17 Lunar Ejecta And Meteorites Experiment Calibration Notebook Bundle</title>
+    <information_model_version>1.11.0.0</information_model_version>
+    <product_class>Product_Bundle</product_class>
+    <Citation_Information>
+      <author_list>Berg, O.E.; Williams, D.R.; Gaddy, M.</author_list>
+      <editor_list>Williams, D.R.; McLaughlin, S.A.</editor_list>
+      <publication_year>2017</publication_year>
+      <doi>10.17189/1519335</doi>
+      <description>This bundle contains a digital reproduction of one hand-written laboratory
+      notebook of calibration analysis for the Apollo 17 Lunar Ejecta And Meteorites (LEAM)
+      Experiment detector, which was identical to Pioneer 8 and 9 Cosmic Dust Detectors
+      (CDD).</description>
+    </Citation_Information>
+    <Modification_History>
+      <Modification_Detail>
+        <modification_date>2015-05-22</modification_date>
+        <version_id>1.0</version_id>
+        <description>Creation.</description>
+      </Modification_Detail>
+    </Modification_History>
+  </Identification_Area>
+  <Context_Area>
+    <Time_Coordinates>
+      <!-- Apollo 17 Launch -->
+      <start_date_time>1972-12-07Z</start_date_time>
+      <!-- ALSEP termination date -->
+      <stop_date_time>1977-09-30Z</stop_date_time>
+    </Time_Coordinates>
+    <Primary_Result_Summary>
+      <purpose>Science</purpose>
+      <processing_level>Derived</processing_level>
+      <description>Digital reproduction of one hand-written laboratory notebook of calibration
+      analysis for the Apollo 17 Lunar Ejecta And Meteorites (LEAM) Experiment detector, which was
+      identical to the Pioneer 8 and 9 Cosmic Dust Detectors (CDD).</description>
+    </Primary_Result_Summary>
+    <Investigation_Area>
+      <name>Apollo 17</name>
+      <type>Mission</type>
+      <Internal_Reference>
+        <lid_reference>urn:nasa:pds:context:investigation:mission.apollo_17</lid_reference>
+        <reference_type>bundle_to_investigation</reference_type>
+      </Internal_Reference>
+    </Investigation_Area>
+    <Observing_System>
+      <Observing_System_Component>
+        <name>Apollo 17 ALSEP</name>
+        <type>Spacecraft</type>
+        <Internal_Reference>
+          <lid_reference>urn:nasa:pds:context:instrument_host:spacecraft.a17a</lid_reference>
+          <reference_type>is_instrument_host</reference_type>
+        </Internal_Reference>
+      </Observing_System_Component>
+      <Observing_System_Component>
+        <name>Apollo 17 Lunar Ejecta And Meteorites Experiment</name>
+        <type>Instrument</type>
+        <Internal_Reference>
+          <lid_reference>urn:nasa:pds:context:instrument:leam.a17a</lid_reference>
+          <reference_type>is_instrument</reference_type>
+        </Internal_Reference>
+      </Observing_System_Component>
+    </Observing_System>
+    <Target_Identification>
+      <name>Moon</name>
+      <type>Satellite</type>
+      <Internal_Reference>
+        <lid_reference>urn:nasa:pds:context:target:satellite.earth.moon</lid_reference>
+        <reference_type>bundle_to_target</reference_type>
+      </Internal_Reference>
+    </Target_Identification>
+    <Target_Identification>
+      <name>Dust</name>
+      <type>Dust</type>
+      <Internal_Reference>
+        <lid_reference>urn:nasa:pds:context:target:dust.dust</lid_reference>
+        <reference_type>bundle_to_target</reference_type>
+      </Internal_Reference>
+    </Target_Identification>
+  </Context_Area>
+  <Reference_List>
+    <Internal_Reference>
+      <lid_reference>urn:nasa:pds:context:resource:resource.a17leamcal_online</lid_reference>
+      <reference_type>bundle_to_resource</reference_type>
+    </Internal_Reference>
+    <Internal_Reference>
+      <lid_reference>urn:nasa:pds:context:resource:resource.a17leamcal_2_online</lid_reference>
+      <reference_type>bundle_to_resource</reference_type>
+    </Internal_Reference>
+  </Reference_List>
+  <Bundle>
+    <bundle_type>Archive</bundle_type>
+  </Bundle>
+  <File_Area_Text>
+    <File>
+      <file_name>readme.txt</file_name>
+      <file_size unit="byte">600</file_size>
+    </File>
+    <Stream_Text>
+      <offset unit="byte">0</offset>
+      <parsing_standard_id>7-Bit ASCII Text</parsing_standard_id>
+      <description>Brief overview of this bundle.</description>
+      <record_delimiter>Carriage-Return Line-Feed</record_delimiter>
+    </Stream_Text>
+  </File_Area_Text>
+  <Bundle_Member_Entry>
+    <lid_reference>urn:nasa:pds:a17leamcal:calibration</lid_reference>
+    <member_status>Primary</member_status>
+    <reference_type>bundle_has_calibration_collection</reference_type>
+  </Bundle_Member_Entry>
+  <Bundle_Member_Entry>
+    <lid_reference>urn:nasa:pds:a17leamcal:data</lid_reference>
+    <member_status>Primary</member_status>
+    <reference_type>bundle_has_data_collection</reference_type>
+  </Bundle_Member_Entry>
+</Product_Bundle>

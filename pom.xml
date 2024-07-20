@@ -161,10 +161,15 @@
   </scm>
 
   <repositories>
-      <repository>
+    <repository>
       <id>project.local</id>
       <name>project</name>
       <url>file:${project.basedir}/build/repo</url>
+    </repository>
+    <repository>
+      <id>snapshots-repo</id>
+      <name>FuseSource 3rdP</name>
+      <url>https://repo.fusesource.com/nexus/content/repositories/releases-3rd-party/</url>
     </repository>
   </repositories>
 
@@ -223,36 +228,6 @@
       <version>1.1.1</version>
       <scope>compile</scope>
     </dependency>
-    <!--
-      Exclude xerces dependency which is picked up by OODT artifacts
-      due to conflict with preparation/core xerces dependency. Also
-      exclude lucene dependency which creates a duplicate JAR situation
-      with the org.apache.lucene version that is picked up by cas-filemgr.
-    -->
-    <dependency>
-      <groupId>gov.nasa.jpl.oodt</groupId>
-      <artifactId>cas-crawler</artifactId>
-      <version>2.4.1</version>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>xerces</groupId>
-          <artifactId>xercesImpl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>lucene</groupId>
-          <artifactId>lucene-core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>apache</groupId>
-          <artifactId>tika</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.transaction</groupId>
-          <artifactId>jta</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
     <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
@@ -272,22 +247,6 @@
         <exclusion>
           <groupId>log4j</groupId>
           <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.oodt</groupId>
-      <artifactId>cas-filemgr</artifactId>
-      <version>${oodt-version}</version>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.tika</groupId>
-          <artifactId>tika-core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.solr</groupId>
-          <artifactId>solr-core</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -317,6 +276,12 @@
       <version>${solr.version}</version>
       <type>jar</type>
       <scope>compile</scope>
+      <exclusions>
+		<exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-api</artifactId>
+        </exclusion>        
+      </exclusions>
     </dependency>
     <dependency>
       <artifactId>solr-solrj</artifactId>
@@ -340,6 +305,25 @@
       <artifactId>tika-core</artifactId>
       <version>1.28.5</version>
     </dependency>
+	<!-- https://mvnrepository.com/artifact/com.google.common/google-collect -->
+	<dependency>
+	    <groupId>com.google.common</groupId>
+	    <artifactId>google-collect</artifactId>
+	    <version>1.0</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-core</artifactId>
+	    <version>6.1.11</version>
+	</dependency>
+	    <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-context</artifactId>
+	    <version>6.1.11</version>
+	</dependency>
+
   </dependencies>
   
   <!-- Inherit from parent -->

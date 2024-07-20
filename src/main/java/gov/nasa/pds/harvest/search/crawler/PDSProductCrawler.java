@@ -13,11 +13,6 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NotFileFilter;
 import org.xml.sax.SAXParseException;
-import gov.nasa.jpl.oodt.cas.crawl.ProductCrawler;
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerAction;
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionRepo;
-import gov.nasa.jpl.oodt.cas.metadata.Metadata;
-import gov.nasa.jpl.oodt.cas.metadata.exceptions.MetExtractionException;
 import gov.nasa.pds.harvest.search.constants.Constants;
 import gov.nasa.pds.harvest.search.crawler.actions.LidCheckerAction;
 import gov.nasa.pds.harvest.search.crawler.actions.LogMissingReqMetadataAction;
@@ -29,6 +24,11 @@ import gov.nasa.pds.harvest.search.crawler.metadata.extractor.Pds4MetExtractorCo
 import gov.nasa.pds.harvest.search.doc.SearchDocState;
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
+import gov.nasa.pds.harvest.search.oodt.crawler.CrawlerAction;
+import gov.nasa.pds.harvest.search.oodt.crawler.CrawlerActionRepo;
+import gov.nasa.pds.harvest.search.oodt.crawler.ProductCrawler;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.MetExtractionException;
+import gov.nasa.pds.harvest.search.oodt.metadata.Metadata;
 import gov.nasa.pds.harvest.search.policy.DirectoryFilter;
 import gov.nasa.pds.harvest.search.policy.FileFilter;
 import gov.nasa.pds.harvest.search.stats.HarvestSolrStats;
@@ -157,11 +157,11 @@ public class PDSProductCrawler extends ProductCrawler {
    * @param product The product file.
    * @param productMetadata The metadata associated with the product.
    */
-  @Override
-  protected void addKnownMetadata(File product, Metadata productMetadata) {
-    //The parent class adds FILENAME, FILE_LOCATION, and PRODUCT_NAME
-    //to the metadata. Not needed at the moment
-  }
+  // @Override
+  // protected void addKnownMetadata(File product, Metadata productMetadata) {
+  // //The parent class adds FILENAME, FILE_LOCATION, and PRODUCT_NAME
+  // //to the metadata. Not needed at the moment
+  // }
 
   /**
    * Crawls the given directory.

@@ -2,12 +2,11 @@ package gov.nasa.pds.harvest.search.crawler;
 
 import java.io.File;
 import java.util.logging.Logger;
-
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionRepo;
 import gov.nasa.pds.harvest.search.constants.Constants;
 import gov.nasa.pds.harvest.search.crawler.metadata.extractor.Pds4MetExtractorConfig;
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
+import gov.nasa.pds.harvest.search.oodt.crawler.CrawlerActionRepo;
 
 /**
  * A crawler class for a PDS Collection file.

@@ -2,8 +2,7 @@ package gov.nasa.pds.harvest.search.crawler.metadata.extractor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import gov.nasa.jpl.oodt.cas.metadata.MetExtractorConfig;
+import gov.nasa.pds.harvest.search.oodt.metadata.MetExtractorConfig;
 import gov.nasa.pds.harvest.search.policy.Pds4ProductMetadata;
 import gov.nasa.pds.harvest.search.policy.ReferenceTypeMap;
 import gov.nasa.pds.harvest.search.policy.References;

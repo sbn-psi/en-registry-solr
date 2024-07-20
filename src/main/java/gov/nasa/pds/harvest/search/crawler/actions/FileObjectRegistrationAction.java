@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,17 +16,17 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerAction;
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionPhases;
-import gov.nasa.jpl.oodt.cas.crawl.structs.exceptions.CrawlerActionException;
-import gov.nasa.jpl.oodt.cas.metadata.Metadata;
-import gov.nasa.jpl.oodt.cas.metadata.exceptions.MetExtractionException;
 import gov.nasa.pds.harvest.search.constants.Constants;
 import gov.nasa.pds.harvest.search.file.FileObject;
 import gov.nasa.pds.harvest.search.file.FileSize;
 import gov.nasa.pds.harvest.search.file.MD5Checksum;
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
+import gov.nasa.pds.harvest.search.oodt.crawler.CrawlerAction;
+import gov.nasa.pds.harvest.search.oodt.filemgr.CrawlerActionPhases;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.CrawlerActionException;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.MetExtractionException;
+import gov.nasa.pds.harvest.search.oodt.metadata.Metadata;
 import gov.nasa.pds.harvest.search.policy.FileTypeMap;
 import gov.nasa.pds.harvest.search.policy.FileTypes;
 import gov.nasa.pds.harvest.search.stats.HarvestSolrStats;
@@ -85,7 +84,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
    */
   public FileObjectRegistrationAction() {
       super();
-      String []phases = {CrawlerActionPhases.PRE_INGEST};
+      String[] phases = {CrawlerActionPhases.PRE_INGEST.getName()};
       setPhases(Arrays.asList(phases));
       setId(ID);
       setDescription(DESCRIPTION);
@@ -132,13 +131,16 @@ public class FileObjectRegistrationAction extends CrawlerAction {
       try {
         // Perform a set of actions before ingesting the file object
         for (CrawlerAction action : actions) {
-          if (action instanceof StorageIngestAction) {
-            StorageIngestAction siAction =
-              (StorageIngestAction) action;
-            String productId = siAction.performAction(product, fileObject,
-                metadata);
-            fileObject.setStorageServiceProductId(productId);
-          } else if (action instanceof CreateAccessUrlsAction) {
+          // Commenting this out for now because I don't think we
+          // need to support this action anymore
+          // if (action instanceof StorageIngestAction) {
+          // StorageIngestAction siAction =
+          // (StorageIngestAction) action;
+          // String productId = siAction.performAction(product, fileObject,
+          // metadata);
+          // fileObject.setStorageServiceProductId(productId);
+          // } else
+          if (action instanceof CreateAccessUrlsAction) {
             CreateAccessUrlsAction cauAction = (CreateAccessUrlsAction) action;
             List<String> urls = cauAction.performAction(product, fileObject);
             fileObject.setAccessUrls(urls);
@@ -181,14 +183,11 @@ public class FileObjectRegistrationAction extends CrawlerAction {
    */
   private ExtrinsicObject createProduct(Metadata metadata, File prodFile) {
     ExtrinsicObject product = new ExtrinsicObject();
-//    product.setGuid(idGenerator.getGuid());
     Set<Slot> slots = new HashSet<Slot>();
-    Set metSet = metadata.getHashtable().entrySet();
-    for (Iterator i = metSet.iterator(); i.hasNext();) {
-      Map.Entry entry = (Map.Entry) i.next();
-      String key = entry.getKey().toString();
+    List<String> keys = metadata.getAllKeys();
+    for (String key : keys) {
       if (key.equals(Constants.REFERENCES)
-          || key.equals(Constants.INCLUDE_PATHS)) {
+          || key.equals(Constants.INCLUDE_PATHS) || key.equals(Constants.SLOT_METADATA)) {
         continue;
       }
       if (key.equals(Constants.LOGICAL_ID)) {
@@ -203,8 +202,8 @@ public class FileObjectRegistrationAction extends CrawlerAction {
              Constants.OBJECT_TYPE));
       } else if (key.equals(Constants.TITLE)) {
         product.setName(metadata.getMetadata(Constants.TITLE));
-      } else if (key.equals(Constants.SLOT_METADATA)) {
-        slots.addAll(metadata.getAllMetadata(Constants.SLOT_METADATA));
+      } else if (key.startsWith(Constants.SLOT_METADATA)) {
+        slots.add(new Slot(key.split("/")[1], metadata.getAllMetadata(key)));
       } else {
         log.log(new ToolsLogRecord(ToolsLevel.WARNING,
             "Creating unexpected slot: " + key, prodFile));
@@ -242,6 +241,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
    */
   private Metadata createFileObjectMetadata(FileObject fileObject,
       Metadata sourceMet) {
+    log.fine("createFileObjectMetadata");
     Metadata metadata = new Metadata();
     List<Slot> slots = new ArrayList<Slot>();
     String lid = sourceMet.getMetadata(Constants.LOGICAL_ID);
@@ -298,10 +298,11 @@ public class FileObjectRegistrationAction extends CrawlerAction {
     if (!fileObject.getAccessUrls().isEmpty()) {
       slots.add(new Slot(Constants.ACCESS_URLS, fileObject.getAccessUrls()));
     }
-    for (Iterator i = sourceMet.getHashtable().entrySet().iterator();
-    i.hasNext();) {
-      Map.Entry entry = (Map.Entry) i.next();
-      String key = entry.getKey().toString();
+    // for (Iterator i = sourceMet.getHashTable().entrySet().iterator();
+    // i.hasNext();) {
+    // Map.Entry entry = (Map.Entry) i.next();
+    // String key = entry.getKey().toString();
+    for (String key : metadata.getKeys()) {
       if (key.equals("dd_version_id")
           || key.equals("std_ref_version_id")) {
         slots.add(new Slot(key, Arrays.asList(
@@ -468,11 +469,9 @@ public class FileObjectRegistrationAction extends CrawlerAction {
     return results;
   }
 
-  private List<FileObject> getPds3FileObjects(File product,
-      List<String> includePaths)
-  throws URISyntaxException, MalformedURLException, MetExtractionException {
-    SimpleDateFormat format = new SimpleDateFormat(
-        "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+  private List<FileObject> getPds3FileObjects(File product, List<String> includePaths)
+      throws URISyntaxException, MalformedURLException, MetExtractionException {
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
     List<FileObject> results = new ArrayList<FileObject>();
     // Create a file object of the label file
     String lastModified = format.format(new Date(product.lastModified()));
@@ -480,20 +479,18 @@ public class FileObjectRegistrationAction extends CrawlerAction {
       log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
           "Capturing file object metadata for " + product.getName(), product));
       String checksum = handleChecksum(product, product);
-      FileObject fileObject = new FileObject(product.getName(),
-          product.getParent(), new FileSize(product.length(), Constants.BYTE),
-          lastModified, checksum, "Label");
+      FileObject fileObject = new FileObject(product.getName(), product.getParent(),
+          new FileSize(product.length(), Constants.BYTE), lastModified, checksum, "Label");
       results.add(fileObject);
     } catch (Exception e) {
       log.log(new ToolsLogRecord(ToolsLevel.SEVERE, "Error "
-          + "occurred while calculating checksum for " + product.getName()
-          + ": " + e.getMessage(), product.toString()));
+          + "occurred while calculating checksum for " + product.getName() + ": " + e.getMessage(),
+          product.toString()));
       ++HarvestSolrStats.numAncillaryProductsNotRegistered;
     }
     Label label = null;
     try {
-      DefaultLabelParser parser = new DefaultLabelParser(false, true,
-          new ManualPathResolver());
+      DefaultLabelParser parser = new DefaultLabelParser(false, true, new ManualPathResolver());
       label = parser.parseLabel(product.toURI().toURL());
     } catch (LabelParserException lp) {
       throw new MetExtractionException(MessageUtils.getProblemMessage(lp));
@@ -510,27 +507,24 @@ public class FileObjectRegistrationAction extends CrawlerAction {
         File file = resolvePath(fileRef.getPath(), basePath, includePaths);
         try {
           if (file != null) {
-            if (!file.getName().equals(product.getName())
-                && !uniqueFiles.contains(file)) {
+            if (!file.getName().equals(product.getName()) && !uniqueFiles.contains(file)) {
               log.log(new ToolsLogRecord(ToolsLevel.DEBUG,
                   "Capturing file object metadata for " + file.getName(), product));
               long size = file.length();
-              String creationDateTime = format.format(new Date(
-                file.lastModified()));
+              String creationDateTime = format.format(new Date(file.lastModified()));
               String checksum = handleChecksum(product, file);
               results.add(new FileObject(file.getName(), file.getParent(),
-                  new FileSize(size, Constants.BYTE),
-                  creationDateTime, checksum, "Observation"));
+                  new FileSize(size, Constants.BYTE), creationDateTime, checksum, "Observation"));
               uniqueFiles.add(file);
             }
           } else {
-            log.log(new ToolsLogRecord(ToolsLevel.SEVERE, "File object not "
-                + "found: " + fileRef.getPath(), product.toString()));
+            log.log(new ToolsLogRecord(ToolsLevel.SEVERE,
+                "File object not " + "found: " + fileRef.getPath(), product.toString()));
             ++HarvestSolrStats.numAncillaryProductsNotRegistered;
           }
         } catch (Exception e) {
-          log.log(new ToolsLogRecord(ToolsLevel.SEVERE, "Error occurred "
-              + "while calculating checksum for " + file.getName() + ": ",
+          log.log(new ToolsLogRecord(ToolsLevel.SEVERE,
+              "Error occurred " + "while calculating checksum for " + file.getName() + ": ",
               product));
           ++HarvestSolrStats.numAncillaryProductsNotRegistered;
         }
