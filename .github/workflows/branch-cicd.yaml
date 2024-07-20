@@ -62,8 +62,40 @@ jobs:
                     distribution: 'adopt'
                     java-version: ${{matrix.java-version}}
             -
-                name: 🩺 Test Software
-                run: mvn test
+                name: 🩺 Test, Build, and Unpack Harvest Software
+                run: |
+                    pwd
+                    mvn test package
+                    tar -xvzf target/harvest-legacy-*-bin.tar.gz
+
+            -
+                name: 💳 Checkout Registry Manager Repo
+                uses: actions/checkout@v4
+                with:
+                    repository: NASA-PDS/registry-mgr-legacy
+                    lfs: true
+                    fetch-depth: 0
+                    token: ${{secrets.ADMIN_GITHUB_TOKEN || github.token}}
+
+            -
+                name: Build Registry Manager
+                run: |
+                    pwd
+                    cd registry-mgr-legacy
+                    mvn clean package
+                    tar -xvzf target/registry-mgr-legacy-*-bin.tar.gz
+
+            -
+                name: 🩺 Run Smoke Tests
+                run: |
+                    echo "Prep environment"
+                    cd $GITHUB_WORKSPACE
+                    mkdir registry-data
+                    export DATA_HOME=$GITHUB_WORKSPACE/registry-data
+                    export LEGACY_REGISTRY_HOME=$GITHUB_WORKSPACE/registry-mgr-legacy/registry-mgr-legacy-*/
+                    export LEGACY_HARVEST_HOME=$GITHUB_WORKSPACE/registry-harvest-legacy/harvest-legacy-*/
+                    cd registry-harvest-legacy/test
+                    ./smoke-tests.sh
 
 ...
 
