@@ -66,6 +66,9 @@ jobs:
                 name: 🩺 Test, Build, and Unpack Harvest Software
                 run: |
                     pwd
+                    ls -al | tee
+                    ls -al $GITHUB_WORKSPACE
+                    ls -al $HOME
                     mvn test package
                     cd $HOME
                     tar -xvzf path: registry-harvest-legacy/target/harvest-legacy-*-bin.tar.gz
