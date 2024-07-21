@@ -27,8 +27,6 @@ import org.apache.commons.io.FileUtils;
 import gov.nasa.pds.harvest.search.commandline.options.Flag;
 import gov.nasa.pds.harvest.search.commandline.options.InvalidOptionException;
 import gov.nasa.pds.harvest.search.constants.Constants;
-import gov.nasa.pds.harvest.search.logging.ToolsLevel;
-import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
 import gov.nasa.pds.harvest.search.logging.formatter.HarvestFormatter;
 import gov.nasa.pds.harvest.search.logging.handler.HarvestFileHandler;
 import gov.nasa.pds.harvest.search.logging.handler.HarvestStreamHandler;
@@ -50,6 +48,8 @@ import gov.nasa.pds.harvest.search.util.Utility;
 import gov.nasa.pds.harvest.search.util.XMLExtractor;
 import gov.nasa.pds.search.core.exception.SearchCoreException;
 import gov.nasa.pds.search.core.exception.SearchCoreFatalException;
+import gov.nasa.pds.search.core.logging.ToolsLevel;
+import gov.nasa.pds.search.core.logging.ToolsLogRecord;
 import net.sf.saxon.trans.XPathException;
 
 /**

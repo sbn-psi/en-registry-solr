@@ -1,9 +1,12 @@
+// $Id: ToolsLevel.java 10558 2012-05-25 22:20:10Z mcayanan $
 package gov.nasa.pds.harvest.search.logging;
 
 import java.util.logging.Level;
 
 public class ToolsLevel extends Level {
-    public static final Level CONFIGURATION = new ToolsLevel("CONFIGURATION",
+	private static final long serialVersionUID = 2869682506838013252L;
+	
+	public static final Level CONFIGURATION = new ToolsLevel("CONFIGURATION",
             Level.SEVERE.intValue() + 8);
     public static final Level SKIP = new ToolsLevel("SKIP",
             Level.SEVERE.intValue() + 6);

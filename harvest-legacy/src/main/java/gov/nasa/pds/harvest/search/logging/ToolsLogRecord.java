@@ -1,3 +1,5 @@
+// $Id: ToolsLogRecord.java 7917 2010-10-21 21:03:42Z mcayanan $
+
 package gov.nasa.pds.harvest.search.logging;
 
 import java.io.File;
@@ -5,15 +7,13 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 public class ToolsLogRecord extends LogRecord {
-    private String filename;
+	private static final long serialVersionUID = 1773070873765120569L;
+	
+	private String filename;
     private int line;
 
     public ToolsLogRecord(Level level, String message) {
         this(level, message, null, -1);
-    }
-
-    public ToolsLogRecord(Level level, String message, int line) {
-      this(level, message, null, line);
     }
 
     public ToolsLogRecord(Level level, File filename) {
