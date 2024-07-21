@@ -1,0 +1,27 @@
+PDS_VERSION_ID = PDS3                                                         
+                                                                              
+OBJECT     = INSTRUMENT_HOST                                                  
+  INSTRUMENT_HOST_ID = "MTSC14"                                               
+                                                                              
+  OBJECT     = INSTRUMENT_HOST_INFORMATION                                    
+    INSTRUMENT_HOST_NAME = "MT. SINGLETON C14 PORTABLE TELESCOPE"             
+    INSTRUMENT_HOST_TYPE = "EARTH BASED"                                      
+    INSTRUMENT_HOST_DESC = "                                                  
+      Mt. Singleton is one of the remote sites associate with Perth           
+      Observatory in Western Australia.  It is located at longitude           
+      E117.28 deg, and latitude S 29.42 deg and elevation 680m above          
+      sea surface.                                                            
+                                                                              
+      C14 portable telescope                                                  
+      14 inches                                                               
+      Schmidt Cassegrain f/11 system                                          
+      in conjunction with CCD makes the field of view 30 arc sec              
+      "                                                                       
+  END_OBJECT = INSTRUMENT_HOST_INFORMATION                                    
+                                                                              
+  OBJECT     = INSTRUMENT_HOST_REFERENCE_INFO                                 
+    REFERENCE_KEY_ID = "N/A"                                                  
+  END_OBJECT = INSTRUMENT_HOST_REFERENCE_INFO                                 
+                                                                              
+END_OBJECT = INSTRUMENT_HOST                                                  
+END                                                                           

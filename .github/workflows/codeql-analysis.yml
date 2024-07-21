@@ -52,7 +52,11 @@ jobs:
 #       mvn clean compile site -DskipTests
 
     - name: Perform CodeQL Analysis
+<<<<<<< HEAD
       uses: github/codeql-action/analyze@v3
+=======
+      uses: github/codeql-action/analyze@v2
+>>>>>>> catalog-legacy/main
       
     - run: |
         pip install nasa-scrub
@@ -73,7 +77,11 @@ jobs:
         
       
     - name: Upload CodeQL Artifacts
+<<<<<<< HEAD
       uses: actions/upload-artifact@v4
+=======
+      uses: actions/upload-artifact@v3
+>>>>>>> catalog-legacy/main
       with:
         name: codeql-artifacts
         path: ${{ env.RESULTS_DIR }}

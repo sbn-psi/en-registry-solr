@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# Bourne Shell script that allows easy execution of the Catalog Tool
+# without the need to set the CLASSPATH or having to type in that long java
+# command (java gov.nasa.pds.citool.CITool ...)
+
+# Expects the Catalog jar file to be in the ../lib directory.
+
+# Check if the JAVA_HOME environment variable is set.
+if [ -z "${JAVA_HOME}" ]; then
+   JAVA_CMD=`which java`
+   if [ $? -ne 0 ]; then
+     echo "JAVA_HOME is not set as an environment variable"
+     exit 1
+   fi
+else
+   JAVA_CMD="${JAVA_HOME}"/bin/java
+fi
+
+# Setup environment variables.
+SCRIPT_DIR=`dirname $0`
+PARENT_DIR=`cd ${SCRIPT_DIR}/.. && pwd`
+LIB_DIR=${PARENT_DIR}/lib
+
+# Check for dependencies.
+if [ ! -f ${LIB_DIR}/catalog-*.jar ]; then
+    echo "Cannot find Catalog jar file in ${LIB_DIR}" 1>&2
+    exit 1
+fi
+
+# Finds the jar file in LIB_DIR and sets it to CATALOG_JAR.
+CATALOG_JAR=`ls ${LIB_DIR}/catalog-*.jar`
+
+# Executes Catalog via the executable jar file
+# Arguments are passed in to the tool via '$@'
+"${JAVA_HOME}"/bin/java -Dpds.registry="http://localhost:8983/solr" -jar ${CATALOG_JAR} "$@"

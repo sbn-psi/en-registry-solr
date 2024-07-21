@@ -1,0 +1,40 @@
+PDS_VERSION_ID         = PDS3                                                 
+OBJECT                 = VOLUME                                               
+ VOLUME_SERIES_NAME    = "SHOEMAKER-LEVY 9 IMPACT EVENTS"                     
+ VOLUME_SET_NAME       = "SHOEMAKER-LEVY 9 IMPACT EVENTS - SELECT"            
+ VOLUME_SET_ID         = USA_NASA_PDS_SL9_10XX                                
+ VOLUMES               = 18                                                   
+ VOLUME_NAME           = "VOLUME 1018"                                        
+ VOLUME_ID             = SL9_1018                                             
+ VOLUME_FORMAT         = "ISO-9660_LEVEL2"                                    
+ VOLUME_VERSION_ID     = "VERSION 1"                                          
+ MEDIUM_TYPE           = "ELECTRONIC"                                         
+ DATA_SET_ID           = "EAR-J/SA-HSOTP-2-EDR-SL9-V1.0"                      
+ PUBLICATION_DATE      = 2010-11-02                                           
+ DESCRIPTION           = "                                                    
+    This volume contains University of Maryland photometer data and           
+    high speed CCD images obtained at 5 remote locations by a Lowell          
+    Observatory led consortium."                                              
+ OBJECT                     = DATA_PRODUCER                                   
+  INSTITUTION_NAME          = "UNIVERSITY OF MARYLAND"                        
+  FACILITY_NAME             = "SMALL BODIES NODE"                             
+  FULL_NAME                 = "ED GRAYZECK"                                   
+  ADDRESS_TEXT              = "Department of Astronomy\n                      
+                               University of Maryland\n                       
+                               College Park, MD 20742-2421\n"                 
+  TELEPHONE_NUMBER          = "3014051539"                                    
+ END_OBJECT                 = DATA_PRODUCER                                   
+                                                                              
+                                                                              
+  OBJECT     = CATALOG                                                        
+    ^DATA_SET            =   "UM_DATASET.CAT"                                 
+    ^INSTRUMENT          =   "HSOTP.CAT"                                      
+    ^INSTRUMENT_HOST     =   "MTSC14.CAT"                                     
+    ^MISSION             =   "COMET_SL9_JUPITER_COLLISION.CAT"                
+    ^TARGET              = { "J1_IO.CAT",                                     
+                             "J2_EUROPA.CAT",                                 
+                             "JUPITER.CAT" }                                  
+    ^REFERENCE           =   "REFERENCE.CAT"                                  
+  END_OBJECT = CATALOG                                                        
+END_OBJECT = VOLUME                                                           
+END                                                                           
