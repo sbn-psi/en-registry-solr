@@ -43,6 +43,7 @@ jobs:
                     lfs: true
                     fetch-depth: 0
                     token: ${{secrets.ADMIN_GITHUB_TOKEN || github.token}}
+                    path: registry-harvest-legacy
             -
                 name: 💵 Maven Cache
                 uses: actions/cache@v4
@@ -66,7 +67,8 @@ jobs:
                 run: |
                     pwd
                     mvn test package
-                    tar -xvzf target/harvest-legacy-*-bin.tar.gz
+                    cd $HOME
+                    tar -xvzf path: registry-harvest-legacy/target/harvest-legacy-*-bin.tar.gz
 
             -
                 name: 💳 Checkout Registry Manager Repo
@@ -76,6 +78,7 @@ jobs:
                     lfs: true
                     fetch-depth: 0
                     token: ${{secrets.ADMIN_GITHUB_TOKEN || github.token}}
+                    path: registry-mgr-legacy
 
             -
                 name: Build Registry Manager
@@ -83,17 +86,18 @@ jobs:
                     pwd
                     cd registry-mgr-legacy
                     mvn clean package
-                    tar -xvzf target/registry-mgr-legacy-*-bin.tar.gz
+                    cd $HOME
+                    tar -xvzf registry-mgr-legacy/target/registry-mgr-legacy-*-bin.tar.gz
 
             -
                 name: 🩺 Run Smoke Tests
                 run: |
                     echo "Prep environment"
-                    cd $GITHUB_WORKSPACE
+                    cd $HOME
                     mkdir registry-data
-                    export DATA_HOME=$GITHUB_WORKSPACE/registry-data
-                    export LEGACY_REGISTRY_HOME=$GITHUB_WORKSPACE/registry-mgr-legacy/registry-mgr-legacy-*/
-                    export LEGACY_HARVEST_HOME=$GITHUB_WORKSPACE/registry-harvest-legacy/harvest-legacy-*/
+                    export DATA_HOME=$HOME/registry-data
+                    export LEGACY_REGISTRY_HOME=$HOME/registry-mgr-legacy-*/
+                    export LEGACY_HARVEST_HOME=$HOME/harvest-legacy-*/
                     cd registry-harvest-legacy/test
                     ./smoke-tests.sh
 
