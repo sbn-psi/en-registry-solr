@@ -44,40 +44,7 @@
       <fileMode>664</fileMode>
       <lineEnding>keep</lineEnding>
     </fileSet>
-    <fileSet>
-      <directory>src/main/resources/policy</directory>
-      <outputDirectory>conf/harvest/</outputDirectory>
-      <includes>
-        <include>global-policy.xml</include>
-      </includes>
-      <fileMode>664</fileMode>
-      <lineEnding>keep</lineEnding>
-    </fileSet>
-    <fileSet>
-      <directory>src/main/resources/util</directory>
-      <outputDirectory>resources</outputDirectory>
-      <includes>
-        <include>*</include>
-      </includes>
-      <fileMode>664</fileMode>
-      <lineEnding>keep</lineEnding>
-    </fileSet>
   </fileSets>
-
-  <files>
-    <file>
-      <source>LICENSE.txt</source>
-      <outputDirectory>/</outputDirectory>
-      <fileMode>664</fileMode>
-      <lineEnding>unix</lineEnding>
-    </file>
-    <file>
-      <source>README.md</source>
-      <fileMode>664</fileMode>
-      <lineEnding>unix</lineEnding>
-      <filtered>true</filtered>
-    </file>
-  </files>
 
   <dependencySets>
     <dependencySet>
