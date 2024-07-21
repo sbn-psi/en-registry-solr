@@ -2,10 +2,8 @@ package gov.nasa.pds.harvest.search.util;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
-
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
 

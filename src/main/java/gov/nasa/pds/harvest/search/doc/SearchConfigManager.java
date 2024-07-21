@@ -7,9 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
 import org.apache.commons.io.FileUtils;
-
 import gov.nasa.pds.search.core.exception.SearchCoreException;
 import gov.nasa.pds.search.core.exception.SearchCoreFatalException;
 import gov.nasa.pds.search.core.schema.CoreConfigReader;
@@ -79,6 +77,7 @@ public class SearchConfigManager
 			}
 			catch(Exception ex) 
 			{
+              ex.printStackTrace();
 				throw new SearchCoreFatalException("Error: Problem parsing " + config + "\nError Message: "
 						+ ex.getMessage() + "\nCause: " + ex.getCause().getMessage());
 			}
