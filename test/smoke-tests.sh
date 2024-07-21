@@ -24,12 +24,12 @@ if [ -z "$DATA_HOME" ]; then
 fi
 
 # Cleanup
-#$LEGACY_REGISTRY_HOME/bin/registry_legacy_installer_docker.sh uninstall
+$LEGACY_REGISTRY_HOME/bin/registry_legacy_installer_docker.sh uninstall
 check_status $? "[ERROR] Registry Manager Uninstall Failure"
-#rm -fr $DATA_HOME/solr-docs
+rm -fr $DATA_HOME/solr-docs
 
 # Install Solr with preconfigured collections
-#$LEGACY_REGISTRY_HOME/bin/registry_legacy_installer_docker.sh install
+$LEGACY_REGISTRY_HOME/bin/registry_legacy_installer_docker.sh install
 check_status $? "[ERROR] Registry Manager Install Failure"
 echo "[SUCCESS] Harvest Successful"
 
@@ -67,7 +67,7 @@ fi
 
 # Load test data
 echo "[INFO] Registry Manager Load"
-#$LEGACY_REGISTRY_HOME/bin/registry-mgr-legacy $DATA_HOME/solr-docs
+$LEGACY_REGISTRY_HOME/bin/registry-mgr-legacy $DATA_HOME/solr-docs
 
 check_status $? "[ERROR] Registry Manager Load Failure"
 
