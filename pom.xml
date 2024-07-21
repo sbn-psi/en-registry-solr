@@ -37,7 +37,7 @@
   <modules>
     <module>search-core</module>
     <module>harvest-legacy</module>
-    <module>registry-pds3-catalog</module>
+    <module>catalog-legacy</module>
     <module>registry-mgr-legacy</module>
   </modules>
   

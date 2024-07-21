@@ -6,14 +6,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>gov.nasa</groupId>
-    <artifactId>pds</artifactId>
-    <version>1.13.0</version>
+    <groupId>gov.nasa.pds</groupId>
+    <artifactId>registry-legacy</artifactId>
+    <version>3.2.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>gov.nasa.pds</groupId>
+  <groupId>gov.nasa.pds.registry-legacy</groupId>
   <artifactId>catalog-legacy</artifactId>
-  <version>3.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Legacy Catalog Tool</name>
@@ -198,6 +197,12 @@
       <artifactId>solr-solrj</artifactId>
       <version>9.4.1</version>
     </dependency>
+    
+	<dependency>
+		<groupId>gov.nasa.pds.registry-legacy</groupId>
+		<artifactId>search-core-legacy</artifactId>
+		<version>${project.version}</version>
+	</dependency>
   </dependencies>
   
   <!-- Inherit from parent -->
