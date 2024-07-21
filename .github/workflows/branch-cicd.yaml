@@ -66,12 +66,10 @@ jobs:
                 name: 🩺 Test, Build, and Unpack Harvest Software
                 run: |
                     pwd
-                    ls -al | tee
-                    ls -al $GITHUB_WORKSPACE
-                    ls -al $HOME
+                    cd registry-harvest-legacy
                     mvn test package
-                    cd $HOME
-                    tar -xvzf path: registry-harvest-legacy/target/harvest-legacy-*-bin.tar.gz
+                    cd $GITHUB_WORKSPACE
+                    tar -xvzf registry-harvest-legacy/target/harvest-legacy-*-bin.tar.gz
 
             -
                 name: 💳 Checkout Registry Manager Repo
@@ -89,18 +87,18 @@ jobs:
                     pwd
                     cd registry-mgr-legacy
                     mvn clean package
-                    cd $HOME
+                    cd $GITHUB_WORKSPACE
                     tar -xvzf registry-mgr-legacy/target/registry-mgr-legacy-*-bin.tar.gz
 
             -
                 name: 🩺 Run Smoke Tests
                 run: |
                     echo "Prep environment"
-                    cd $HOME
+                    cd cd $GITHUB_WORKSPACE
                     mkdir registry-data
-                    export DATA_HOME=$HOME/registry-data
-                    export LEGACY_REGISTRY_HOME=$HOME/registry-mgr-legacy-*/
-                    export LEGACY_HARVEST_HOME=$HOME/harvest-legacy-*/
+                    export DATA_HOME=$GITHUB_WORKSPACE/registry-data
+                    export LEGACY_REGISTRY_HOME=$GITHUB_WORKSPACE/registry-mgr-legacy-*/
+                    export LEGACY_HARVEST_HOME=$GITHUB_WORKSPACE/harvest-legacy-*/
                     cd registry-harvest-legacy/test
                     ./smoke-tests.sh
 
