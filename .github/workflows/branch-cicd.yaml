@@ -94,7 +94,7 @@ jobs:
                 name: 🩺 Run Smoke Tests
                 run: |
                     echo "Prep environment"
-                    cd cd $GITHUB_WORKSPACE
+                    cd $GITHUB_WORKSPACE
                     mkdir registry-data
                     export DATA_HOME=$GITHUB_WORKSPACE/registry-data
                     export LEGACY_REGISTRY_HOME=$GITHUB_WORKSPACE/registry-mgr-legacy-*/
