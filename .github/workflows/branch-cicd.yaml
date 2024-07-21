@@ -66,7 +66,7 @@ jobs:
                 name: 🩺 Test, Build, and Unpack Software
                 run: |
                     pwd
-                    mvn test package
+                    mvn test install
                     tar -xvzf harvest-legacy/target/harvest-legacy-*-bin.tar.gz
                     tar -xvzf registry-mgr/target/registry-mgr-*-bin.tar.gz
                     tar -xvzf catalog-legacy/target/catalog-legacy-*-bin.tar.gz
