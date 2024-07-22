@@ -22,12 +22,10 @@ import gov.nasa.pds.registry.model.Slot;
 import gov.nasa.pds.registry.model.wrapper.ExtendedExtrinsicObject;
 import gov.nasa.pds.search.core.exception.SearchCoreException;
 import gov.nasa.pds.search.core.exception.SearchCoreFatalException;
-import gov.nasa.pds.search.core.registry.ProductClassException;
 import gov.nasa.pds.search.core.schema.Field;
 import gov.nasa.pds.search.core.schema.OutputString;
 import gov.nasa.pds.search.core.schema.OutputStringFormat;
 import gov.nasa.pds.search.core.schema.Product;
-import gov.nasa.pds.search.core.util.Debugger;
 
 
 /**
@@ -153,7 +151,7 @@ public class SearchDocGenerator {
    */
   private Map<String, List<String>> setFieldValues(
       ExtendedExtrinsicObject searchExtrinsic, Product config, Metadata metadata)
-      throws ProductClassException {
+      throws SearchCoreException {
     try {
       Map<String, List<String>> fieldMap = new HashMap<String, List<String>>();
       
@@ -188,7 +186,7 @@ public class SearchDocGenerator {
       return fieldMap;
     } catch (Exception ex) {
       ex.printStackTrace();
-      throw new ProductClassException("Exception "
+      throw new SearchCoreException("Exception "
           + ex.getClass().getName() + ex.getMessage());
     }
   }
@@ -256,12 +254,12 @@ public class SearchDocGenerator {
     for (String registryPath : registryPathList) {
       pathArray = registryPath.split("\\.");
       if (pathArray.length > 1) {
-        Debugger.debug("Traversing registry path - " + searchExtrinsic.getLid()
+        log.fine("Traversing registry path - " + searchExtrinsic.getLid()
             + " - " + registryPath);        
         valueList.addAll(traverseRegistryPath(Arrays.asList(pathArray), 
             Arrays.asList(searchExtrinsic), metadata));
       } else {  // Field is a slot
-        Debugger.debug("Getting slot values - " + searchExtrinsic.getLid()
+        log.fine("Getting slot values - " + searchExtrinsic.getLid()
             + " - " + registryPath);
         valueList.addAll(getValidSlotValues(searchExtrinsic, registryPath));
       }
@@ -292,7 +290,8 @@ public class SearchDocGenerator {
         if (!searchExt.hasValidAssociationValues()) {   
           // If associations have values not are not lidvids
           // We will have to make the lidvids for them
-          Debugger.debug("-- INVALID ASSOCIATION VALUE FOUND for " + searchExt.getLid() + " - " + slotName);
+          log.fine(
+              "INVALID ASSOCIATION VALUE FOUND for " + searchExt.getLid() + " - " + slotName);
           List<String> newSlotValues = new ArrayList<String>();
           ExtendedExtrinsicObject assocSearchExt;
           for(String lid : slotValues) {
@@ -394,7 +393,7 @@ public class SearchDocGenerator {
   }
   
   private Map<String, String> setFieldTypes(Product config) 
-      throws ProductClassException {
+      throws SearchCoreException {
     try {
       Map<String, String> typeMap = new HashMap<String, String>();
 
@@ -415,7 +414,7 @@ public class SearchDocGenerator {
       return typeMap;
     } catch (Exception ex) {
       ex.printStackTrace();
-      throw new ProductClassException("Exception "
+      throw new SearchCoreException("Exception "
           + ex.getClass().getName() + ex.getMessage());
     }
   }
