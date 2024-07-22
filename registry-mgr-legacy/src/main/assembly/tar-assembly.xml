@@ -68,20 +68,6 @@
       <lineEnding>unix</lineEnding>
     </file>
     <file>
-      <source>NOTICE</source>
-      <outputDirectory>/</outputDirectory>
-      <fileMode>664</fileMode>
-      <lineEnding>unix</lineEnding>
-    </file>
-    <file>
-      <source>README-PACKAGE.txt</source>
-      <outputDirectory>/</outputDirectory>
-      <destName>README.txt</destName>
-      <fileMode>664</fileMode>
-      <lineEnding>unix</lineEnding>
-      <filtered>true</filtered>
-    </file>
-    <file>
       <source>src/main/resources/build/VERSION.txt</source>
       <outputDirectory>/</outputDirectory>
       <fileMode>664</fileMode>

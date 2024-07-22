@@ -55,12 +55,10 @@
       <lineEnding>crlf</lineEnding>
     </file>
     <file>
-      <source>README-PACKAGE.txt</source>
+      <source>README.txt</source>
       <outputDirectory>/</outputDirectory>
-      <destName>README.txt</destName>
       <fileMode>644</fileMode>
       <lineEnding>crlf</lineEnding>
-      <filtered>true</filtered>
     </file>
   </files>
 
@@ -69,7 +67,6 @@
       <outputDirectory>lib</outputDirectory>
       <unpack>false</unpack>
       <scope>runtime</scope>
-      <useProjectArtifact>false</useProjectArtifact>
     </dependencySet>
   </dependencySets>
 </assembly>

@@ -69,13 +69,13 @@
       <source>LICENSE.md</source>
       <outputDirectory>/</outputDirectory>
       <fileMode>664</fileMode>
-      <lineEnding>unix</lineEnding>
+      <lineEnding>crlf</lineEnding>
     </file>
     <file>
       <source>README.md</source>
       <outputDirectory>/</outputDirectory>
       <fileMode>664</fileMode>
-      <lineEnding>unix</lineEnding>
+      <lineEnding>crlf</lineEnding>
       <filtered>true</filtered>
     </file>
   </files>
