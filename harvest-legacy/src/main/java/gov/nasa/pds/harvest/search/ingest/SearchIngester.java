@@ -108,10 +108,6 @@ public class SearchIngester implements Ingester
 		String lid = met.getMetadata(Constants.LOGICAL_ID);
 		String vid = met.getMetadata(Constants.PRODUCT_VERSION);
 		String lidvid = lid + "::" + vid;
-
-        for (String key : met.getAllKeys()) {
-          log.info("ingest key: " + key);
-        }
 				
 		try 
 		{

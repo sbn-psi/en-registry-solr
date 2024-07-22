@@ -112,8 +112,6 @@ public class XMLWriter {
     String fname = fnameprefix + "_" + classname + "_" + itemoid + "."
         + fnameext;
 
-    // log.info("Filename: "+fname);
-
     return fname;
   }
 
@@ -123,22 +121,15 @@ public class XMLWriter {
 
     tName = name.trim();
     
-    //if (!BAD_VALUES_LIST.contains(value.toUpperCase())) {
-        tValue = value.trim();
-          Element element = doc.createElement(tName);
-          this.classElement.appendChild(element);
+    tValue = value.trim();
+    Element element = doc.createElement(tName);
+    this.classElement.appendChild(element);
 
-          Text text = doc.createTextNode(tValue);
-          if (type != null) {
-            element.setAttribute("type", type.trim());
-          }
-          element.appendChild(text);
-    //}
-
-    // Previous method used to encode only select HTML entities
-    //tName = repAllCharWStr(tName);
-    //tValue = repAllCharWStr(tValue);
-
+    Text text = doc.createTextNode(tValue);
+    if (type != null) {
+    	element.setAttribute("type", type.trim());
+    }
+    element.appendChild(text);
   }
 
   /**

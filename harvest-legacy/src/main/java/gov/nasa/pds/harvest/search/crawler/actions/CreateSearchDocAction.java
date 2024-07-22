@@ -110,11 +110,6 @@ public class CreateSearchDocAction extends CrawlerAction {
       } else if (key.equals(Constants.TITLE)) {
         product.setName(metadata.getMetadata(Constants.TITLE));
       } else if (key.startsWith(Constants.SLOT_METADATA)) {
-        if (key.split("/")[1].equals("instrument_name")) {
-          for (Object obj : metadata.getAllMetadata(key)) {
-            log.info("instrument_name: " + (String) obj);
-          }
-        }
         slots.add(new Slot(key.split("/")[1], metadata.getAllMetadata(key)));
       } else if (key.startsWith("file_ref")) {
         slots.add(new Slot(key.replace("/", "_"), metadata.getAllMetadata(key)));

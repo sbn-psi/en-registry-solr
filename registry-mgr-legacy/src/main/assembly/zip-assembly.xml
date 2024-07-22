@@ -64,7 +64,7 @@
 
   <files>
     <file>
-      <source>LICENSE</source>
+      <source>LICENSE.md</source>
       <outputDirectory>/</outputDirectory>
       <fileMode>664</fileMode>
       <lineEnding>unix</lineEnding>

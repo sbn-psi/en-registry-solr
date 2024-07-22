@@ -122,7 +122,6 @@ public class BundleMetExtractor extends Pds4MetExtractor {
       }
       if (!refMap.isEmpty()) {
         for (Map.Entry<String, List<String>> entry : refMap.entrySet()) {
-          log.info("refMap key-value: " + entry.getKey() + " - " + entry.getValue());
           slots.add(new Slot(entry.getKey(), entry.getValue()));
         }
       }

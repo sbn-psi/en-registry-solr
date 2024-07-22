@@ -92,8 +92,7 @@ public class CollectionMetExtractor extends Pds4MetExtractor {
       metadata.addMetadata(Constants.TITLE, trimmedTitle);
     }
     if (!"".equals(objectType)) {
-      log.info(Constants.OBJECT_TYPE + ":" + objectType);
-       metadata.addMetadata(Constants.OBJECT_TYPE, objectType);
+      metadata.addMetadata(Constants.OBJECT_TYPE, objectType);
     }
     if ("".equals(associationType)) {
       throw new MetExtractionException("Could not find the inventory "

@@ -240,24 +240,6 @@ public class Metadata {
   }
 
   /**
-   * Gets all values for give key
-   * 
-   * @param key The key for which all values will be return
-   * @return All values for given key, or null if key does not exist
-   */
-  public List<Slot> getAllMetadataAsSlots(String groupKey) {
-    List<Slot> slots = new ArrayList<Slot>();
-    Metadata group = this.getSubMetadata(groupKey);
-    for (String k : group.getKeys()) {
-      log.info("group key: " + k);
-    }
-    for (String value : group.getValues()) {
-      log.info("group value: " + value);
-    }
-    return slots;
-  }
-
-  /**
    * Gets All key in and below given group
    * 
    * @param group The group in question

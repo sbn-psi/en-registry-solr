@@ -150,7 +150,6 @@ public class Pds4MetExtractor implements MetExtractor {
       }
       if (!refMap.isEmpty()) {
         for (Map.Entry<String, List<String>> entry : refMap.entrySet()) {
-          log.info("refMap: " + entry.getKey());
           slots.add(new Slot(entry.getKey(), entry.getValue()));
         }
       }
@@ -158,9 +157,6 @@ public class Pds4MetExtractor implements MetExtractor {
       throw new MetExtractionException(ExceptionUtils.getRootCauseMessage(e));
     }
     if (!slots.isEmpty()) {
-      for (Slot slot : slots) {
-        log.info("Slot Name: " + slot.getName());
-      }
       metadata.addMetadata(Constants.SLOT_METADATA, slots);
     }
     return metadata;
