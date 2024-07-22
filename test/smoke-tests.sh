@@ -23,11 +23,6 @@ if [ -z "$DATA_HOME" ]; then
   exit 1
 fi
 
-# Cleanup
-$LEGACY_REGISTRY_HOME/bin/registry_legacy_installer_docker.sh uninstall
-check_status $? "[ERROR] Registry Manager Uninstall Failure"
-rm -fr $DATA_HOME/solr-docs
-
 # Install Solr with preconfigured collections
 $LEGACY_REGISTRY_HOME/bin/registry_legacy_installer_docker.sh install
 check_status $? "[ERROR] Registry Manager Install Failure"
