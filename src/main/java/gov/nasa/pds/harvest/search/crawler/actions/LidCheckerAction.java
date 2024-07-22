@@ -3,14 +3,13 @@ package gov.nasa.pds.harvest.search.crawler.actions;
 import java.io.File;
 import java.util.Arrays;
 import java.util.logging.Logger;
-
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerAction;
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionPhases;
-import gov.nasa.jpl.oodt.cas.crawl.structs.exceptions.CrawlerActionException;
-import gov.nasa.jpl.oodt.cas.metadata.Metadata;
 import gov.nasa.pds.harvest.search.constants.Constants;
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
+import gov.nasa.pds.harvest.search.oodt.crawler.CrawlerAction;
+import gov.nasa.pds.harvest.search.oodt.filemgr.CrawlerActionPhases;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.CrawlerActionException;
+import gov.nasa.pds.harvest.search.oodt.metadata.Metadata;
 
 /**
  * Pre-ingest Crawler Action that checks to see if the logical identifier
@@ -40,7 +39,7 @@ public class LidCheckerAction extends CrawlerAction {
    */
   public LidCheckerAction() {
     super();
-    String []phases = {CrawlerActionPhases.PRE_INGEST};
+    String[] phases = {CrawlerActionPhases.PRE_INGEST.getName()};
     setPhases(Arrays.asList(phases));
     setId(ID);
     setDescription(DESCRIPTION);

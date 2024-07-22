@@ -1,8 +1,6 @@
 package gov.nasa.pds.harvest.search.doc;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -10,17 +8,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
-
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-
-import gov.nasa.jpl.oodt.cas.metadata.Metadata;
 import gov.nasa.pds.harvest.search.constants.Constants;
+import gov.nasa.pds.harvest.search.oodt.metadata.Metadata;
 import gov.nasa.pds.harvest.search.stats.HarvestSolrStats;
 import gov.nasa.pds.harvest.search.util.DocWriter;
 import gov.nasa.pds.harvest.search.util.TransactionManager;
@@ -29,12 +22,10 @@ import gov.nasa.pds.registry.model.Slot;
 import gov.nasa.pds.registry.model.wrapper.ExtendedExtrinsicObject;
 import gov.nasa.pds.search.core.exception.SearchCoreException;
 import gov.nasa.pds.search.core.exception.SearchCoreFatalException;
-import gov.nasa.pds.search.core.registry.ProductClassException;
 import gov.nasa.pds.search.core.schema.Field;
 import gov.nasa.pds.search.core.schema.OutputString;
 import gov.nasa.pds.search.core.schema.OutputStringFormat;
 import gov.nasa.pds.search.core.schema.Product;
-import gov.nasa.pds.search.core.util.Debugger;
 
 
 /**
@@ -45,6 +36,8 @@ import gov.nasa.pds.search.core.util.Debugger;
  */
 public class SearchDocGenerator {
 	private static final int SOLR_DOC_THRESHOLD = 1000;
+
+    private static Logger log = Logger.getLogger(SearchDocGenerator.class.getName());
 
 	private File outputDirectory;
 
@@ -158,7 +151,7 @@ public class SearchDocGenerator {
    */
   private Map<String, List<String>> setFieldValues(
       ExtendedExtrinsicObject searchExtrinsic, Product config, Metadata metadata)
-      throws ProductClassException {
+      throws SearchCoreException {
     try {
       Map<String, List<String>> fieldMap = new HashMap<String, List<String>>();
       
@@ -193,7 +186,7 @@ public class SearchDocGenerator {
       return fieldMap;
     } catch (Exception ex) {
       ex.printStackTrace();
-      throw new ProductClassException("Exception "
+      throw new SearchCoreException("Exception "
           + ex.getClass().getName() + ex.getMessage());
     }
   }
@@ -261,12 +254,12 @@ public class SearchDocGenerator {
     for (String registryPath : registryPathList) {
       pathArray = registryPath.split("\\.");
       if (pathArray.length > 1) {
-        Debugger.debug("Traversing registry path - " + searchExtrinsic.getLid()
+        log.fine("Traversing registry path - " + searchExtrinsic.getLid()
             + " - " + registryPath);        
         valueList.addAll(traverseRegistryPath(Arrays.asList(pathArray), 
             Arrays.asList(searchExtrinsic), metadata));
       } else {  // Field is a slot
-        Debugger.debug("Getting slot values - " + searchExtrinsic.getLid()
+        log.fine("Getting slot values - " + searchExtrinsic.getLid()
             + " - " + registryPath);
         valueList.addAll(getValidSlotValues(searchExtrinsic, registryPath));
       }
@@ -297,7 +290,8 @@ public class SearchDocGenerator {
         if (!searchExt.hasValidAssociationValues()) {   
           // If associations have values not are not lidvids
           // We will have to make the lidvids for them
-          Debugger.debug("-- INVALID ASSOCIATION VALUE FOUND for " + searchExt.getLid() + " - " + slotName);
+          log.fine(
+              "INVALID ASSOCIATION VALUE FOUND for " + searchExt.getLid() + " - " + slotName);
           List<String> newSlotValues = new ArrayList<String>();
           ExtendedExtrinsicObject assocSearchExt;
           for(String lid : slotValues) {
@@ -337,6 +331,7 @@ public class SearchDocGenerator {
   private List<String> traverseRegistryPath(List<String> pathList, 
       List<ExtendedExtrinsicObject> searchExtrinsicList, Metadata metadata)
           throws Exception {
+    log.fine("traverseRegistryPath");
     ArrayList<String> newPathList = null;
     if (pathList.size() > 1 && !searchExtrinsicList.isEmpty()) {
       newPathList = new ArrayList<String>();
@@ -347,7 +342,7 @@ public class SearchDocGenerator {
         List<ExtrinsicObject> extrinsics = new ArrayList<ExtrinsicObject>();
         if ("file_ref".equalsIgnoreCase(pathList.get(0))) {
           if (metadata.containsKey("file_ref")) {
-            extrinsics.addAll(metadata.getAllMetadata("file_ref"));
+            extrinsics.addAll(metadata.getAllMetadata(Constants.SLOT_METADATA + "/" + "file_ref"));
           }
         } else if ("collection_ref".equalsIgnoreCase(pathList.get(0))) {
           List<String> refs = searchExtrinsic.getSlotValues("collection_ref");
@@ -398,7 +393,7 @@ public class SearchDocGenerator {
   }
   
   private Map<String, String> setFieldTypes(Product config) 
-      throws ProductClassException {
+      throws SearchCoreException {
     try {
       Map<String, String> typeMap = new HashMap<String, String>();
 
@@ -419,7 +414,7 @@ public class SearchDocGenerator {
       return typeMap;
     } catch (Exception ex) {
       ex.printStackTrace();
-      throw new ProductClassException("Exception "
+      throw new SearchCoreException("Exception "
           + ex.getClass().getName() + ex.getMessage());
     }
   }

@@ -41,7 +41,7 @@
     -->
   <accessUrls harvest:registerFileUrls="false">
     <accessUrl>
-      <baseUrl>http://starbase.jpl.nasa.gov</baseUrl>
+      <baseUrl>http://pds.nasa.gov</baseUrl>
       <offset>$HOME</offset>
     </accessUrl>
   </accessUrls>

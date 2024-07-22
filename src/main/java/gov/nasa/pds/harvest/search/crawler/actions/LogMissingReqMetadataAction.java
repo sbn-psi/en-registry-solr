@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
-
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerAction;
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionPhases;
-import gov.nasa.jpl.oodt.cas.crawl.structs.exceptions.CrawlerActionException;
-import gov.nasa.jpl.oodt.cas.metadata.Metadata;
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
+import gov.nasa.pds.harvest.search.oodt.crawler.CrawlerAction;
+import gov.nasa.pds.harvest.search.oodt.filemgr.CrawlerActionPhases;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.CrawlerActionException;
+import gov.nasa.pds.harvest.search.oodt.metadata.Metadata;
 
 /**
  * Crawler action class that checks to see if the required metadata
@@ -31,7 +30,7 @@ public class LogMissingReqMetadataAction extends CrawlerAction {
         super();
         this.reqMetadata = new ArrayList<String>();
         this.reqMetadata.addAll(reqMetadata);
-        String []phases = {CrawlerActionPhases.PRE_INGEST};
+        String[] phases = {CrawlerActionPhases.PRE_INGEST.getName()};
         setPhases(Arrays.asList(phases));
         setId(ID);
         setDescription(DESCRIPTION);
@@ -41,7 +40,8 @@ public class LogMissingReqMetadataAction extends CrawlerAction {
     public boolean performAction(File product, Metadata productMetadata)
             throws CrawlerActionException {
         boolean passFlag = true;
-        if (productMetadata.getHashtable().isEmpty()) {
+        // if (productMetadata.getHashTable().isEmpty()) {
+        if (productMetadata.getKeys().isEmpty()) {
           return false;
         }
         for (String key : reqMetadata) {

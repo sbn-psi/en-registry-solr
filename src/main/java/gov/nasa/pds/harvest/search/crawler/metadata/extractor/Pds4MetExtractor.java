@@ -9,14 +9,14 @@ import java.util.Map;
 import java.util.logging.Logger;
 import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import gov.nasa.jpl.oodt.cas.metadata.MetExtractor;
-import gov.nasa.jpl.oodt.cas.metadata.MetExtractorConfig;
-import gov.nasa.jpl.oodt.cas.metadata.Metadata;
-import gov.nasa.jpl.oodt.cas.metadata.exceptions.MetExtractionException;
 import gov.nasa.pds.harvest.search.constants.Constants;
 import gov.nasa.pds.harvest.search.inventory.ReferenceEntry;
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.MetExtractionException;
+import gov.nasa.pds.harvest.search.oodt.metadata.MetExtractor;
+import gov.nasa.pds.harvest.search.oodt.metadata.MetExtractorConfig;
+import gov.nasa.pds.harvest.search.oodt.metadata.Metadata;
 import gov.nasa.pds.harvest.search.policy.XPath;
 import gov.nasa.pds.harvest.search.util.LidVid;
 import gov.nasa.pds.harvest.search.util.XMLExtractor;
@@ -57,8 +57,7 @@ public class Pds4MetExtractor implements MetExtractor {
    * @param product A PDS4 xml file
    * @return a class representation of the extracted metadata
    *
-   * @throws MetExtractionException If an error occured while performing
-   * metadata extraction.
+   * @throws MetExtractionException If an error occurred while performing metadata extraction.
    *
    */
   public Metadata extractMetadata(File product)
@@ -151,6 +150,7 @@ public class Pds4MetExtractor implements MetExtractor {
       }
       if (!refMap.isEmpty()) {
         for (Map.Entry<String, List<String>> entry : refMap.entrySet()) {
+          log.info("refMap: " + entry.getKey());
           slots.add(new Slot(entry.getKey(), entry.getValue()));
         }
       }
@@ -158,6 +158,9 @@ public class Pds4MetExtractor implements MetExtractor {
       throw new MetExtractionException(ExceptionUtils.getRootCauseMessage(e));
     }
     if (!slots.isEmpty()) {
+      for (Slot slot : slots) {
+        log.info("Slot Name: " + slot.getName());
+      }
       metadata.addMetadata(Constants.SLOT_METADATA, slots);
     }
     return metadata;

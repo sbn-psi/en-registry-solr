@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_1700.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<Product_Collection xmlns="http://pds.nasa.gov/pds4/pds/v1"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://pds.nasa.gov/pds4/pds/v1 https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_1700.xsd">
+
+  <Identification_Area>
+    <logical_identifier>urn:nasa:pds:a17leamcal:calibration</logical_identifier>
+    <version_id>1.0</version_id>
+    <title>Apollo 17 Lunar Ejecta And Meteorites Experiment Calibration Notebook Collection</title>
+    <information_model_version>1.7.0.0</information_model_version>
+    <product_class>Product_Collection</product_class>
+    <Citation_Information>
+      <author_list>Berg, O.E.; Williams, D.R.; Gaddy, M.</author_list>
+      <editor_list>Williams, D.R.; McLaughlin, S.A.</editor_list>
+      <publication_year>2017</publication_year>
+      <description>This collection contains a digital reproduction of one hand-written laboratory
+      notebook of calibration analysis by Dr. Otto E. Berg for the Apollo 17 Lunar Ejecta And
+      Meteorites (LEAM) Experiment. Dr. Berg used this work along with analyses of data acquired by
+      the Pioneer 8 and 9 Cosmic Dust Detectors, which were identical to LEAM detector, to
+      calibrate the Apollo 17 LEAM data. Dr. Berg was the principal investigator for all three
+      instruments.</description>
+    </Citation_Information>
+    <Modification_History>
+      <Modification_Detail>
+        <modification_date>2015-05-22</modification_date>
+        <version_id>1.0</version_id>
+        <description>Creation.</description>
+      </Modification_Detail>
+    </Modification_History>
+  </Identification_Area>
+  <Context_Area>
+    <Time_Coordinates>
+      <!-- Apollo 17 launch -->
+      <start_date_time>1972-12-07Z</start_date_time>
+      <!-- ALSEP termination date -->
+      <stop_date_time>1977-09-30Z</stop_date_time>
+    </Time_Coordinates>
+    <Primary_Result_Summary>
+      <purpose>Science</purpose>
+      <processing_level>Derived</processing_level>
+      <description>Digital reproduction of one hand-written laboratory notebook of calibration
+      analysis for the Apollo 17 Lunar Ejecta And Meteorites (LEAM) Experiment detector, which was
+      identical to the Pioneer 8 and 9 Cosmic Dust Detectors (CDD).</description>
+    </Primary_Result_Summary>
+    <Investigation_Area>
+      <name>Apollo 17</name>
+      <type>Mission</type>
+      <Internal_Reference>
+        <lid_reference>urn:nasa:pds:context:investigation:mission.apollo_17</lid_reference>
+        <reference_type>collection_to_investigation</reference_type>
+      </Internal_Reference>
+    </Investigation_Area>
+    <Observing_System>
+      <Observing_System_Component>
+        <name>Apollo 17 ALSEP</name>
+        <type>Spacecraft</type>
+        <Internal_Reference>
+          <lid_reference>urn:nasa:pds:context:instrument_host:spacecraft.a17a</lid_reference>
+          <reference_type>is_instrument_host</reference_type>
+        </Internal_Reference>
+      </Observing_System_Component>
+      <Observing_System_Component>
+        <name>Apollo 17 Lunar Ejecta And Meteorites Experiment</name>
+        <type>Instrument</type>
+        <Internal_Reference>
+          <lid_reference>urn:nasa:pds:context:instrument:leam.a17a</lid_reference>
+          <reference_type>is_instrument</reference_type>
+        </Internal_Reference>
+      </Observing_System_Component>
+    </Observing_System>
+    <Target_Identification>
+      <name>Moon</name>
+      <type>Satellite</type>
+      <Internal_Reference>
+        <lid_reference>urn:nasa:pds:context:target:satellite.earth.moon</lid_reference>
+        <reference_type>collection_to_target</reference_type>
+      </Internal_Reference>
+    </Target_Identification>
+    <Target_Identification>
+      <name>Dust</name>
+      <type>Dust</type>
+      <Internal_Reference>
+        <lid_reference>urn:nasa:pds:context:target:dust.dust</lid_reference>
+        <reference_type>collection_to_target</reference_type>
+      </Internal_Reference>
+    </Target_Identification>
+  </Context_Area>
+  <Reference_List>
+    <Internal_Reference>
+      <lid_reference>urn:nasa:pds:context:resource:resource.a17leamcal_online</lid_reference>
+      <reference_type>collection_to_resource</reference_type>
+    </Internal_Reference>
+    <Internal_Reference>
+      <lid_reference>urn:nasa:pds:context:resource:resource.a17leamcal_2_online</lid_reference>
+      <reference_type>collection_to_resource</reference_type>
+    </Internal_Reference>
+    <Internal_Reference>
+      <lid_reference>urn:nasa:pds:a17leamcal:calibration:overview</lid_reference>
+      <reference_type>collection_to_document</reference_type>
+    </Internal_Reference>
+    <Internal_Reference>
+      <lid_reference>urn:nasa:pds:apollodoc:a17doc:a17a_leam_overview</lid_reference>
+      <reference_type>collection_to_document</reference_type>
+      <comment>Overview of the Apollo 17 ALSEP Lunar Ejecta And Meteorites (LEAM)
+      Experiment</comment>
+    </Internal_Reference>
+    <Internal_Reference>
+      <lid_reference>urn:nasa:pds:pioneerdoc:p8doc:p8_cdd_overview</lid_reference>
+      <reference_type>collection_to_document</reference_type>
+      <comment>Overview of the Pioneer 8 Cosmic Dust Detector (CDD); CDD data helped calibration
+      results from the Apollo 17 LEAM instrument, which was identical to the Pioneer CDDs</comment>
+    </Internal_Reference>
+    <Internal_Reference>
+      <lid_reference>urn:nasa:pds:pioneerdoc:p9doc:p9_cdd_overview</lid_reference>
+      <reference_type>collection_to_document</reference_type>
+      <comment>Overview of the Pioneer 9 Cosmic Dust Detector (CDD); CDD data helped calibration
+      results from the Apollo 17 LEAM instrument, which was identical to the Pioneer CDDs</comment>
+    </Internal_Reference>
+    <Internal_Reference>
+      <lid_reference>urn:nasa:pds:pioneer89cdd:calibration</lid_reference>
+      <reference_type>collection_to_calibration</reference_type>
+      <comment>This collection contains digital reproductions of two hand-written laboratory
+      notebooks of calibration analyses by Dr. Otto E. Berg for the Pioneer 8 and 9 Cosmic Dust
+      Detectors (CDD).</comment>
+    </Internal_Reference>
+    <External_Reference>
+      <reference_text>Apollo 17 Preliminary Science Report, NASA SP-330, published by NASA,
+      Washington, D.C., 1973.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <reference_text>Apollo Scientific Experiments Data Handbook, NASA Technical Memorandum
+      X-58131, JSC-09166, published by NASA Johnson Space Center, Houston, Texas, Aug. 1974
+      (revised Apr. 1976).</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <reference_text>Auer, S. and O.E. Berg, Levitated lunar surface dust as evidenced by the LEAM
+      experiment, In: Proceedings of European Planetary Science Congress 2008; Proceedings of the
+      conference held 21-25 September 2008 in Munster, Germany, p. 705, 2008.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <reference_text>Bates, J.R., W.W. Lauderdale, and H. Kernaghan, ALSEP Termination Report,
+      NASA Reference Publication Series, NASA RF-1036, published by NASA Johnson Space Center,
+      Houston, Texas, Apr. 1979.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <doi>10.1029/GL001i007p00289</doi>
+      <reference_text>Berg, O.E., F.F. Richardson, J.W. Rhee and S. Auer, Preliminary results of a
+      cosmic dust experiment on the moon, Geophysical Research Letters, Volume 1, Issue 7, pp.
+      289-290, 1974.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <doi>10.1007/3-540-07615-8_486B</doi>
+      <reference_text>Berg, O.E., H. Wolf and J. Rhee, Lunar Soil Movement Registered by the Apollo
+      17 Cosmic Dust Experiment, In: Elsasser H., Fechting H. (eds); Interplanetary Dust and
+      Zodiacal Light, Lecture Notes in Physics, Volume 48, Springer, Berlin, Heidelberg,
+      1976.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <doi>10.1029/1999JE001165</doi>
+      <reference_text>Davies, M.E., and T.R. Colvin, Lunar coordinates in the regions of the Apollo
+      landers, Journal of Geophysical Research, Volume 105, Issue E8, pages 20,227-20,280,
+      2000.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <doi>10.1016/j.pss.2011.04.005</doi>
+      <reference_text>Grun, E., M. Horanyi and Z. Sternovsky, The lunar dust environment, Planetary
+      and Space Science, Volume 59, Issue 14, pp. 1672-1680, 2011.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <doi>10.1016/j.pss.2013.10.005</doi>
+      <reference_text>Grun, E. and M. Horanyi, A new look at Apollo 17 LEAM data: Nighttime dust
+      activity in 1976, Planetary and Space Science, Volume 89, pp. 2-14, 2013.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <doi>10.1016/j.pss.2011.04.016</doi>
+      <reference_text>O'Brien, B.J., Review of measurements of dust movements on the Moon during
+      Apollo, Planetary and Space Science, Volume 59, Issue 14, pp. 1708-1726,
+      2011.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <reference_text>Perkins, D.H., Final Report - Analysis of LEAM experiment response to charged
+      particles, NASA-CR-147872, NASA contract no. NAS9-14751, Bendix Aerospace Systems Division, BSR
+      4234, 1976.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <reference_text>Rhee, J.W., O.E. Berg and H. Wolf, Electrostatic dust transport and Apollo 17
+      LEAM experiment, In: Space research XVII; Proceedings of the Open Meetings of Working Groups
+      on Physical Sciences, June 8-19, 1976 and Symposium on Minor Constituents and Excited
+      Species, Philadelphia, Pa., June 9, 10, 1976. (A78-18101 05-42) Oxford and New York, Pergamon
+      Press, pp. 627-629, 1977.</reference_text>
+    </External_Reference>
+    <External_Reference>
+      <reference_text>Tomandl, D.A. and O.E. Berg, An upper limit for the flux of interstellar dust
+      grains in the solar system, In: Space research XVII; Proceedings of the Open Meetings of
+      Working Groups on Physical Sciences, June 8-19, 1976 and Symposium on Minor Constituents and
+      Excited Species, Philadelphia, Pa., June 9, 10, 1976. (A78-18101 05-42) Oxford and New York,
+      Pergamon Press, pp. 631-635, 1977.</reference_text>
+    </External_Reference>
+  </Reference_List>
+  <Collection>
+    <collection_type>Calibration</collection_type>
+  </Collection>
+  <File_Area_Inventory>
+    <File>
+      <file_name>collection_calibration_inventory.csv</file_name>
+    </File>
+    <Inventory>
+      <offset unit="byte">0</offset>
+      <parsing_standard_id>PDS DSV 1</parsing_standard_id>
+      <records>4</records>
+      <record_delimiter>Carriage-Return Line-Feed</record_delimiter>
+      <field_delimiter>Comma</field_delimiter>
+      <Record_Delimited>
+        <fields>2</fields>
+        <groups>0</groups>
+        <Field_Delimited>
+          <name>Member Status</name>
+          <field_number>1</field_number>
+          <data_type>ASCII_String</data_type>
+          <maximum_field_length unit="byte">1</maximum_field_length>
+          <field_format>%1s</field_format>
+        </Field_Delimited>
+        <Field_Delimited>
+          <name>LIDVID_LID</name>
+          <field_number>2</field_number>
+          <data_type>ASCII_LIDVID_LID</data_type>
+          <maximum_field_length unit="byte">255</maximum_field_length>
+          <field_format>%-255s</field_format>
+        </Field_Delimited>
+      </Record_Delimited>
+      <reference_type>inventory_has_member_product</reference_type>
+    </Inventory>
+  </File_Area_Inventory>
+</Product_Collection>

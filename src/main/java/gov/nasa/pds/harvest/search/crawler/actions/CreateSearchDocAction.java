@@ -4,22 +4,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
-
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerAction;
-import gov.nasa.jpl.oodt.cas.crawl.action.CrawlerActionPhases;
-import gov.nasa.jpl.oodt.cas.crawl.structs.exceptions.CrawlerActionException;
-import gov.nasa.jpl.oodt.cas.metadata.Metadata;
 import gov.nasa.pds.harvest.search.constants.Constants;
 import gov.nasa.pds.harvest.search.doc.SearchDocGenerator;
 import gov.nasa.pds.harvest.search.doc.SearchDocState;
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
+import gov.nasa.pds.harvest.search.oodt.crawler.CrawlerAction;
+import gov.nasa.pds.harvest.search.oodt.filemgr.CrawlerActionPhases;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.CrawlerActionException;
+import gov.nasa.pds.harvest.search.oodt.metadata.Metadata;
 import gov.nasa.pds.harvest.search.util.Utility;
 import gov.nasa.pds.registry.model.ExtrinsicObject;
 import gov.nasa.pds.registry.model.Slot;
@@ -33,6 +30,8 @@ import gov.nasa.pds.search.core.exception.SearchCoreFatalException;
  *
  */
 public class CreateSearchDocAction extends CrawlerAction {
+
+  private static Logger log = Logger.getLogger(CreateSearchDocAction.class.getName());
 
   /** The crawler action identifier. */
   private final static String ID = "CreateSearchDocAction";
@@ -49,8 +48,8 @@ public class CreateSearchDocAction extends CrawlerAction {
   
   public CreateSearchDocAction(File configDir, File outputDir, SearchDocState searchDocState)
           throws SearchCoreException, SearchCoreFatalException {
-    generator = new SearchDocGenerator(configDir, outputDir);
-    String []phases = {CrawlerActionPhases.POST_INGEST_SUCCESS};
+    this.generator = new SearchDocGenerator(configDir, outputDir);
+    String[] phases = {CrawlerActionPhases.POST_INGEST_SUCCESS.getName()};
     setPhases(Arrays.asList(phases));
     setId(ID);
     setDescription(DESCRIPTION);
@@ -63,7 +62,7 @@ public class CreateSearchDocAction extends CrawlerAction {
       throws CrawlerActionException {
     try {
       ExtrinsicObject extrinsic = createProduct(productMetadata, product);
-      generator.generate(extrinsic, productMetadata, this.searchDocState);
+      this.generator.generate(extrinsic, productMetadata, this.searchDocState);
       String lidvid = extrinsic.getLid() + "::" + extrinsic.getSlot(
           Constants.PRODUCT_VERSION).getValues().get(0);
       LOG.log(new ToolsLogRecord(ToolsLevel.SUCCESS, 
@@ -90,12 +89,11 @@ public class CreateSearchDocAction extends CrawlerAction {
   private ExtrinsicObject createProduct(Metadata metadata, File prodFile) {
     ExtrinsicObject product = new ExtrinsicObject();
     Set<Slot> slots = new HashSet<Slot>();
-    Set metSet = metadata.getHashtable().entrySet();
-    for (Iterator i = metSet.iterator(); i.hasNext();) {
-      Map.Entry entry = (Map.Entry) i.next();
-      String key = entry.getKey().toString();
+    List<String> keys = metadata.getAllKeys();
+    for (String key : keys) {
       if (key.equals(Constants.REFERENCES)
           || key.equals(Constants.INCLUDE_PATHS) 
+          || key.equals(Constants.SLOT_METADATA)
           || key.equals("file_ref")) {
         continue;
       }
@@ -111,8 +109,15 @@ public class CreateSearchDocAction extends CrawlerAction {
              Constants.OBJECT_TYPE));
       } else if (key.equals(Constants.TITLE)) {
         product.setName(metadata.getMetadata(Constants.TITLE));
-      } else if (key.equals(Constants.SLOT_METADATA)) {
-        slots.addAll(metadata.getAllMetadata(Constants.SLOT_METADATA));
+      } else if (key.startsWith(Constants.SLOT_METADATA)) {
+        if (key.split("/")[1].equals("instrument_name")) {
+          for (Object obj : metadata.getAllMetadata(key)) {
+            log.info("instrument_name: " + (String) obj);
+          }
+        }
+        slots.add(new Slot(key.split("/")[1], metadata.getAllMetadata(key)));
+      } else if (key.startsWith("file_ref")) {
+        slots.add(new Slot(key.replace("/", "_"), metadata.getAllMetadata(key)));
       } else {
         LOG.log(new ToolsLogRecord(ToolsLevel.WARNING,
             "Creating unexpected slot: " + key, prodFile));

@@ -1,9 +1,7 @@
 package gov.nasa.pds.harvest.search.registry;
 
 import javax.xml.xpath.XPathExpression;
-
 import org.w3c.dom.Document;
-
 import gov.nasa.pds.harvest.search.util.XPathUtils;
 
 public class BaseExtractor

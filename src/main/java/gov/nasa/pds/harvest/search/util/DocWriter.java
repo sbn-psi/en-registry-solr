@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-
 import org.apache.commons.lang.StringEscapeUtils;
-
+import gov.nasa.pds.search.core.exception.InvalidDatetimeException;
 import gov.nasa.pds.search.core.logging.ToolsLevel;
 import gov.nasa.pds.search.core.logging.ToolsLogRecord;
-import gov.nasa.pds.search.core.util.InvalidDatetimeException;
 import gov.nasa.pds.search.core.util.PDSDateConvert;
 
 public class DocWriter 

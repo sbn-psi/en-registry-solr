@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import gov.nasa.jpl.oodt.cas.metadata.Metadata;
-import gov.nasa.jpl.oodt.cas.metadata.exceptions.MetExtractionException;
 import gov.nasa.pds.harvest.search.constants.Constants;
 import gov.nasa.pds.harvest.search.inventory.InventoryEntry;
 import gov.nasa.pds.harvest.search.inventory.InventoryReaderException;
@@ -15,6 +13,8 @@ import gov.nasa.pds.harvest.search.inventory.InventoryTableReader;
 import gov.nasa.pds.harvest.search.inventory.ReferenceEntry;
 import gov.nasa.pds.harvest.search.logging.ToolsLevel;
 import gov.nasa.pds.harvest.search.logging.ToolsLogRecord;
+import gov.nasa.pds.harvest.search.oodt.filemgr.exceptions.MetExtractionException;
+import gov.nasa.pds.harvest.search.oodt.metadata.Metadata;
 import gov.nasa.pds.harvest.search.util.LidVid;
 import gov.nasa.pds.registry.model.Slot;
 import net.sf.saxon.tree.tiny.TinyElementImpl;
@@ -92,6 +92,7 @@ public class CollectionMetExtractor extends Pds4MetExtractor {
       metadata.addMetadata(Constants.TITLE, trimmedTitle);
     }
     if (!"".equals(objectType)) {
+      log.info(Constants.OBJECT_TYPE + ":" + objectType);
        metadata.addMetadata(Constants.OBJECT_TYPE, objectType);
     }
     if ("".equals(associationType)) {
@@ -164,14 +165,14 @@ public class CollectionMetExtractor extends Pds4MetExtractor {
         for (ReferenceEntry entry : refEntries) {
           String value = "";
           if (!entry.hasVersion()) {
-            log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Setting "
+            log.log(new ToolsLogRecord(ToolsLevel.INFO, "Setting "
                 + "LID-based association, \'" + entry.getLogicalID()
                 + "\', under slot name \'" + entry.getType()
                 + "\'.", product));
             value = entry.getLogicalID();
           } else {
             String lidvid = entry.getLogicalID() + "::" + entry.getVersion();
-            log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Setting "
+            log.log(new ToolsLogRecord(ToolsLevel.INFO, "Setting "
                 + "LIDVID-based association, \'" + lidvid
                 + "\', under slot name \'" + entry.getType()
                 + "\'.", product));
