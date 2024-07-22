@@ -67,7 +67,7 @@ jobs:
                     pwd
                     mvn install
                     tar -xvzf harvest-legacy/target/harvest-legacy-*-bin.tar.gz
-                    tar -xvzf registry-mgr/target/registry-mgr-*-bin.tar.gz
+                    tar -xvzf registry-mgr-legacy/target/registry-mgr-legacy-*-bin.tar.gz
                     tar -xvzf catalog-legacy/target/catalog-legacy-*-bin.tar.gz
 
             -
