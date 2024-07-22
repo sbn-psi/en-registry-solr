@@ -298,10 +298,7 @@ public class FileObjectRegistrationAction extends CrawlerAction {
     if (!fileObject.getAccessUrls().isEmpty()) {
       slots.add(new Slot(Constants.ACCESS_URLS, fileObject.getAccessUrls()));
     }
-    // for (Iterator i = sourceMet.getHashTable().entrySet().iterator();
-    // i.hasNext();) {
-    // Map.Entry entry = (Map.Entry) i.next();
-    // String key = entry.getKey().toString();
+
     for (String key : metadata.getKeys()) {
       if (key.equals("dd_version_id")
           || key.equals("std_ref_version_id")) {
