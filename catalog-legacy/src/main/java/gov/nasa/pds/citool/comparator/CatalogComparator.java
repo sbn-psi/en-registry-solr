@@ -74,16 +74,6 @@ public class CatalogComparator {
                         "compare.target.missingStatement",
                         ProblemType.MISSING_ID,
                         arguments));
-/*
-                log.log(new ToolsLogRecord(CIToolLevel.SEVERE,
-                        "Element " + source.getIdentifier() + " not present in target",
-                        target.getFilename()));
-
-                log.log(new ToolsLogRecord(CIToolLevel.SEVERE_NOTIFY, "Source",
-                        source.getFilename(), target.getFilename(),
-                        source.getLineNumber()));
-                hasEqualAttributes = false;
-*/
             }
             else {
                 if (!source.equals(targetAttribute)) {
@@ -99,15 +89,6 @@ public class CatalogComparator {
                             "compare.nonMatchingValues", diffRecords,
                             arguments);
                     problems.add(de);
-/*
-                    log.log(new ToolsLogRecord(CIToolLevel.SEVERE,
-                            "Element " + targetAttribute.getIdentifier() + " has different value than source",
-                            targetAttribute.getFilename(),
-                            targetAttribute.getLineNumber()));
-                    log.log(new ToolsLogRecord(CIToolLevel.SEVERE_NOTIFY, "Source",
-                            source.getFilename(), targetAttribute.getFilename(),
-                            source.getLineNumber()));
-*/
                 }
                 targetAttributes.remove(targetAttribute);
             }
@@ -119,11 +100,6 @@ public class CatalogComparator {
                     t.getLineNumber(), null,
                     "compare.source.missingStatement", ProblemType.MISSING_ID,
                     arguments));
-/*
-            log.log(new ToolsLogRecord(CIToolLevel.SEVERE,
-                    "Element " + t.getIdentifier() + " not present in source",
-                    t.getFilename(), t.getLineNumber()));
-*/
         }
         return problems;
     }
@@ -162,15 +138,6 @@ public class CatalogComparator {
                         "compare.target.missingStatement",
                         ProblemType.MISSING_ID,
                         arguments));
-/*
-                log.log(new ToolsLogRecord(CIToolLevel.SEVERE,
-                        "Pointer " + source.getIdentifier() + " not present in target",
-                        target.getFilename()));
-
-                log.log(new ToolsLogRecord(CIToolLevel.SEVERE_NOTIFY, "Source",
-                        source.getFilename(), target.getFilename(),
-                        source.getLineNumber()));
-*/
             }
             else {
                 if (!source.equals(targetPointer)) {
@@ -186,19 +153,6 @@ public class CatalogComparator {
                             "compare.nonMatchingValues", diffRecords,
                             arguments);
                     problems.add(de);
-/*
-                    log.log(new ToolsLogRecord(CIToolLevel.SEVERE,
-                            "Pointer " + targetPointer.getIdentifier() + " has different value than source",
-                            targetPointer.getFilename(),
-                            targetPointer.getLineNumber()));
-                    log.log(new ToolsLogRecord(CIToolLevel.SEVERE_NOTIFY, "Source",
-                            source.getFilename(), targetPointer.getFilename(),
-                            source.getLineNumber()));
-
-                    DiffLogger.logRecord(CIToolLevel.DIFF, diffRecords, targetPointer.getFilename());
-
-                    hasEqualPointers = false;
-*/
                 }
                 targetPointers.remove(targetPointer);
             }
@@ -210,11 +164,6 @@ public class CatalogComparator {
                     t.getLineNumber(), null,
                     "compare.source.missingStatement", ProblemType.MISSING_ID,
                     arguments));
-/*
-            log.log(new ToolsLogRecord(CIToolLevel.SEVERE,
-                    "Pointer " + t.getIdentifier() + " not present in source",
-                    t.getFilename(), t.getLineNumber()));
-*/
         }
         return problems;
     }
@@ -288,14 +237,6 @@ public class CatalogComparator {
                                 "compare.target.missingStatement",
                                 ProblemType.MISSING_ID,
                                 arguments));
-/*
-                        log.log(new ToolsLogRecord(CIToolLevel.SEVERE,
-                            "Object " + source.getIdentifier() + " not present in target",
-                            target.getFilename()));
-                        log.log(new ToolsLogRecord(CIToolLevel.SEVERE_NOTIFY, "Source",
-                            source.getFilename(), target.getFilename(),
-                            source.getLineNumber()));
-*/
                     }
                 }
             }
@@ -307,12 +248,6 @@ public class CatalogComparator {
                     t.getLineNumber(), null,
                     "compare.source.missingStatement", ProblemType.MISSING_ID,
                     arguments));
-/*
-            log.log(new ToolsLogRecord(CIToolLevel.SEVERE,
-                    "Object " + t.getIdentifier() + " not present in source",
-                    t.getFilename(),
-                    t.getLineNumber()));
-*/
         }
         return problems;
     }

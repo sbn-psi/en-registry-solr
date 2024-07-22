@@ -178,24 +178,5 @@ public class CIToolComparator {
             report.recordSkip(uri, e);
         }
         return label;
-/*
-        LabelParserFactory factory = LabelParserFactory.getInstance();
-        LabelParser parser = factory.newLabelParser(LabelParser.CATALOG);
-        parser.getProperties().setProperty("parser.pointers", "false");
-        Label label = null;
-
-        try {
-            label = parser.parse(url);
-        } catch (ParseException p) {
-            label = new Label();
-            label.setStatus(Label.SKIP);
-            label.incrementWarnings();
-        } catch (IOException io) {
-            label = new Label();
-            label.setStatus(Label.SKIP);
-            label.incrementWarnings();
-        }
-        return label;
-*/
     }
 }
