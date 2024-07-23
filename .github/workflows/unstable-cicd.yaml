@@ -72,8 +72,9 @@ jobs:
                 uses: NASA-PDS/roundup-action@stable
                 with:
                     assembly: unstable
+                    maven-build-phases: install
                     maven-doc-phases: package,site,site:stage,-DskipTests
-                    maven-unstable-artifact-phases: clean,site,install,deploy,-DskipTests
+                    maven-unstable-artifact-phases: clean,site,deploy,-DskipTests
                     packages: openjdk17-jdk
                 env:
                     ossrh_username: ${{secrets.OSSRH_USERNAME}}
