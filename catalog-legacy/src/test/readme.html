@@ -1,0 +1,120 @@
+<html>
+
+<head>
+<style>
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+pre {
+    background-color: #eeeeee;
+    padding: 5px;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 5px;
+}
+
+td { 
+  border: solid;
+  border-width: 1px;
+  padding: 5px 10px;
+}
+
+</style>
+</head>
+
+<body>
+<h1>Manual Testing Instructions</h1>
+
+<h2>Prerequisites</h2>
+
+<h3>Build and Install Catalog Tool</h3>
+<ul>
+<li>
+Build the Catalog tool by running
+<pre>
+mvn package
+</pre>
+</li>
+<li>
+Extract generated <i>target/catalog-2.0.0-bin.zip</i> or tar archive into a folder, for example, <i>/tmp</i>.
+</li>
+</ul>
+
+<h3>Solr Server</h3>
+<ul>
+<li>You need Solr 7.x running in cloud mode.</li>
+<li>Solr server should have <i>.system</i> and <i>pds</i> collections.</li>
+<li>See Harvest tool documentation for instructions on installing and configuring Solr server.</li>
+<li>By default, the Catalog tool will use <i>http://localhost:8983/solr</i> server. 
+You can change <i>pds.registry</i> property in <i>catalog/bin/catalog(.bat)</i> file to point to another Solr server.</li>
+</ul>
+
+
+<h3>Test Data</h3>
+<ul>
+<li>
+You can find some test PDS3 data in <i>/pds4-java/ingest/catalog/src/test/resources/data</i> folder.
+More data is available at PDS nodes. For example, <i>https://pds-imaging.jpl.nasa.gov/data/</i>
+or <i>https://pdssbn.astro.umd.edu/holdings/</i>.
+</li>
+<li>
+To test data set <i>resource_ref</i> field, you will need resource data 
+ingested into Solr <i>pds</i> collection. Some resource XML files are in 
+<i>/pds4-java/ingest/catalog/src/test/resources/data</i> folder. You can find more resource data
+at <i>https://starbase.jpl.nasa.gov/pds4/context-pds3/resource/Product/</i>. 
+</li>
+<li>
+If you don't want to run Harvest to ingest resource data, you can manually create resource documents in Solr with the
+minimal set of fields by running the following command in Solr admin UI.
+<pre>
+&lt;add&gt;
+&lt;doc&gt;
+    &lt;field name="lid"&gt;urn:nasa:pds:context_pds3:resource:resource.ear-j-sa-hsotp-2-edr-sl9-v1.0__browserp_ear-j-sa-hsotp-2-edr-sl9-v1.0&lt;/field&gt;
+    &lt;field name="search_id"&gt;urn:nasa:pds:context_pds3:resource:resource.ear-j-sa-hsotp-2-edr-sl9-v1.0__browserp_ear-j-sa-hsotp-2-edr-sl9-v1.0&lt;/field&gt;
+    &lt;field name="data_class"&gt;Resource&lt;/field&gt;
+&lt;/doc&gt;
+&lt;/add&gt;
+</pre>
+</li>
+</ul>
+
+<h2>Testing</h2>
+<ul>
+<li>
+Run catalog tool. For example,
+<pre>
+/tmp/catalog-2.0.0/bin/catalog /tmp/data/ear-j_sa-hsotp-2-edr-sl9-v1.0 \
+-m ingest \
+-C /tmp/catalog-2.0.0/search-conf/defaults/pds/ \
+-o /tmp
+</pre>
+Where
+<table>
+<tr><td>/tmp/data/ear-j_sa-hsotp-2-edr-sl9-v1.0</td><td>A catalog volume directory.</td></tr>
+<tr><td>-m ingest</td><td>Ingest command.</td></tr>
+<tr><td>-C /tmp/catalog-2.0.0/search-conf/defaults/pds/</td><td>Search configuration directory.</td></tr>
+<tr><td>-o /tmp</td><td>Output directory for Solr documents.</td></tr>
+</table>
+</li>
+<li>
+If there are no errors, output folder should contain <i>usa_nasa_pds_sl9_10xx__sl9_1018.solr.xml</i> 
+file with Solr documents. 
+</li>
+<li>
+Run Solr post tool to ingest the documents. Note, there is no <i>post.cmd</i> on Windows.
+<pre>
+$SOLR_HOME/bin/post -c pds /tmp/usa_nasa_pds_sl9_10xx__sl9_1018.solr.xml
+</pre>
+</li>
+<li>
+Compare Solr documents in PROD (https://pds.nasa.gov/services/search/search?wt=json&amp;q=...) and your 
+server (http://localhost:8983/solr/pds/select?wt=json&amp;q=...).
+</li>
+</ul>
+
+</body>
+</html>

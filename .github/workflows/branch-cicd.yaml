@@ -43,7 +43,6 @@ jobs:
                     lfs: true
                     fetch-depth: 0
                     token: ${{secrets.ADMIN_GITHUB_TOKEN || github.token}}
-                    path: registry-harvest-legacy
             -
                 name: 💵 Maven Cache
                 uses: actions/cache@v4
@@ -63,43 +62,27 @@ jobs:
                     distribution: 'adopt'
                     java-version: ${{matrix.java-version}}
             -
-                name: 🩺 Test, Build, and Unpack Harvest Software
+                name: 🩺 Test, Build, and Unpack Software
                 run: |
                     pwd
-                    cd registry-harvest-legacy
-                    mvn test package
-                    cd $GITHUB_WORKSPACE
-                    tar -xvzf registry-harvest-legacy/target/harvest-legacy-*-bin.tar.gz
-
-            -
-                name: 💳 Checkout Registry Manager Repo
-                uses: actions/checkout@v4
-                with:
-                    repository: NASA-PDS/registry-mgr-legacy
-                    lfs: true
-                    fetch-depth: 0
-                    token: ${{secrets.ADMIN_GITHUB_TOKEN || github.token}}
-                    path: registry-mgr-legacy
-
-            -
-                name: Build Registry Manager
-                run: |
-                    pwd
-                    cd registry-mgr-legacy
-                    mvn clean package
-                    cd $GITHUB_WORKSPACE
+                    mvn install
+                    tar -xvzf harvest-legacy/target/harvest-legacy-*-bin.tar.gz
                     tar -xvzf registry-mgr-legacy/target/registry-mgr-legacy-*-bin.tar.gz
+                    tar -xvzf catalog-legacy/target/catalog-legacy-*-bin.tar.gz
 
             -
                 name: 🩺 Run Smoke Tests
                 run: |
                     echo "Prep environment"
-                    cd $GITHUB_WORKSPACE
-                    mkdir registry-data
-                    export DATA_HOME=$GITHUB_WORKSPACE/registry-data
-                    export LEGACY_REGISTRY_HOME=$GITHUB_WORKSPACE/registry-mgr-legacy-*/
-                    export LEGACY_HARVEST_HOME=$GITHUB_WORKSPACE/harvest-legacy-*/
-                    cd registry-harvest-legacy/test
+                    export DATA_HOME=/registry-data
+                    sudo mkdir $DATA_HOME
+                    sudo chown 8983:8983 $DATA_HOME
+                    sudo chmod 777 $DATA_HOME
+
+                    export LEGACY_REGISTRY_HOME=$(pwd)/registry-mgr-legacy-*/
+                    export LEGACY_HARVEST_HOME=$(pwd)/harvest-legacy-*/
+                    export LEGACY_CATALOG_HOME=$(pwd)/catalog-legacy-*/
+                    cd test
                     ./smoke-tests.sh
 
 ...
