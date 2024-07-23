@@ -75,6 +75,7 @@ jobs:
                 run: |
                     echo "Prep environment"
                     mkdir registry-data
+                    sudo chown 8983:8983 registry-data
                     export DATA_HOME=$(pwd)/registry-data
                     export LEGACY_REGISTRY_HOME=$(pwd)/registry-mgr-legacy-*/
                     export LEGACY_HARVEST_HOME=$(pwd)/harvest-legacy-*/
