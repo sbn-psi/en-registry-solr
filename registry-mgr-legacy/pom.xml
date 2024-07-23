@@ -11,7 +11,7 @@
     <version>3.2.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>gov.nasa.pds</groupId>
+  <groupId>gov.nasa.pds.registry-legacy</groupId>
   <artifactId>registry-mgr-legacy</artifactId>
   <version>2.5.0-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -40,6 +40,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <phase>validate</phase>
@@ -60,6 +61,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.2</version>
         <configuration>
           <archive>
             <manifest>
@@ -71,6 +73,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.7.1</version>
         <executions>
           <execution>
             <id>bin-release</id>
@@ -107,16 +110,6 @@
       </plugin>
     </plugins> 
   </build>
-
-  <scm>
-    <url>https://github.com/NASA-PDS/registry-mgr-legacy</url>
-    <connection>scm:git:git://github.com/NASA-PDS/registry-mgr-legacy.git</connection>
-    <developerConnection>scm:git:git@github.com:NASA-PDS/registry-mgr-legacy.git</developerConnection>
-  </scm>
-  
-  <properties>
-    <solr.version>9.6.0</solr.version>
-  </properties>
 
   <dependencies>
     <dependency>

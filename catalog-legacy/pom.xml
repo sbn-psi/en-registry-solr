@@ -46,6 +46,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.2</version>
         <configuration>
           <archive>
             <manifest>
@@ -56,12 +57,10 @@
           </archive>
         </configuration>
       </plugin>
-
-<!--
-      kelly 2023-09-13; I did not comment this out:
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <phase>validate</phase>
@@ -79,10 +78,10 @@
           <doUpdate>false</doUpdate>
         </configuration>
       </plugin>
--->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.7.1</version>
         <executions>
           <execution>
             <id>bin-release</id>
@@ -130,7 +129,6 @@
       <version>2.3.5</version>
     </dependency>
 
-    <!-- I guess for some IDE users (Eclipse?) this is implicit? -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>

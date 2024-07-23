@@ -19,13 +19,7 @@
   <description>
     The Legacy Harvest Tool provides functionality for capturing and indexing product metadata. The tool will run locally at the Discipline Node to crawl the local data repository in order to discover products and index associated metadata with the Search Service.
   </description>
-  <url>https://nasa-pds-incubator.github.io/harvest/</url>
-
-  <inceptionYear>2010</inceptionYear>
-
-  <organization>
-    <name>California Institute of Technology</name>
-  </organization>
+  
 
   <licenses>
     <license>
@@ -33,13 +27,6 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
-  
-  <properties>
-    <oodt-version>0.12</oodt-version>
-    <search-version>2.1.0-SNAPSHOT</search-version>
-    <product-tools-version>4.4.0</product-tools-version>
-    <solr.version>9.6.0</solr.version>
-  </properties>
 
   <build>
     <resources>
@@ -75,6 +62,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.2</version>
         <configuration>
           <archive>
             <manifest>
@@ -88,6 +76,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.7.1</version>
         <executions>
           <execution>
             <id>bin-release</id>
@@ -105,8 +94,9 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>buildnumber-maven-plugin</artifactId>
+	    <version>3.2.0</version>
         <executions>
           <execution>
             <phase>validate</phase>
@@ -123,15 +113,6 @@
           </items>
           <doCheck>false</doCheck>
           <doUpdate>false</doUpdate>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>4.0.0-M15</version>
-        <configuration>
-          <skip>false</skip>  <!-- This is `true` in parent pom -->
-          <skipDeploy>false</skipDeploy>  <!-- This is `true` in parent pom -->
         </configuration>
       </plugin>
       <plugin>
@@ -154,12 +135,6 @@
       </plugin>
     </plugins>
   </build>
-
-  <scm>
-    <url>https://github.com/NASA-PDS/harvest/tree/main</url>
-    <connection>scm:git:git://github.com/NASA-PDS/registry-harvest-legacy.git</connection>
-    <developerConnection>scm:git:ssh://github.com:NASA-PDS/registry-harvest-legacy.git</developerConnection>
-  </scm>
 
   <repositories>
     <repository>
