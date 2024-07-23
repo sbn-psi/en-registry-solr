@@ -74,9 +74,11 @@ jobs:
                 name: 🩺 Run Smoke Tests
                 run: |
                     echo "Prep environment"
-                    mkdir registry-data
-                    sudo chown 8983:8983 registry-data
-                    export DATA_HOME=$(pwd)/registry-data
+                    export DATA_HOME=/registry-data
+                    mkdir $DATA_HOME
+                    sudo chown 8983:8983 $DATA_HOME
+                    sudo chmod 777 $DATA_HOME
+
                     export LEGACY_REGISTRY_HOME=$(pwd)/registry-mgr-legacy-*/
                     export LEGACY_HARVEST_HOME=$(pwd)/harvest-legacy-*/
                     export LEGACY_CATALOG_HOME=$(pwd)/catalog-legacy-*/
