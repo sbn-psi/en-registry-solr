@@ -209,7 +209,7 @@
     <dependency>
       <groupId>gov.nasa.pds</groupId>
       <artifactId>pds3-product-tools</artifactId>
-      <version>${product-tools-version}</version>
+      <version>4.4.0</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
@@ -221,7 +221,7 @@
     <dependency>
       <artifactId>solr-core</artifactId>
       <groupId>org.apache.solr</groupId>
-      <version>${solr.version}</version>
+      <version>9.6.0</version>
       <type>jar</type>
       <scope>compile</scope>
       <exclusions>
@@ -234,7 +234,7 @@
     <dependency>
       <artifactId>solr-solrj</artifactId>
       <groupId>org.apache.solr</groupId>
-      <version>${solr.version}</version>
+      <version>9.6.0</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
