@@ -44,8 +44,8 @@
 	        <artifactId>maven-site-plugin</artifactId>
 	        <version>4.0.0-M15</version>
 	        <configuration>
-	          <skip>true</skip> <!-- skipping site build for now -->
-	          <skipDeploy>true</skipDeploy>
+	          <skip>false</skip> <!-- skipping site build for now -->
+	          <skipDeploy>false</skipDeploy>
 	        </configuration>
 	      </plugin>
 	   </plugins>
