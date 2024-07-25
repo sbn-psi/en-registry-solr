@@ -148,7 +148,7 @@ public abstract class ProductCrawler extends ProductCrawlerBean {
 
     // Check if ingest has been turned off.
     if (isSkipIngest()) {
-      LOG.log(Level.INFO, "Skipping ingest of product: [" + product.getAbsolutePath() + "]");
+      LOG.log(Level.FINE, "Skipping ingest of product: [" + product.getAbsolutePath() + "]");
       return createIngestStatus(product, IngestStatus.Result.SKIPPED, "Crawler ingest turned OFF");
     }
 
@@ -157,7 +157,7 @@ public abstract class ProductCrawler extends ProductCrawlerBean {
 
     // On Successful Ingest.
     if (ingestSuccess) {
-      LOG.log(Level.INFO, "Successful ingest of product: [" + product.getAbsolutePath() + "]");
+      LOG.log(Level.FINE, "Successful ingest of product: [" + product.getAbsolutePath() + "]");
       performPostIngestOnSuccessActions(product, productMetadata);
       return createIngestStatus(product, IngestStatus.Result.SUCCESS, "Ingest was successful");
 
@@ -261,8 +261,6 @@ public abstract class ProductCrawler extends ProductCrawlerBean {
   @VisibleForTesting
   boolean ingest(File product, Metadata productMetdata) {
     try {
-//      LOG.log(Level.INFO, "ProductCrawler: Ready to ingest product: [" + product
-//          + "]: ProductType: [" + productMetdata.getMetadata(PRODUCT_TYPE) + "]");
       String productId = ingester.ingest(new URL(getFilemgrUrl()), product, productMetdata);
       LOG.log(Level.INFO,
           "Successfully ingested product: [" + product + "]: product id: " + productId);

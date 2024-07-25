@@ -98,14 +98,14 @@ public class BundleMetExtractor extends Pds4MetExtractor {
       for (ReferenceEntry entry : getReferences(references, product)) {
         String value = "";
         if (!entry.hasVersion()) {
-          log.log(new ToolsLogRecord(ToolsLevel.INFO, "Setting "
+          log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Setting "
               + "LID-based association, \'" + entry.getLogicalID()
               + "\', under slot name \'" + entry.getType()
               + "\'.", product));
           value = entry.getLogicalID();
         } else {
           String lidvid = entry.getLogicalID() + "::" + entry.getVersion();
-          log.log(new ToolsLogRecord(ToolsLevel.INFO, "Setting "
+          log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Setting "
               + "LIDVID-based association, \'" + lidvid
               + "\', under slot name \'" + entry.getType()
               + "\'.", product));
