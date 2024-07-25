@@ -74,7 +74,7 @@ jobs:
                     assembly: stable
                     packages: openjdk17-jdk
                     maven-build-phases: install
-                    maven-stable-artifact-phases: clean,site
+                    maven-stable-artifact-phases: clean,site,package
                 env:
                     ossrh_username: ${{secrets.OSSRH_USERNAME}}
                     ossrh_password: ${{secrets.OSSRH_PASSWORD}}
