@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 import org.apache.commons.lang.StringEscapeUtils;
 import gov.nasa.pds.search.core.exception.InvalidDatetimeException;
+import gov.nasa.pds.search.core.exception.SearchCoreFatalException;
 import gov.nasa.pds.search.core.logging.ToolsLevel;
 import gov.nasa.pds.search.core.logging.ToolsLogRecord;
 import gov.nasa.pds.search.core.util.PDSDateConvert;
@@ -22,6 +23,7 @@ public class DocWriter
 	private String classname;
 	private String fnameprefix = "solr_doc";
 	private String fnameext = "xml";
+    private String filepath = "";
 
 	private Logger log = Logger.getLogger(this.getClass().getName());
 	
@@ -36,10 +38,10 @@ public class DocWriter
 			this.classname = productTitle;
 
 			// Get the filepath
-			String filepath = getFilename(basedir.getAbsolutePath(), seq);
+            this.filepath = getFilename(basedir.getAbsolutePath(), seq);
 
 			// Open a new file writer
-			open(filepath);
+            open(this.filepath);
 		} 
 		catch (Exception ex) 
 		{
@@ -48,7 +50,7 @@ public class DocWriter
 	}
 
 	
-	public void write() 
+    public void write() throws SearchCoreFatalException 
 	{
 		try 
 		{
@@ -88,9 +90,11 @@ public class DocWriter
 
 			this.solrDoc.write("</doc>\n</add>\n");
 			this.solrDoc.close();
-		} 
-		catch(Exception ex) 
-		{
+          } catch (NullPointerException e) {
+            e.printStackTrace();
+            throw new SearchCoreFatalException(
+                "Solr Doc was not opened properly prior to attempting to write: " + this.filepath);
+          } catch (Exception ex) {
 			ex.printStackTrace();
 		} 
 		finally 
@@ -121,7 +125,7 @@ public class DocWriter
 		File f = new File(filepath);
 
 		// If it exists, just open and append to it
-		if (f.exists()) {
+        if (f.exists() && f.length() != 0) {
 			// Remove last line of file since it has an </add> closing tag
 			removeLastLine(filepath);
 			this.solrDoc = new FileWriter(filepath, true);

@@ -84,7 +84,7 @@ public abstract class ProductCrawler extends ProductCrawlerBean {
     stack.push(dirRoot.isDirectory() ? dirRoot : dirRoot.getParentFile());
     while (!stack.isEmpty()) {
       File dir = (File) stack.pop();
-      LOG.log(Level.INFO, "Crawling " + dir);
+      LOG.log(Level.FINE, "Crawling " + dir);
 
       File[] productFiles;
       productFiles = isCrawlForDirs() ? dir.listFiles(DIR_FILTER) : dir.listFiles(FILE_FILTER);
@@ -107,7 +107,7 @@ public abstract class ProductCrawler extends ProductCrawlerBean {
   }
 
   public IngestStatus handleFile(File product) {
-    LOG.log(Level.INFO, "Handling file " + product);
+    LOG.log(Level.FINE, "Handling file " + product);
 
     // Check preconditions.
     if (!passesPreconditions(product)) {

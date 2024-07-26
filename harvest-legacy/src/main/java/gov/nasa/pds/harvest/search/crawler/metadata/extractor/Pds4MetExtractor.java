@@ -106,7 +106,7 @@ public class Pds4MetExtractor implements MetExtractor {
       metadata.addMetadata(Constants.OBJECT_TYPE, objectType);
     }
     if (references.size() == 0) {
-      log.log(new ToolsLogRecord(ToolsLevel.INFO, "No associations found.",
+      log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "No associations found.",
           product));
     }
     if ((!"".equals(objectType)) && (config.hasObjectType(objectType))) {
