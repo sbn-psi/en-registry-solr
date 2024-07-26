@@ -262,7 +262,7 @@ public abstract class ProductCrawler extends ProductCrawlerBean {
   boolean ingest(File product, Metadata productMetdata) {
     try {
       String productId = ingester.ingest(new URL(getFilemgrUrl()), product, productMetdata);
-      LOG.log(Level.INFO,
+      LOG.log(Level.FINE,
           "Successfully ingested product: [" + product + "]: product id: " + productId);
     } catch (Exception e) {
       LOG.log(Level.WARNING, "ProductCrawler: Exception ingesting product: [" + product
