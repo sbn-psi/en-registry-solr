@@ -23,6 +23,8 @@ if [ -z "$DATA_HOME" ]; then
   exit 1
 fi
 
+mkdir -p $DATA_HOME/solr-docs
+
 # Install Solr with preconfigured collections
 $LEGACY_REGISTRY_HOME/bin/registry_legacy_installer_docker.sh install
 check_status $? "[ERROR] Registry Manager Install Failure"
@@ -37,9 +39,9 @@ sed "s/{TEST_DATA_HOME}/$TEST_DATA_HOME/g" $PARENTDIR/src/test/resources/conf/ha
 echo "[INFO] Created new config file with TEST_DATA_HOME=$TEST_DATA_HOME"
 
 echo "[INFO] Harvest test data"
-$LEGACY_HARVEST_HOME/bin/harvest-legacy -c $(pwd)/test-policy.xml \
-                                        -C $LEGACY_HARVEST_HOME/conf/search/defaults \
-                                        -o $DATA_HOME/solr-docs --verbose 0
+$LEGACY_HARVEST_HOME/bin/harvest-solr -c $(pwd)/test-policy.xml \
+                                      -C $LEGACY_HARVEST_HOME/conf/search/defaults \
+                                      -o $DATA_HOME/solr-docs --verbose 0
 
 check_status $? "[ERROR] Harvest Failure"
 echo "[SUCCESS] Harvest Successful"
@@ -62,7 +64,7 @@ fi
 
 # Load test data
 echo "[INFO] Registry Manager Load"
-$LEGACY_REGISTRY_HOME/bin/registry-mgr-legacy $DATA_HOME/solr-docs
+$LEGACY_REGISTRY_HOME/bin/registry-mgr-solr $DATA_HOME/solr-docs
 
 check_status $? "[ERROR] Registry Manager Load Failure"
 
