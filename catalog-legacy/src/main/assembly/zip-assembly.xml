@@ -27,8 +27,8 @@
       <directory>src/main/resources/bin</directory>
       <outputDirectory>bin</outputDirectory>
       <includes>
-        <include>catalog-legacy</include>
-        <include>catalog-legacy.bat</include>
+        <include>catalog-solr</include>
+        <include>catalog-solr.bat</include>
       </includes>
       <fileMode>755</fileMode>
       <lineEnding>keep</lineEnding>

@@ -27,7 +27,7 @@
       <directory>src/main/resources/bin</directory>
       <outputDirectory>bin</outputDirectory>
       <includes>
-        <include>harvest-legacy</include>
+        <include>harvest-solr</include>
       </includes>
       <fileMode>775</fileMode>
       <lineEnding>keep</lineEnding>

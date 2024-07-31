@@ -46,7 +46,7 @@
       	<include>**/registry.properties</include>
         <include>**/registry_legacy_installer_standalone.sh</include>
         <include>**/registry_legacy_installer_docker.sh</include>
-        <include>**/registry-mgr-legacy</include>
+        <include>**/registry-mgr-solr</include>
         <include>**/registry_legacy_install.bat</include>
         <include>**/registry_legacy_uninstall.bat</include>
       </includes>
