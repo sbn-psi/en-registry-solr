@@ -14,7 +14,7 @@ COMMAND=""
 
 SCRIPT_DIR=$(cd "$( dirname $0 )" && pwd)
 PARENT_DIR=$(cd ${SCRIPT_DIR}/.. && pwd)
-LOG=${PARENT_DIR}/registry_installer_docker-log-$(date '+%Y%m%d_%H%M%S').txt
+LOG=${HOME}/registry_installer_docker-log-$(date '+%Y%m%d_%H%M%S').txt
 
 VERSION_FILE=${PARENT_DIR}/VERSION.txt
 VERSION="latest"
