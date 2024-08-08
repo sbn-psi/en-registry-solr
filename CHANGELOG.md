@@ -1,8 +1,16 @@
 # Changelog
 
-## [release/4.1.2](https://github.com/NASA-PDS/registry-legacy-solr/tree/release/4.1.2) (2024-07-31)
+## [«unknown»](https://github.com/NASA-PDS/registry-legacy-solr/tree/«unknown») (2024-08-08)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.1.1...release/4.1.2)
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.1.2...«unknown»)
+
+**Other closed issues:**
+
+- Create Installation and Deployment page on Wiki [\#97](https://github.com/NASA-PDS/registry-legacy-solr/issues/97)
+
+## [v4.1.2](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.1.2) (2024-07-31)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.1.1...v4.1.2)
 
 ## [v4.1.1](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.1.1) (2024-07-31)
 
