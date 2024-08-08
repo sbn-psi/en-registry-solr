@@ -2,7 +2,6 @@ package gov.nasa.pds.citool.commandline.options;
 
 import java.io.File;
 import java.util.List;
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
@@ -16,7 +15,8 @@ public class ToolsPropertiesConfiguration extends PropertiesConfiguration {
     }
 
     public List<String> getList(ConfigKey configKey) {
-        return getList(configKey.getKey());
+      List<?> list = getList(configKey.getKey());
+      return (List<String>) list;
     }
 
     public int getInt(ConfigKey configKey) {

@@ -300,7 +300,7 @@ public class CITool
                 while (list.remove(""));
                 list = Utility.removeQuotes(list);
                 List<Target> targets = new ArrayList<Target>();
-                for(String s : list) {
+                for (String s : list) {
                     targets.add(new Target(s));
                 }
                 setTargets(targets);
