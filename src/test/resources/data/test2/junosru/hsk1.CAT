@@ -1,0 +1,31 @@
+PDS_VERSION_ID      = PDS3
+LABEL_REVISION_NOTE = "20220513 RChen/EN initial"
+RECORD_TYPE         = STREAM
+
+OBJECT              = DATA_SET_HOUSEKEEPING
+  DATA_SET_ID       = "JNO-J-SRU-COUNTRATE-TABLE-5-L2-V1.0"
+  CURATING_NODE_ID  = IMAGING
+
+  OBJECT            = RESOURCE_INFORMATION
+    RESOURCE_ID     = "BROWSERP_JNO-J-SRU-COUNTRATE-TABLE-5-L2-V1.0"
+    RESOURCE_NAME   = "Imaging Online Data Volumes"
+    RESOURCE_CLASS  = "application.dataSetBrowserP"
+    RESOURCE_STATUS = "UP"
+    RESOURCE_LINK   = "https://pds-imaging.jpl.nasa.gov/data/juno/"
+    DESCRIPTION     = "placeholder until SRU data is certified"
+
+  END_OBJECT        = RESOURCE_INFORMATION
+
+  OBJECT            = RESOURCE_INFORMATION
+    RESOURCE_ID     = "FOOTEST"
+    RESOURCE_NAME   = "Joe's Online Data Volumes"
+    RESOURCE_CLASS  = "application.dataSetBrowserP"
+    RESOURCE_STATUS = "UP"
+    RESOURCE_LINK   = "https://pds.nasa.gov"
+    DESCRIPTION     = "placeholder until SRU data is certified"
+
+  END_OBJECT        = RESOURCE_INFORMATION
+
+END_OBJECT          = DATA_SET_HOUSEKEEPING
+
+END
