@@ -1,0 +1,59 @@
+PDS_VERSION_ID       = PDS3
+LABEL_REVISION_NOTE  = "2022-01-01"
+RECORD_TYPE          = STREAM
+
+OBJECT               = REFERENCE
+  REFERENCE_KEY_ID   = "BECKERETAL2005"
+  REFERENCE_DESC     = "
+    Becker, H.N., J.W. Alexander, and T. Elliott, High-energy electron 
+    testing of CCDs for a Jovian science mission, Proc. SPIE, 5902, Focal 
+    Plane Arrays for Space Telescopes II, 59020Q, 2005, 
+    doi:10.1117/12.623690."
+END_OBJECT           = REFERENCE
+
+OBJECT               = REFERENCE
+  REFERENCE_KEY_ID   = "BECKERETAL2013"
+  REFERENCE_DESC     = "
+    Becker, H.N., J.L. Joergensen, C.J. Hansen, M.A. Caplinger, M.A. Ravine, 
+    R. Gladstone, M.H. Versteeg, B. Mauk, C. Paranicas, D.K. Haggerty, R.M. 
+    Thorne, J.E. Connerney, and S.S. Kang, Earth's Radiation Belts: The View 
+    from Juno's Cameras, AGU Fall Meeting Abstracts, 2013."
+END_OBJECT           = REFERENCE
+
+OBJECT               = REFERENCE
+  REFERENCE_KEY_ID   = "BECKERETAL2017"
+  REFERENCE_DESC     = "
+  	Becker, H.N., J.W. Alexander, A. Adriani, A. Mura, A. Cicchetti, R. 
+    Noschese, J.L. Jorgensen, T. Denver, J. Sushkova, A. Jorgensen, M. Benn,
+    J.E.P. Connerney, S.J. Bolton, The Selex Galileo Juno SRU Team, J. 
+    Allison, S. Watts, V. Adumitroaie, E.A. Manor-Chapman, I.J. Daubar, 
+    C. Lee1, S. Kang, W.J. McAlpine, T. Di Iorio, C. Pasqui, A. Barbis, P. 
+    Lawton, L. Spalsbury, S. Loftin, and J. Sun, The Juno Radiation 
+    Monitoring (RM) Investigation, Space Sci Rev, 2017. 
+    doi:10.1007/s11214-017-0345-9."
+END_OBJECT           = REFERENCE
+
+OBJECT               = REFERENCE
+  REFERENCE_KEY_ID   = "DAUBARETAL2022"
+  REFERENCE_DESC     = "
+    Daubar, I.J., Software Interface Specification Stellar Reference Unit 
+    Standard Data Products, Version 1.0, 2022."
+END_OBJECT           = REFERENCE
+
+OBJECT               = REFERENCE
+  REFERENCE_KEY_ID   = "STPIERREETAL2012"
+  REFERENCE_DESC     = "
+    St. Pierre, J.A., K.M. Francis, J.A. Wynn and C.T. Voth, Initial GN&C 
+    Performance on the Juno Spacecraft, Adv.  Astronautical Sci., v. 144, pp. 
+    715-734, 2012."
+END_OBJECT           = REFERENCE
+
+OBJECT               = REFERENCE
+  REFERENCE_KEY_ID   = "WELLSETAL1981"
+  REFERENCE_DESC     = "
+    Wells, D.C., E.W. Greisen, and R.H. Harten, FITS: A Flexible Image 
+    Transport System, Astronomy & Astrophysics Supplement Series, 44, 363-
+    370, 1981/"
+END_OBJECT           = REFERENCE
+
+END

@@ -1,0 +1,122 @@
+PDS_VERSION_ID                  = PDS3
+LABEL_REVISION_NOTE             = "2022-01-21"
+RECORD_TYPE                     = STREAM
+
+OBJECT                          = DATA_SET
+  DATA_SET_ID                   = "JNO-J-SRU-EDR-2-L0-V1.0"
+
+  OBJECT                        = DATA_SET_MISSION
+    MISSION_NAME                = "JUNO"
+  END_OBJECT                    = DATA_SET_MISSION
+
+  OBJECT                        = DATA_SET_INFORMATION
+    DATA_SET_NAME               = "JUNO JUPITER SRU EDR 2 L0 V1.0"
+    DATA_SET_TERSE_DESC         = "JUNO SRU IMAGE DATA"
+    DATA_SET_COLLECTION_MEMBER_FLG = N
+    DATA_OBJECT_TYPE            = IMAGE
+    ARCHIVE_STATUS              = "PRE PEER REVIEW"
+    START_TIME                  = 2016-01-01T00:00:00.000
+    STOP_TIME                   = "NULL"
+    DATA_SET_RELEASE_DATE       = "NULL"
+    PRODUCER_FULL_NAME          = "INGRID DAUBAR"
+    DETAILED_CATALOG_FLAG       = N
+    CITATION_DESC               = "Daubar, Ingrid, et al., Juno
+                                SRU EDR V1.0, NASA Planetary Data
+                                System,
+                                JUNO-J-SRU-EDR-2-L0-V1.0, 2022.
+                                https://doi.org/10.17189/e1kz-jt85"
+    ABSTRACT_DESC               = "NULL"
+    CONFIDENCE_LEVEL_NOTE       = "NULL"
+    DATA_SET_DESC               = "
+
+    Data Set Overview
+    =================
+
+    This data set contains images acquired by Juno's Stellar Reference 
+    Unit (SRU).
+
+    This data set uses the Committee on Data Management
+    and Computation (CODMAC) data level numbering system.
+    The SRU EDRs are considered Level 2 or Edited Data
+    (equivalent to NASA Level 0). 
+
+
+    Processing
+    ==========
+
+    SRU products are produced by the program 
+        make_PDS_labels_SRU_EDR.pl .
+    This program converts the FITS images from
+    the format internally used by the Juno SRU Team.
+    This program reads an SRU image file, strips the FITS headers, extracts
+    information from those headers, creates and formats the PDS labels, 
+    and creates a stripped image file.
+
+
+    Data
+    ====
+
+    SRU images are a standard size of 512 by 512 pixels (numbered from 0 
+    through 511, inclusive). The last two rows, rows 510 and 511, 
+    are 'dummy' rows, and the first two columns, columns 0 and 1, are dummy 
+    columns. Thus the first pixel of real data is indexed at (row, column) 
+    0, 2. When the SRU is operated using time delay integration (TDI), the 
+    first row of real data (row 2) experiences an 8.1 ms exposure to the 
+    optical scene (2 RPM spacecraft spin rate; see section 5.1 of the SIS).
+    The SRU (instrument) frame has a boresight coordinate (255.5, 255.5).
+   
+    Pixel values in the EDRs are in units of output 
+    analog-to-digital data number (DN). Pixel values are represented as 
+    16 bit signed integers 
+    with values from 0 to 16383 (2^14-1), inclusive. The SRU data only 
+    occupies 14 bits, so higher order bits are always zero.
+    Dummy pixels are not read out and their values are replaced with zero. 
+    Any pixel with a zero value is not a valid measurement. Electronic 
+    offsets cause minimum valid values to be on-zero, on the order of 550 
+    or 680 DN, depending on the utilized SRU, 1 or 2 respectively.
+
+    SRU EDR images are not compressed or processed geometrically and are 
+    archived in the standard Flexible Image Transport System (FITS) format 
+    (http://fits.gsfc.nasa.gov/) (Wells et al., 1981). Each image product 
+    has two parts: the image itself with the extension of 'FIT' and a 
+    detached label with an extension of 'LBL'. Image files include a 
+    standard FITS header that is 2880 bytes long. Files are then padded 
+    with zero fill (ASCII 00h) to be a multiple of 2880 bytes long, as is 
+    standard for FITS files.
+
+    Partial images are the result of one of two situations: 1.) They may 
+    be commanded purposely in order to satisfy onboard command timing 
+    restrictions, or 2.) Data downlink or data collection problems such as 
+    outages of the Deep Space Network (DSN), spacecraft anomalies, or data 
+    gaps due to weather. In either case, the EDR images are padded with 
+    zeros to always be the same 512x512 pixel size. 
+
+    Refer to the Stellar Reference Unit Standard Data Products Software 
+    Interface Specification (SIS) for further details on these data products
+    and corrections which can be made for camera optical distortion.
+
+    "
+
+  END_OBJECT            = DATA_SET_INFORMATION
+
+  OBJECT                = DATA_SET_TARGET
+    TARGET_NAME         = JUPITER
+  END_OBJECT            = DATA_SET_TARGET
+
+  OBJECT                = DATA_SET_HOST
+    INSTRUMENT_HOST_ID  = JNO
+    INSTRUMENT_ID       = SRU
+  END_OBJECT            = DATA_SET_HOST
+
+  OBJECT                = DATA_SET_REFERENCE_INFORMATION
+    REFERENCE_KEY_ID    = "DAUBARETAL2022"
+  END_OBJECT            = DATA_SET_REFERENCE_INFORMATION
+
+  OBJECT                = DATA_SET_REFERENCE_INFORMATION
+    REFERENCE_KEY_ID    = "WELLSETAL1981"
+  END_OBJECT            = DATA_SET_REFERENCE_INFORMATION
+
+END_OBJECT              = DATA_SET
+
+END
+

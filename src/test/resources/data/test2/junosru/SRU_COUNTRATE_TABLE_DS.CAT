@@ -1,0 +1,115 @@
+PDS_VERSION_ID                     = PDS3
+LABEL_REVISION_NOTE                = "2022-01-01"
+RECORD_TYPE                        = STREAM
+
+OBJECT                             = DATA_SET
+  DATA_SET_ID                      = "JNO-J-SRU-COUNTRATE-TABLE-5-L2-V1.0"
+
+  OBJECT                           = DATA_SET_MISSION
+    MISSION_NAME                   = "JUNO"
+  END_OBJECT                       = DATA_SET_MISSION
+
+  OBJECT                           = DATA_SET_INFORMATION
+    DATA_SET_NAME                  = "
+      JUNO JUPITER SRU COUNT RATE TABLE 5 L2 V1.0"
+    DATA_SET_TERSE_DESC            = "
+      JUNO SRU COUNT RATE TABLE DATA"
+    DATA_SET_COLLECTION_MEMBER_FLG = N
+    DATA_OBJECT_TYPE               = SPREADSHEET
+    ARCHIVE_STATUS                 = "PRE PEER REVIEW" 
+    START_TIME                     = 2016-01-01T00:00:00.000
+    STOP_TIME                      = "NULL"
+    DATA_SET_RELEASE_DATE          = "NULL"
+    PRODUCER_FULL_NAME             = "INGRID DAUBAR"
+    DETAILED_CATALOG_FLAG          = N
+    CITATION_DESC                  = "
+      Daubar, I.,
+      JUNO JUPITER SRU COUNT RATE TABLE 5 L2 V1.0, 
+      JNO-J-SRU-COUNTRATE-TABLE-5-L2-V1.0,
+      NASA Planetary Data System, 2022.
+      https://doi.org/10.17189/649d-ch52"
+    ABSTRACT_DESC                  = "NULL"
+    DATA_SET_DESC                  = "
+
+
+    Data Set Overview
+    =================
+
+    This data set contains count rate tables derived from the Juno
+    Stellar Reference Unit (SRU) EDR images.
+
+    This data set uses the Committee on Data Management
+    and Computation (CODMAC) data level numbering system.
+    The SRU count rate tables are considered Level 5 or Derived Data
+    (equivalent to NASA Level 1C). 
+
+
+    Processing
+    ==========
+
+    SRU count rate tables are produced in '.CSV' format and consist of
+    comma-delimited values.
+
+
+    Data
+    ====
+      
+    SRU count rate tables (CRTs) contain derived electron count rates from 
+    a series of SRU images acquired during an orbit. The process by which 
+    these are derived is explained in the Software Interface Specification 
+    (SIS): Stellar Reference Unit Standard Data Products. Typically these SRU 
+    images are taken near perijove. Image processing includes geometric 
+    correction, star identification and removal, hot pixel removal, and count 
+    rate detection. One of two methods of count rate quantification is used, 
+    depending on the noise level observed in the image. Details of this 
+    processing are described in the SIS.
+
+    One count rate table (CRT) will be produced for each orbit. Within one 
+    orbit's table, each row will represent the derived count rate from 
+    one SRU image. The count rate values are derived from one of the two 
+    measurement techniques described in the SIS, indicated by a valid value 
+    in either column 4 or 5. The measurement technique will be chosen based 
+    on the overall radiation-induced noise level of that image. 
+
+    There are six fields in the table. The columns are as follows: SCET (UTC) 
+    corresponding to midpoint of SRU image exposure; SCLK corresponding to 
+    midpoint of SRU image exposure (following conversion from the native 
+    format provided in the Event Verification Record (EVR) which telemeters 
+    the SRU-generated image time tag); Identification number of the SRU that 
+    the image was taken with; Detected count rate ('cluster' counts per 
+    square cm of CCD area per second), if valid; Derived rate of deposited 
+    noise signal ('DN' per pixel per second), if valid; Derived count rate 
+    per square cm of CCD area per second using one of the previous methods 
+    that is valid. Column 4 or 5 will have a value of 1.0E-31 if that 
+    measurement technique is not valid; in that case the other column will 
+    have a valid value.
+
+    Each table product has two parts: the table itself with the extension 
+    of 'CSV' and a detached label with an extension of 'LBL'. 
+
+    Refer to the Stellar Reference Unit Standard Data Products Software 
+    Interface Specification (SIS) for further details on these data products.
+
+"
+
+  CONFIDENCE_LEVEL_NOTE = "NULL"
+
+  END_OBJECT            = DATA_SET_INFORMATION
+
+  OBJECT                = DATA_SET_TARGET
+    TARGET_NAME         = JUPITER
+  END_OBJECT            = DATA_SET_TARGET
+
+  OBJECT                = DATA_SET_HOST
+    INSTRUMENT_HOST_ID  = JNO
+    INSTRUMENT_ID       = SRU
+  END_OBJECT            = DATA_SET_HOST
+
+  OBJECT                = DATA_SET_REFERENCE_INFORMATION
+    REFERENCE_KEY_ID    = "DAUBARETAL2022"
+  END_OBJECT            = DATA_SET_REFERENCE_INFORMATION
+
+END_OBJECT              = DATA_SET
+
+END
+

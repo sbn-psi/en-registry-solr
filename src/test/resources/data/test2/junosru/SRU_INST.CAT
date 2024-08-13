@@ -1,0 +1,142 @@
+PDS_VERSION_ID       = PDS3
+LABEL_REVISION_NOTE  = "2022-01-01"
+RECORD_TYPE          = STREAM
+
+OBJECT               = INSTRUMENT
+  INSTRUMENT_HOST_ID = JNO
+  INSTRUMENT_ID      = SRU
+
+  OBJECT             = INSTRUMENT_INFORMATION
+    INSTRUMENT_NAME  = "STELLAR REFERENCE UNIT"
+    INSTRUMENT_TYPE  = "CAMERA"
+    INSTRUMENT_DESC  = 
+"
+
+
+Instrument Overview
+===================
+
+The Juno Stellar Reference Unit (SRU) is a custom built star sensor 
+manufactured by Selex Galileo (now Leonardo Finmeccanica) in Florence, Italy. 
+The SRU provides inertial attitude information to Juno's attitude 
+determination software by producing vector measurements of star-like objects 
+observed within its field of view (St. Pierre et al., 2012). The SRU 
+optical heads are mounted on the forward deck of the Juno spacecraft. Only 
+one SRU is operated at any given time. SRU-1 is the nominal operational unit, 
+and SRU-2 provides cold spare redundancy. The SRU may also be operated in a
+snapshot mode which allows collection of full or partial images by the 
+silicon charge coupled device (CCD) focal plane array.
+
+Juno's SRU Team operates the SRU as a broadband visible (450-1100 nm) 
+science imager for the purpose of studying low-light features and phenomena 
+of the Jovian system, such as Jupiter's faint dust ring and auroral 
+emissions. SRU images of lightning on Jupiter's dark side (Becker et al., 
+2020) support Juno's study of Jupiter's atmospheric dynamics and 
+composition, and images of Jupiter's moons under low illumination 
+conditions support Juno's satellite science.
+
+The Radiation Monitoring Investigation (RMI) of the Juno mission was designed 
+to characterize the external Jovian radiation environment using the 
+Stellar Reference Unit (SRU) and other instruments on the spacecraft (Becker 
+et al., 2017). Juno's RMI (a component of the SRU Team) measures noise from
+penetrating electrons within SRU images collected at Jupiter specifically 
+for this purpose. Noise signals are created by ionization events within the 
+active regions of the SRU focal plane array pixels as penetrating charged 
+particles pass through the material. The objective is to characterize 
+Jupiter's >10 MeV electron environment within regions of the jovian 
+magnetosphere where little to no in situ high energy electron data have 
+previously been collected.
+
+
+Detailed instrument description
+===============================
+
+The Juno Stellar Reference Unit (SRU) is a low-light, broadband visible 
+(450-1100 nm) imager with no filters. The camera has a 29.924 mm focal 
+length, spatial resolution of 0.57 mrad per pixel, and a 16.4 deg (square) 
+field of view. The collecting area of the optics is 4.155 cm2. The SRU 
+detector is a frame transfer silicon CCD with a 512x512 pixel useful 
+imaging region, a 512x512 pixel light shielded storage region, 17 micron 
+pixel pitch, and a 200,000 electron full well capacity (Becker et al., 
+2005). The camera gain is 15.47 signal electrons per output analog-to-digital 
+data number (DN). The throughput of the optical system, QT (the CCD 
+quantum efficiency (Q) multiplied by the optics transmission (T)), is 
+provided as a function of wavelength in Appendix C of the Software Interface 
+Specification (SIS). 
+
+Because the SRU must perform the star measurement function within the 
+extremely harsh radiation environment of Jupiter's magnetosphere its optical 
+head is very heavily shielded in order to reduce noise from penetrating 
+ionizing radiation. The CCD registers impacts by penetrating charged particles 
+as elevated noise signals within a cluster of pixels local to each 'hit.' The 
+noise signal electrons are created by ionization events within the active 
+depletion and diffusion regions of the pixels as charged particles pass 
+through the silicon. Given the heavy shielding of the SRU optical head, only 
+external electrons >1 MeV are energetic enough to generate noise in the CCD 
+with significant probability, either as an impacting primary electron of 
+reduced energy, or by virtue of a secondary particle generated during the 
+transit into the optical head materials. Although there is a probability for 
+external 1 to 10 MeV electrons to generate noise in the SRU CCD, penetrating 
+>10-MeV electrons should be the dominant contributors to CCD noise events in 
+the Juno SRU at Jupiter. This is primarily due to the spectral hardness of the 
+Jovian electron distribution, such that penetrating >10-MeV electrons will be 
+the dominant contributors to CCD noise events (Becker et al., 2017). 
+
+As Juno is a spin-stabilized spacecraft, the SRU CCD is nominally operated 
+using time delay integration (TDI) to compensate for the motion of the ~two 
+revolutions per minute (RPM) spacecraft spin. Without TDI, the spacecraft spin 
+causes the scene to move along the CCD column direction. When operated using 
+TDI, the rows of the image are shifted during the exposure time at an angular 
+rate consistent with the spacecraft spin. A typical spin rate of 2 RPM (12 
+degrees per second) results in a 2.7 ms integration dwell time between shifts. 
+This integration time is calculated by the SRU based on the angular rate 
+information provided by the spacecraft. During TDI exposure, the first rows of 
+the image are shifted into the optically shielded storage region and are no 
+longer exposed to light; however, the pixels in the storage region continue to 
+be exposed to impacts from penetrating radiation. The number of TDI shifts is 
+a function of the desired exposure time. Post-exposure, the transfer of the 
+image to the storage region occurs over a period of (526 - Number of TDI 
+shifts during exposure) x 2 usec. Pixels are then read out at a rate of 1 us 
+per pixel; the time to read out a full row of the CCD image is approximately 
+0.51 ms. The fact that the CCD is read out in a row-wise fashion following 
+transfer into the storage region creates an effective range of exposures to 
+penetrators on a single frame which adds to the measurement capability.  For 
+example, this range is 1:25 for 10 ms exposures given the ~250 ms readout 
+time for a full frame image. 
+
+When operated in a 'no-TDI' mode, the pixels in the image region are exposed 
+to photons without undergoing any row shifts during the exposure time. This 
+causes the scene to smear along the CCD column direction at a rate equal to 
+the spacecraft angular spin rate. Frame transfer and readout occurs in the 
+same fashion as with TDI images. 
+
+The measurement dynamic range of the SRU's particle detection algorithm was 
+determined to be 200 - 10 million counts cm^-2 CCD s^-1. Measured count rates 
+agreed with simulated expectations to within 20%. See Becker et al. (2017) for 
+further details. 
+
+See the Software Interface Specification (SIS) Stellar Reference Unit 
+Standard Data Products (Daubar et al. 2022) for more information.
+
+"
+  END_OBJECT = INSTRUMENT_INFORMATION
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "BECKERETAL2005"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "BECKERETAL2017"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "DAUBARETAL2022"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "STPIERREETAL2012"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+END_OBJECT = INSTRUMENT
+
+END

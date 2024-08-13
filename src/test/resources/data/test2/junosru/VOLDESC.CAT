@@ -1,0 +1,77 @@
+PDS_VERSION_ID               = PDS3
+RECORD_TYPE                  = STREAM
+LABEL_REVISION_NOTE          = "
+  20220315 RChen/EN work around catalog ingest. Delete this line next time."
+
+OBJECT                       = VOLUME
+  VOLUME_SERIES_NAME         = "JUNO MISSION TO JUPITER"
+  VOLUME_SET_NAME            = "JUNO: SRU DATA"
+  VOLUME_SET_ID              = "USA_NASA_PDS_JNOSRU_0XXX"
+  VOLUMES                    = 1
+/* RC: the next two are my guesses */
+  VOLUME_NAME                = "JUNO SRU EDR"
+  VOLUME_ID                  = "JNOSRUEDR"
+  VOLUME_FORMAT              = "N/A"
+  VOLUME_VERSION_ID          = "VERSION 1"
+  MEDIUM_TYPE                = "ELECTRONIC"
+  DATA_SET_ID                = {"JNO-J-SRU-EDR-2-L0-V1.0",
+                             "JNO-J-SRU-COUNTRATE-TABLE-5-L2-V1.0"}
+
+  PUBLICATION_DATE           = 2022-01-01
+  DESCRIPTION                = "This volume contains Juno Stellar Reference 
+                             Unit data in their original, uncompressed
+                             format (EDR) and tables of derived count rates.
+                             The volume also contains detailed
+                             documentation about the mission,
+                             instrument, and data set, as well as
+                             an index table."
+                             
+  OBJECT                     = DATA_PRODUCER
+    INSTITUTION_NAME         = "JET PROPULSION LABORATORY"
+    FACILITY_NAME            = "NASA/JPL"
+    FULL_NAME                = "HEIDI BECKER"
+    ADDRESS_TEXT             = "JET PROPULSION LABORATORY
+                                4800 OAK GROVE DRIVE
+                                PASADENA, CA 91109-8099"
+    TELEPHONE_NUMBER         = "8183935491"
+    ALTERNATE_TELEPHONE_NUMBER = "8186532398"
+    ELECTRONIC_MAIL_TYPE     = "INTERNET"
+    ELECTRONIC_MAIL_ID       = "HEIDI.N.BECKER@JPL.NASA.GOV"
+  END_OBJECT                 = DATA_PRODUCER
+
+  OBJECT                     = DATA_PRODUCER
+    INSTITUTION_NAME         = "BROWN UNIVERSITY"
+    FACILITY_NAME            = "DEPARTMENT OF EARTH, ENVIRONMENTAL, AND 
+                                PLANETARY SCIENCES"
+    FULL_NAME                = "INGRID DAUBAR"
+    ADDRESS_TEXT             = "CAMPUS BOX 1846
+                                BROWN UNIVERSITY
+                                PROVIDENCE, RI 02912-1846"
+    TELEPHONE_NUMBER         = "4018631437"
+    ELECTRONIC_MAIL_TYPE     = "INTERNET"
+    ELECTRONIC_MAIL_ID       = "INGRID_DAUBAR@BROWN.EDU"
+  END_OBJECT                 = DATA_PRODUCER
+
+  OBJECT                     = CATALOG
+    ^DATA_SET_CATALOG        = {"SRU_EDR_IMG_DS.CAT",
+                                "SRU_COUNTRATE_TABLE_DS.CAT"}
+    ^INSTRUMENT_CATALOG      = "SRU_INST.CAT"
+    ^INSTRUMENT_HOST_CATALOG = "INSTHOST.CAT"
+    ^MISSION_CATALOG         = "MISSION.CAT"
+    ^PERSONNEL_CATALOG       = "SRU_PERSON.CAT"
+    ^REFERENCE_CATALOG       = {"SRU_REF.CAT","PROJREF.CAT"}
+
+    ^HOUSEKEEPING_CATALOG    = {"hsk1.CAT","hsk2.CAT"}
+    ^TARGET_CATALOG          = {
+      "zzold/targCALLISTO.cat", "zzold/targDUST.cat",
+      "zzold/targEARTH.cat", "zzold/targEUROPA.cat",
+      "zzold/targGANYMEDE.cat", "zzold/targIO.cat",
+      "zzold/targIO.PLASMA.TORUS.cat", "zzold/targJ_RINGS.cat",
+      "zzold/targJUPITER.cat", "zzold/targMOON.cat",
+      "zzold/targSOLAR_SYSTEM.cat", "zzold/targSOLAR.WIND.cat"}
+
+  END_OBJECT                 = CATALOG
+
+END_OBJECT                   = VOLUME
+END
+
