@@ -6,6 +6,7 @@
 
 **Other closed issues:**
 
+- Add catalog solr test data to smoke tests [\#113](https://github.com/NASA-PDS/registry-legacy-solr/issues/113)
 - Create Installation and Deployment page on Wiki [\#97](https://github.com/NASA-PDS/registry-legacy-solr/issues/97)
 
 ## [v4.1.2](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.1.2) (2024-07-31)
