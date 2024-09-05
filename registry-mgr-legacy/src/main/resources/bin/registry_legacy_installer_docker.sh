@@ -125,6 +125,7 @@ wait_for_solr() {
 start_registry_container() {
     echo -ne "Starting Registry Docker Container                            " | tee -a $LOG
     docker run --name ${DOCKER_IMAGE} \
+      --restart=always \
       -u solr \
       -d -p 8983:8983 \
       -v ${DATA_HOME}/${DOCKER_VOLUME}:/var/solr/ \
