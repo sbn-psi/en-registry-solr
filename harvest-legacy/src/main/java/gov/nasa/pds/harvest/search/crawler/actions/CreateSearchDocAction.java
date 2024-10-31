@@ -49,7 +49,7 @@ public class CreateSearchDocAction extends CrawlerAction {
   public CreateSearchDocAction(File configDir, File outputDir, SearchDocState searchDocState)
           throws SearchCoreException, SearchCoreFatalException {
     this.generator = new SearchDocGenerator(configDir, outputDir);
-    String[] phases = {CrawlerActionPhases.POST_INGEST_SUCCESS.getName()};
+    String[] phases = {CrawlerActionPhases.PRE_INGEST.getName()};
     setPhases(Arrays.asList(phases));
     setId(ID);
     setDescription(DESCRIPTION);

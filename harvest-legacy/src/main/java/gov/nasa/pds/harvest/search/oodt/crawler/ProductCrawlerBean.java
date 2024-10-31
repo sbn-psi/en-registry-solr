@@ -59,7 +59,7 @@ public abstract class ProductCrawlerBean implements PDSCoreMetKeys {
     this.requiredMetadata.add(TITLE);
     this.noRecur = false;
     this.crawlForDirs = false;
-    this.skipIngest = false;
+    this.skipIngest = true;
     this.daemonPort = -1;
     this.daemonWait = -1;
     this.globalMetadata = new Metadata();
