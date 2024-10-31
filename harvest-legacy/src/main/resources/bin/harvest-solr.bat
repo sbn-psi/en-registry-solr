@@ -9,7 +9,7 @@
 :: ############################################################################
 :: Update Environment Variables as needed
 
-set SOLR_URL=http://localhost:8983/solr
+set SOLR_URL=https://sbnpds4.psi.edu/solr
 set SCRIPT_DIR=%~dps0
 set PARENT_DIR=%SCRIPT_DIR%..
 set LIB_DIR=%PARENT_DIR%\lib

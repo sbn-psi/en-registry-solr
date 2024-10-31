@@ -9,7 +9,7 @@
 ################################################################################
 # UPDATE VARIABLES AS NEEDED
 
-SOLR_URL=http://localhost:8983/solr
+SOLR_URL=https://sbnpds4.psi.edu/solr
 SCRIPT_DIR=`cd "$( dirname $0 )" && pwd`
 PARENT_DIR=`cd ${SCRIPT_DIR}/.. && pwd`
 SEARCH_CONF=${PARENT_DIR}/conf/search/defaults
