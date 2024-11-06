@@ -80,9 +80,24 @@ public class DocWriter
 						else if(fieldName.equalsIgnoreCase("resclass")) 
 						{
 							value = this.classname;
-						} 
+						}
+						// pdssbn addition: make sure that refs have vids
+						else if(fieldName.equalsIgnoreCase("instrument_ref") || fieldName.equalsIgnoreCase("target_ref") || fieldName.equalsIgnoreCase("investigation_ref") || fieldName.equalsIgnoreCase("instrument_host_ref")) 
+						{
+							if(value != null && value.length() > 0) 
+							{
+								if(value.indexOf("::") == -1) 
+								{
+									value += "::1.0";
+								}
+							}
+						}
 
 						String escValue = StringEscapeUtils.escapeXml(value);
+						
+						// pdssbn addition: trim the value
+						escValue = escValue.trim();
+
 						this.solrDoc.write("<field name=\"" + fieldName + "\">" + escValue + "</field>\n");
 					}
 				}
