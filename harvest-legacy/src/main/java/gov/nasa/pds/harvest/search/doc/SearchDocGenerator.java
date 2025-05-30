@@ -113,10 +113,15 @@ public class SearchDocGenerator {
 			fieldMap.put("package_id", Arrays.asList(TransactionManager.getInstance().getTransactionId()));
 
       // PDSSBN: Add resource url as just the folder containing the label
-      String fileUrl = fieldMap.get("file_ref_url").get(0);
-      String resourceUrl = fileUrl.substring(0, fileUrl.lastIndexOf("/") + 1);
-      fieldMap.put("resource_url", Arrays.asList(resourceUrl));
-      typeMap.put("resource_url", "string");
+      if(!fieldMap.containsKey("file_ref_url")) {
+        // If file_ref_url is not present, we cannot create resource_url
+        log.warning("file_ref_url not found in fieldMap, cannot create resource_url");
+      } else {
+        String fileUrl = fieldMap.get("file_ref_url").get(0);
+        String resourceUrl = fileUrl.substring(0, fileUrl.lastIndexOf("/") + 1);
+        fieldMap.put("resource_url", Arrays.asList(resourceUrl));
+        typeMap.put("resource_url", "string");
+      }
 
 			// Increment our product counter
 			obj.incrementCounter();
