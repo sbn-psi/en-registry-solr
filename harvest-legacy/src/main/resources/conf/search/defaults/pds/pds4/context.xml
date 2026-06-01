@@ -29,6 +29,16 @@
       <registryPath>name</registryPath>
     </field>
     <field name="description" type="required">
+      <registryPath>agency_description</registryPath>
+      <registryPath>airborne_description</registryPath>
+      <registryPath>facility_description</registryPath>
+      <registryPath>instrument_description</registryPath>
+      <registryPath>instrument_host_description</registryPath>
+      <registryPath>investigation_description</registryPath>
+      <registryPath>node_description</registryPath>
+      <registryPath>other_description</registryPath>
+      <registryPath>target_description</registryPath>
+      <registryPath>telescope_description</registryPath>
       <registryPath>citation_description</registryPath>
       <registryPath>resource_description</registryPath>
     </field>
@@ -41,6 +51,9 @@
     </field>
     <field name="data_class" type="string">
       <registryPath>data_class</registryPath>
+    </field>
+    <field name="page_type" type="string">
+      <registryPath>page_type</registryPath>
     </field>
     <field name="objectType" type="string">
       <registryPath>objectType</registryPath>
@@ -67,6 +80,66 @@
     </field>
     <field name="citation_editor_list" type="string">
       <registryPath>citation_editor_list</registryPath>
+    </field>
+    <field name="citation_author_organization_name" type="string">
+      <registryPath>citation_author_organization_name</registryPath>
+    </field>
+    <field name="citation_author_organization_rorid" type="string">
+      <registryPath>citation_author_organization_rorid</registryPath>
+    </field>
+    <field name="citation_author_organization_contributor_type" type="string">
+      <registryPath>citation_author_organization_contributor_type</registryPath>
+    </field>
+    <field name="citation_author_person_contributor_type" type="string">
+      <registryPath>citation_author_person_contributor_type</registryPath>
+    </field>
+    <field name="citation_author_person_display_full_name" type="string">
+      <registryPath>citation_author_person_display_full_name</registryPath>
+    </field>
+    <field name="citation_author_person_given_name" type="string">
+      <registryPath>citation_author_person_given_name</registryPath>
+    </field>
+    <field name="citation_author_person_family_name" type="string">
+      <registryPath>citation_author_person_family_name</registryPath>
+    </field>
+    <field name="citation_author_person_orcid" type="string">
+      <registryPath>citation_author_person_orcid</registryPath>
+    </field>
+    <field name="citation_author_person_affiliation_organization_name" type="string">
+      <registryPath>citation_author_person_affiliation_organization_name</registryPath>
+    </field>
+    <field name="citation_author_person_affiliation_organization_rorid" type="string">
+      <registryPath>citation_author_person_affiliation_organization_rorid</registryPath>
+    </field>
+    <field name="citation_editor_organization_name" type="string">
+      <registryPath>citation_editor_organization_name</registryPath>
+    </field>
+    <field name="citation_editor_organization_rorid" type="string">
+      <registryPath>citation_editor_organization_rorid</registryPath>
+    </field>
+    <field name="citation_editor_organization_contributor_type" type="string">
+      <registryPath>citation_editor_organization_contributor_type</registryPath>
+    </field>
+    <field name="citation_editor_person_contributor_type" type="string">
+      <registryPath>citation_editor_person_contributor_type</registryPath>
+    </field>
+    <field name="citation_editor_person_display_full_name" type="string">
+      <registryPath>citation_editor_person_display_full_name</registryPath>
+    </field>
+    <field name="citation_editor_person_given_name" type="string">
+      <registryPath>citation_editor_person_given_name</registryPath>
+    </field>
+    <field name="citation_editor_person_family_name" type="string">
+      <registryPath>citation_editor_person_family_name</registryPath>
+    </field>
+    <field name="citation_editor_person_orcid" type="string">
+      <registryPath>citation_editor_person_orcid</registryPath>
+    </field>
+    <field name="citation_editor_person_affiliation_organization_name" type="string">
+      <registryPath>citation_editor_person_affiliation_organization_name</registryPath>
+    </field>
+    <field name="citation_editor_person_affiliation_organization_rorid" type="string">
+      <registryPath>citation_editor_person_affiliation_organization_rorid</registryPath>
     </field>
     <field name="citation_publication_year" type="string">
       <registryPath>citation_publication_year</registryPath>
@@ -98,6 +171,9 @@
       <registryPath>external_reference_doi</registryPath>
     </field>
     <!-- Airborne Fields -->
+    <field name="airborne_ref" type="string">
+      <registryPath>airborne_ref</registryPath>
+    </field>
     <field name="airborne_name" type="string">
       <registryPath>airborne_name</registryPath>
     </field>
@@ -108,6 +184,9 @@
       <registryPath>airborne_description</registryPath>
     </field>
     <!-- Facility Fields -->
+    <field name="facility_ref" type="string">
+      <registryPath>facility_ref</registryPath>
+    </field>
     <field name="facility_name" type="float">
       <registryPath>facility_name</registryPath>
     </field>
@@ -133,6 +212,11 @@
     </field>
     <field name="instrument_type" type="string">
       <registryPath>instrument_type</registryPath>
+      <registryPath>instrument_type_legacy</registryPath>
+    </field>
+    <field name="instrument_subtype" type="string">
+      <registryPath>instrument_subtype</registryPath>
+      <registryPath>instrument_subtype_legacy</registryPath>
     </field>
     <field name="instrument_description" type="string">
       <registryPath>instrument_description</registryPath>
@@ -225,6 +309,9 @@
       <registryPath>person_description</registryPath>
     </field>
     <!-- Resource Fields -->
+    <field name="resource_ref" type="string">
+      <registryPath>resource_ref</registryPath>
+    </field>
     <field name="resource_name" type="string">
       <registryPath>resource_name</registryPath>
     </field>
@@ -251,6 +338,9 @@
       <registryPath>target_description</registryPath>
     </field>
     <!-- Telescope Fields -->
+    <field name="telescope_ref" type="string">
+      <registryPath>telescope_ref</registryPath>
+    </field>
     <field name="telescope_aperture" type="string">
       <registryPath>telescope_aperture</registryPath>
     </field>
@@ -276,9 +366,6 @@
     <!-- File Reference Fields -->
     <field name="file_ref_name" type="string">
       <registryPath>file_ref_file_name</registryPath>
-    </field>
-    <field name="file_ref_location" type="string">
-      <registryPath>file_ref_file_location</registryPath>
     </field>
     <field name="file_ref_url" type="string">
       <registryPath>file_ref_access_url</registryPath>

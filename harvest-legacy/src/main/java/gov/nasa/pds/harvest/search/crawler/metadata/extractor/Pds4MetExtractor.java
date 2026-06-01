@@ -114,10 +114,13 @@ public class Pds4MetExtractor implements MetExtractor {
     }
     if (dataClasses.size() != 0) {
       List<String> values = new ArrayList<String>();
+      List<String> pageTypeValues = new ArrayList<String>();
       for (TinyElementImpl dataClass : dataClasses) {
          values.add(dataClass.getDisplayName());
+         pageTypeValues.add(dataClass.getDisplayName().replace("_", " ") + " Portal");
       }
       slots.add(new Slot(Constants.DATA_CLASS, values));
+      slots.add(new Slot(Constants.COLLECTION_PAGE_TYPE, pageTypeValues));
     }
     try {
       HashMap<String, List<String>> refMap =
@@ -187,12 +190,24 @@ public class Pds4MetExtractor implements MetExtractor {
             name = node.getDisplayName();
           }
         }
-        List<String> values = extractor.getValuesFromDoc(xpath.getValue());
+
+        // Check if this should be extracted as JSON (slot name ends with "_json")
+        List<String> values;
+        if (name != null && name.endsWith("_json")) {
+          // Extract as JSON
+          values = extractor.getValuesAsJsonFromDoc(xpath.getValue());
+        } else {
+          // Extract as regular text values
+          values = extractor.getValuesFromDoc(xpath.getValue());
+        }
+
         if (values != null && (!values.isEmpty())) {
           Slot slot = new Slot(name, values);
-          String unit = node.getAttributeValue("", Constants.UNIT);
-          if (unit != null) {
-            slot.setSlotType(unit);
+          if (node != null) {
+            String unit = node.getAttributeValue("", Constants.UNIT);
+            if (unit != null) {
+              slot.setSlotType(unit);
+            }
           }
           slots.add(slot);
         }
@@ -278,7 +293,7 @@ public class Pds4MetExtractor implements MetExtractor {
         // multiple lidvids that are associated to a single reference type)
         for (LidVid lidvid : lidvids) {
           ReferenceEntry re = new ReferenceEntry();
-          if (lidvid.hasVersion()) {
+          if (lidvid.hasVersion() && !Constants.CONTEXT_REFS.contains(refTypeMap)) {
             re.setLogicalID(lidvid.getLid());
             re.setVersion(lidvid.getVersion());
           } else {

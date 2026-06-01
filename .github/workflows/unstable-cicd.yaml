@@ -50,14 +50,14 @@ jobs:
         steps:
             -
                 name: 💳 Checkout
-                uses: actions/checkout@v4
+                uses: actions/checkout@v6
                 with:
                     lfs: true
                     fetch-depth: 0
                     token: ${{secrets.ADMIN_GITHUB_TOKEN}}
             -
                 name: 💵 Maven Cache
-                uses: actions/cache@v4
+                uses: actions/cache@v5
                 with:
                     path: ~/.m2/repository
                     # The "key" used to indicate a set of cached files is the operating system runner
@@ -77,8 +77,8 @@ jobs:
                     maven-unstable-artifact-phases: clean,site,deploy,-DskipTests
                     packages: openjdk17-jdk
                 env:
-                    ossrh_username: ${{secrets.OSSRH_USERNAME}}
-                    ossrh_password: ${{secrets.OSSRH_PASSWORD}}
+                    central_portal_username: ${{secrets.CENTRAL_REPOSITORY_USERNAME}}
+                    central_portal_token: ${{secrets.CENTRAL_REPOSITORY_TOKEN}}
                     CODE_SIGNING_KEY: ${{secrets.CODE_SIGNING_KEY}}
                     ADMIN_GITHUB_TOKEN: ${{secrets.ADMIN_GITHUB_TOKEN}}
 

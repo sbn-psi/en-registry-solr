@@ -3,14 +3,14 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <groupId>gov.nasa</groupId>
-    <artifactId>pds</artifactId>
-    <version>1.18.0</version>
+    <groupId>gov.nasa.pds</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.20.0</version>
   </parent>
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>registry-legacy</artifactId>
-  <version>4.2.0-SNAPSHOT</version>
+  <version>5.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Legacy Registry</name>
@@ -41,21 +41,38 @@
 	  <plugins>
 		<plugin>
 	        <groupId>org.apache.maven.plugins</groupId>
-	        <artifactId>maven-site-plugin</artifactId>
-	        <version>4.0.0-M16</version>
+	        <artifactId>maven-compiler-plugin</artifactId>
+	        <version>3.11.0</version>
 	        <configuration>
-	          <skip>false</skip> <!-- skipping site build for now -->
-	          <skipDeploy>false</skipDeploy>
+	          <source>11</source>
+	          <target>11</target>
 	        </configuration>
 	      </plugin>
-	   </plugins>
+        <!-- Disable Site for now -->
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>4.0.0-M14</version>
+          <configuration>
+            <skip>false</skip>
+            <skipDeploy>false</skipDeploy>
+          </configuration>
+        </plugin>
+		<plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>17</source>
+            <target>17</target>
+          </configuration>
+        </plugin>
+      </plugins>
    </build>
    
   
   <scm>
-    <url>https://github.com/NASA-PDS/registry-legacy</url>
-    <connection>scm:git:git://github.com/NASA-PDS/registry-legacy.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/NASA-PDS/registry-legacy.git</developerConnection>
+    <url>https://github.com/NASA-PDS/registry-legacy-solr</url>
+    <connection>scm:git:git://github.com/NASA-PDS/registry-legacy-solr.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/NASA-PDS/registry-legacy-solr.git</developerConnection>
   </scm>
   
   <repositories />

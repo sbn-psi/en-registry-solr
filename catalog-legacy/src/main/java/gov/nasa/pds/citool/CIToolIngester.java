@@ -1,5 +1,15 @@
 package gov.nasa.pds.citool;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 import gov.nasa.pds.citool.comparator.CatalogComparator;
 import gov.nasa.pds.citool.ingestor.CatalogObject;
 import gov.nasa.pds.citool.ingestor.CatalogVolumeIngester;
@@ -9,21 +19,11 @@ import gov.nasa.pds.citool.target.Target;
 import gov.nasa.pds.citool.util.ReferenceUtils;
 import gov.nasa.pds.citool.util.References;
 import gov.nasa.pds.citool.util.RegistryObjectCache;
-
 import gov.nasa.pds.tools.LabelParserException;
 import gov.nasa.pds.tools.constants.Constants.ProblemType;
 import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.ManualPathResolver;
 import gov.nasa.pds.tools.label.parser.DefaultLabelParser;
-
-import java.net.URI;
-import java.net.URL;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.logging.Logger;
-import java.io.IOException;
 
 
 public class CIToolIngester 
@@ -45,11 +45,18 @@ public class CIToolIngester
      * @param target URL of the target (directory or file)
      * @throws Exception
      */
-    public void ingest(Target target, boolean recurse) throws Exception 
+    public void ingest(Target target, boolean recurse) throws Exception
     {
         if(target.isDirectory())
         {
             List<URL> urls = target.traverse(recurse);
+            // Sort URLs alphabetically to make processing order predictable and debuggable
+            Collections.sort(urls, new Comparator<URL>() {
+                @Override
+                public int compare(URL url1, URL url2) {
+                    return url1.toString().compareTo(url2.toString());
+                }
+            });
             List<Label> catLabels = parseLabels(urls);
             processVolume(catLabels);
         }
@@ -92,8 +99,7 @@ public class CIToolIngester
     	{	
     		if (obj.getIsLocal()) 
     		{
-    			catIngester.ingest(obj);	
-    			report.record(obj.getLabel().getLabelURI(), obj.getLabel().getProblems());
+              catIngester.ingest(obj);
     		}    		
        	} 
        	
@@ -119,6 +125,7 @@ public class CIToolIngester
     		if(obj.getIsLocal())
     		{
     			catIngester.publishObject(obj);
+                report.record(obj.getLabel().getLabelURI(), obj.getLabel().getProblems());
     		}
     	}
     }
@@ -136,12 +143,24 @@ public class CIToolIngester
 		boolean isVolumeCatalog = false;
 		
 		// TODO: need to add to handle multiple catalog objects (sets of catalog references???)
-		for (Label lbl : catLabels) 
+		for (Label lbl : catLabels)
 		{
 			CatalogObject catObj = new CatalogObject(this.report);
 			boolean validFile = catObj.processLabel(lbl);
-			if (validFile) 
-			{
+            if (validFile) {
+				if(catObj.getCatObjType() == null) {
+					// Log diagnostic information about the label
+					StringBuilder objTypes = new StringBuilder();
+					for (gov.nasa.pds.tools.label.ObjectStatement obj : lbl.getObjects()) {
+						if (objTypes.length() > 0) objTypes.append(", ");
+						objTypes.append(obj.getIdentifier());
+					}
+					log.warning("Catalog object type is null for label: " + lbl.getLabelURI() +
+					           ". Objects found in label: [" + objTypes.toString() + "]. " +
+					           "None match expected catalog types. Skipping this catalog object.");
+					continue;
+				}
+
 				if(catObj.getCatObjType().equalsIgnoreCase("VOLUME"))
 				{
 					pointerFiles = catObj.getPointerFiles();
@@ -152,6 +171,8 @@ public class CIToolIngester
 					catIngester.setVolumeId(id);
 					
 					isVolumeCatalog = true;
+
+                    checkPointerFiles(pointerFiles, lbl, catIngester);
 				}
 				
 				catIngester.addCatalogObject(catObj);
@@ -172,20 +193,6 @@ public class CIToolIngester
 			System.exit(1);
 		}
 		
-		for(String ptrFile : pointerFiles) 
-		{
-			// Ignore the reference file when it's N/A
-			if(ptrFile.equals("N/A")) 
-			{
-				continue;
-			}
-
-			if(!catIngester.labelExists(ptrFile))
-			{
-				log.warning("Missing catalog file " + ptrFile);
-			}
-		}
-		
 		return catIngester;
     }
     
@@ -196,7 +203,7 @@ public class CIToolIngester
      * 
      * @return a Label object
      */
-    public Label parse(URL url) 
+    public Label parse(URL url)
     {
     	URI uri = null;
         try {
@@ -204,16 +211,33 @@ public class CIToolIngester
         } catch (URISyntaxException u) {
             //Ignore
         }
+
+        // Log which file is being processed to help identify hangs
+        System.out.println("PROCESSING: " + url.toString());
+
         ManualPathResolver resolver = new ManualPathResolver();
         resolver.setBaseURI(ManualPathResolver.getBaseURI(uri));
         //Parser must have "parser.pointers" set to false
         DefaultLabelParser parser = new DefaultLabelParser(false, true, resolver);
         Label label = null;
-        try 
+        try
         {
             label = parser.parseLabel(url);
-        } 
-        catch (LabelParserException lp) 
+
+            // Filter out line ending errors - they don't prevent reading the file
+            // PDS3 standard requires CRLF, but many files use Unix LF line endings
+            if (label != null && label.getProblems() != null) {
+                int beforeCount = label.getProblems().size();
+                label.getProblems().removeIf(problem ->
+                    "parser.error.badLineEnding".equals(problem.getKey()));
+                int afterCount = label.getProblems().size();
+                if (beforeCount != afterCount) {
+                    System.err.println("INFO: Filtered out " + (beforeCount - afterCount) +
+                        " line ending errors from " + url);
+                }
+            }
+        }
+        catch (LabelParserException lp)
         {
         	lp.printStackTrace();
             //Product tools library records files that have a missing
@@ -281,5 +305,21 @@ public class CIToolIngester
             }
             return false;
         }
+    }
+
+    private void checkPointerFiles(List<String> pointerFiles, Label label,
+        CatalogVolumeIngester catIngester) {
+      for (String ptrFile : pointerFiles) {
+        // Ignore the reference file when it's N/A
+        if (ptrFile.equals("N/A")) {
+          continue;
+        }
+
+        if (!catIngester.labelExists(ptrFile)) {
+          LabelParserException lp = new LabelParserException(label.getLabelURI(), null, null,
+              "parser.warning.missingPointer", ProblemType.UNKNOWN_FILE, ptrFile);
+          label.addProblem(lp);
+        }
+      }
     }
 }

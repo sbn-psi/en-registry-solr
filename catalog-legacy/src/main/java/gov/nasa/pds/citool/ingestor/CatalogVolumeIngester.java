@@ -1,6 +1,13 @@
 package gov.nasa.pds.citool.ingestor;
 
-import gov.nasa.pds.citool.ingestor.Constants;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import gov.nasa.pds.citool.registry.client.RegistryClient;
 import gov.nasa.pds.citool.registry.client.RegistryClientManager;
 import gov.nasa.pds.citool.registry.model.FileInfo;
@@ -8,25 +15,19 @@ import gov.nasa.pds.citool.registry.model.Metadata;
 import gov.nasa.pds.citool.registry.model.RegistryObject;
 import gov.nasa.pds.citool.registry.model.Slots;
 import gov.nasa.pds.citool.search.DocGenerator;
+import gov.nasa.pds.citool.search.DocGeneratorException;
 import gov.nasa.pds.citool.util.ReferenceUtils;
 import gov.nasa.pds.citool.util.Utility;
-
 import gov.nasa.pds.tools.LabelParserException;
 import gov.nasa.pds.tools.constants.Constants.ProblemType;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.Map;
-import java.util.HashMap;
 
 
 public class CatalogVolumeIngester 
 {	
-	public static int fileObjCount = 0;
-	public static int registryCount = 0;
-	public static int failCount = 0;
+  public static int fileObjCount = 0;
+  public static int registryCount = 0;
+  public static int solrDocCount = 0;
+  public static int failCount = 0;
 	
 	private String archiveStatus = null;
 	private String volumeId; 
@@ -63,7 +64,7 @@ public class CatalogVolumeIngester
     	for (CatalogObject aCatObj: catObjs) 
     	{
     		String tmpFilename = aCatObj.getFilename();
-            tmpFilename = tmpFilename.substring(tmpFilename.lastIndexOf('/') + 1);
+            tmpFilename = tmpFilename.substring(tmpFilename.lastIndexOf(File.separator) + 1);
             
             if (tmpFilename.equalsIgnoreCase(filename)) 
             {
@@ -183,8 +184,8 @@ public class CatalogVolumeIngester
 			
 			// New product
 			RegistryObject product = ProductFactory.createProduct(catObj, this);
-			catObj.setVersion(1.0f);
-			product.setVersionName("1.0");
+            catObj.setVersion(99.0f);
+            product.setVersionName("99.0");
 
 			catObj.setExtrinsicObject(product);
 			return product.getLid();
@@ -364,19 +365,25 @@ public class CatalogVolumeIngester
 			if (catObj.getCatObjType().equalsIgnoreCase(Constants.DATASET_OBJ)) 
 			{
 				Metadata md = catObj.getMetadata();				
-				if (md.isMultiValued(keyToLook)) 
+				if (md.isMultiValued(keyToLook))
 				{
 					List<String> tmpValues = md.getAllMetadata(keyToLook);
-					for (String instId: tmpValues) 
-					{					
-						if (instId.equalsIgnoreCase(valueToFind)) 
+					for (String instId: tmpValues)
+					{
+						if (instId == null) {
+							log.warning("Found null value in multi-valued " + keyToLook +
+							           " for DATA_SET catalog object: " + catObj.getFilename());
+							continue;
+						}
+
+						if (instId.equalsIgnoreCase(valueToFind))
 						{
 							String dsId = md.getMetadata("DATA_SET_ID");
 							dsId = Utility.replaceChars(dsId);
-			    			dsId = dsId.toLowerCase(); 
+			    			dsId = dsId.toLowerCase();
 			    			String dsLid = Constants.LID_PREFIX+"data_set:data_set." + dsId;
-			    		
-			    			if (!Utility.valueExists(dsLid, values)) 
+
+			    			if (!Utility.valueExists(dsLid, values))
 			    			{
 								values.add(dsLid);
 			    			}
@@ -386,7 +393,10 @@ public class CatalogVolumeIngester
 				else 
 				{
 					String instId = md.getMetadata(keyToLook);
-					if (instId.equalsIgnoreCase(valueToFind)) 
+					if (instId == null) {
+						log.warning("Missing " + keyToLook + " field in DATA_SET catalog object: " +
+						           catObj.getFilename());
+					} else if (instId.equalsIgnoreCase(valueToFind)) 
 					{
 						String dsId = md.getMetadata("DATA_SET_ID");
 						dsId = Utility.replaceChars(dsId);
@@ -409,16 +419,19 @@ public class CatalogVolumeIngester
 	
 	public void publishObject(CatalogObject obj)
 	{
-		RegistryObject ro = obj.getExtrinsicObject();
-		if(ro == null) return;
+      if (obj.getExtrinsicObject() == null) {
+        return;
+      }
 		
-		try
-		{
-			DocGenerator.getInstance().addDoc(ro);
-		} 
-		catch(Exception ex) 
-		{
-			log.log(Level.SEVERE, "Could not publish catalog object.", ex);
-		}  		
+		try {
+          DocGenerator.getInstance().addDoc(obj);
+          solrDocCount++;
+        } catch (DocGeneratorException e) {
+          LabelParserException lp = new LabelParserException(obj.getLabel().getLabelURI(), null,
+              null, "ingest.warning.skipFile", ProblemType.INVALID_LABEL_WARNING, e.getMessage());
+          obj.getLabel().addProblem(lp);
+        } catch (IOException ex) {
+          log.log(Level.SEVERE, "Unexpected error trying to generate Solr Doc.", ex);
+        }
 	}
 }

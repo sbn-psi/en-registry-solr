@@ -95,6 +95,30 @@ build_docker_image() {
 create_docker_volumes() {
     echo "Creating docker volumes and associated data directory        " | tee -a $LOG
     mkdir -p $DATA_HOME/$DOCKER_VOLUME/data
+
+    # Ensure Solr user (8983) can write to the data directory
+    # In CI environments, this directory may be created with wrong ownership
+    if command -v chown > /dev/null 2>&1; then
+        # Detect if we're in CI and sudo is available
+        CHOWN_CMD="chown"
+        if [ -n "$CI" ] || [ -n "$GITHUB_ACTIONS" ]; then
+            if command -v sudo > /dev/null 2>&1; then
+                CHOWN_CMD="sudo chown"
+                echo "  Detected CI environment, using sudo for ownership change" | tee -a $LOG
+            fi
+        fi
+
+        # Attempt to change ownership to Solr user (8983)
+        if $CHOWN_CMD -R 8983:8983 $DATA_HOME/$DOCKER_VOLUME >>$LOG 2>&1; then
+            echo "  Successfully set ownership to Solr user (8983:8983)" | tee -a $LOG
+        else
+            echo "WARNING: Could not chown $DATA_HOME/$DOCKER_VOLUME to 8983:8983" | tee -a $LOG
+            echo "         You may need to run with sudo or adjust permissions manually" | tee -a $LOG
+            echo "         Current permissions:" | tee -a $LOG
+            ls -la $DATA_HOME/$DOCKER_VOLUME | tee -a $LOG
+        fi
+    fi
+
     docker volume create $DOCKER_VOLUME >>$LOG 2>&1
 }
 
@@ -125,7 +149,7 @@ wait_for_solr() {
 start_registry_container() {
     echo -ne "Starting Registry Docker Container                            " | tee -a $LOG
     docker run --name ${DOCKER_IMAGE} \
-      --restart=always \
+      --restart unless-stopped \
       -u solr \
       -d -p 8983:8983 \
       -v ${DATA_HOME}/${DOCKER_VOLUME}:/var/solr/ \
@@ -138,12 +162,12 @@ start_registry_container() {
 create_solr_collections() {
     # Create the Registry collections
     echo -ne "Creating Registry collection (registry)                       " | tee -a $LOG
-    docker exec --user=solr ${DOCKER_IMAGE} solr create -c registry -d registry -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
+    docker exec --user=solr ${DOCKER_IMAGE} solr create -c registry -d registry -shards ${numShards} -replicationFactor ${replicationFactor} >>$LOG 2>&1
     print_status $?
 
     # Create the Search collection 
     echo -ne "Creating Search collection (data)                             " | tee -a $LOG
-    docker exec --user=solr ${DOCKER_IMAGE} solr create -c data -d data -s ${numShards} -rf ${replicationFactor} >>$LOG 2>&1
+    docker exec --user=solr ${DOCKER_IMAGE} solr create -c data -d data -shards ${numShards} -replicationFactor ${replicationFactor} >>$LOG 2>&1
     print_status $?
 }
 

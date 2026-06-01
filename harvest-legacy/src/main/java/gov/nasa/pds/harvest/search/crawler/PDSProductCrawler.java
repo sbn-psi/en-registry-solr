@@ -244,6 +244,7 @@ public class PDSProductCrawler extends ProductCrawler {
    * @return true if the file passes.
    */
   @Override
+  @SuppressWarnings("java:S2696") // Method overrides parent so cannot be static; static counters are intentional for harvest reporting
   protected boolean passesPreconditions(File product) {
     if (inPersistanceMode) {
       if (touchedFiles.containsKey(product)) {
@@ -258,6 +259,13 @@ public class PDSProductCrawler extends ProductCrawler {
       }
     }
     if (Constants.collections.contains(product)) {
+      return false;
+    }
+    // Skip non-XML files (e.g., CSV inventory files, PDFs, TXT files, etc.)
+    String fileName = product.getName().toLowerCase();
+    if (!fileName.endsWith(".xml") && !fileName.endsWith(".lblx")) {
+      log.log(new ToolsLogRecord(ToolsLevel.SKIP, "Skipping non-XML file.", product));
+      ++HarvestSolrStats.numFilesSkipped;
       return false;
     }
     log.log(new ToolsLogRecord(ToolsLevel.DEBUG, "Begin processing.", product));
@@ -281,35 +289,6 @@ public class PDSProductCrawler extends ProductCrawler {
       ++HarvestSolrStats.numBadFiles;
       return false;
     } else  {
-      try {
-        String lid = extractor.getValueFromDoc(Constants.coreXpathsMap.get(
-          Constants.LOGICAL_ID));
-        String version = extractor.getValueFromDoc(Constants.coreXpathsMap.get(
-            Constants.PRODUCT_VERSION));
-        // Check to see if the product is part of the non-primary member list.
-        int index = Constants.nonPrimaryMembers.indexOf(new LidVid(lid));
-        if (index != -1) {
-          LidVid lidvid = Constants.nonPrimaryMembers.get(index);
-          if (lidvid.hasVersion()) {
-            if (lidvid.getVersion().equals(version)) {
-              log.log(new ToolsLogRecord(ToolsLevel.SKIP,
-                "Not a primary member.", product));
-              ++HarvestSolrStats.numFilesSkipped;
-              return false;
-            }
-          } else {
-            log.log(new ToolsLogRecord(ToolsLevel.SKIP,
-                "Not a primary member.", product));
-              ++HarvestSolrStats.numFilesSkipped;
-              return false;
-          }
-        }
-      } catch (Exception e) {
-        log.log(new ToolsLogRecord(ToolsLevel.SEVERE, "Problem extracting "
-            + "LIDVID: " + e.getMessage(), product));
-        ++HarvestSolrStats.numBadFiles;
-        return false;
-      }
       try {
         objectType = extractor.getValueFromDoc(Constants.coreXpathsMap.get(
             Constants.PRODUCT_CLASS));

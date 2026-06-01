@@ -37,6 +37,9 @@
     <field name="data_product_type" type="string">
       <outputString format="text">Bundle</outputString>
     </field>
+    <field name="page_type" type="string">
+      <outputString format="text">Data</outputString>
+    </field>
     <field name="objectType" type="string">
       <registryPath>objectType</registryPath>
     </field>
@@ -71,6 +74,19 @@
     </field>
     <field name="citation_editor_list" type="string">
       <registryPath>citation_editor_list</registryPath>
+    </field>
+    <!-- JSON fields for authors and editors to preserve nested structure -->
+    <field name="citation_author_person_json" type="string">
+      <registryPath>citation_author_person_json</registryPath>
+    </field>
+    <field name="citation_author_organization_json" type="string">
+      <registryPath>citation_author_organization_json</registryPath>
+    </field>
+    <field name="citation_editor_person_json" type="string">
+      <registryPath>citation_editor_person_json</registryPath>
+    </field>
+    <field name="citation_editor_organization_json" type="string">
+      <registryPath>citation_editor_organization_json</registryPath>
     </field>
     <field name="citation_publication_year" type="string">
       <registryPath>citation_publication_year</registryPath>
@@ -215,9 +231,6 @@
     <!-- File Reference Fields -->
     <field name="file_ref_name" type="string">
       <registryPath>file_ref_file_name</registryPath>
-    </field>
-    <field name="file_ref_location" type="string">
-      <registryPath>file_ref_file_location</registryPath>
     </field>
     <field name="file_ref_url" type="string">
       <registryPath>file_ref_access_url</registryPath>

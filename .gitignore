@@ -35,12 +35,14 @@ src/test/temp/
 
 # other stuff
 *.xpr
+*.env
 *.swp
 /bin/
 .*.swp
 *.sublime-*
 *.DS_Store
 pom.xml.versionsBackup
+.vscode
 
 # Java stuff
 *.javac

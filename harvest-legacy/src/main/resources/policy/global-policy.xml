@@ -16,6 +16,7 @@
 
   <candidates>
     <namespace harvest:prefix="pds" harvest:uri="http://pds.nasa.gov/pds4/pds/v1" harvest:default="true"/>
+    <namespace harvest:prefix="ctli" harvest:uri="http://pds.nasa.gov/pds4/ctli/v2" harvest:default="true"/>
 
     <productMetadata harvest:objectType="Product_Attribute_Definition">
       <!-- Identification_Area -->
@@ -36,6 +37,19 @@
       </xPath>
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
+      </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
       </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
@@ -208,6 +222,19 @@
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
       </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
+      </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
       </xPath>
@@ -373,6 +400,19 @@
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
       </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
+      </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
       </xPath>
@@ -507,6 +547,19 @@
       </xPath>
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
+      </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
       </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
@@ -678,6 +731,19 @@
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
       </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
+      </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
       </xPath>
@@ -740,7 +806,10 @@
       <xPath harvest:slotName="facility_description">//Facility/description</xPath>
       <!-- Instrument -->
       <xPath harvest:slotName="instrument_name">//Instrument/name</xPath>
-      <xPath harvest:slotName="instrument_type">//Instrument/type</xPath>
+      <xPath harvest:slotName="instrument_type_legacy">//Instrument/type</xPath>
+      <xPath harvest:slotName="instrument_type">//Type_List_Area/ctli:Type_List/ctli:type</xPath>
+      <xPath harvest:slotName="instrument_subtype_legacy">//Instrument/subtype</xPath>
+      <xPath harvest:slotName="instrument_subtype">//Type_List_Area/ctli:Type_List/ctli:subtype</xPath>
       <xPath harvest:slotName="instrument_description">//Instrument/description</xPath>
       <xPath harvest:slotName="instrument_model_id">//Instrument/model_id</xPath>
       <xPath harvest:slotName="instrument_naif_id">//Instrument/naif_instrument_id</xPath>
@@ -823,6 +892,19 @@
       </xPath>
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
+      </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
       </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
@@ -910,6 +992,19 @@
       </xPath>
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
+      </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
       </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
@@ -999,6 +1094,19 @@
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
       </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
+      </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
       </xPath>
@@ -1087,6 +1195,19 @@
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
       </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
+      </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
       </xPath>
@@ -1159,6 +1280,19 @@
       </xPath>
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
+      </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
       </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
@@ -1235,6 +1369,19 @@
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
       </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
+      </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
       </xPath>
@@ -1308,6 +1455,19 @@
       </xPath>
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
+      </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
       </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
@@ -1397,6 +1557,19 @@
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
       </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
+      </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
       </xPath>
@@ -1485,6 +1658,19 @@
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
       </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
+      </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
       </xPath>
@@ -1557,6 +1743,19 @@
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
       </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
+      </xPath>      
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
       </xPath>
@@ -1629,6 +1828,19 @@
       </xPath>
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
+      </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
       </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
@@ -1712,6 +1924,19 @@
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
       </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
+      </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
       </xPath>
@@ -1785,6 +2010,19 @@
       </xPath>
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
+      </xPath>
+      <!-- Extract List_Author and List_Editor as JSON to preserve nested structure -->
+      <xPath harvest:slotName="citation_author_person_json">
+        //Identification_Area/Citation_Information/List_Author/Person
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_json">
+        //Identification_Area/Citation_Information/List_Author/Organization
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_json">
+        //Identification_Area/Citation_Information/List_Editor/Person
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_json">
+        //Identification_Area/Citation_Information/List_Editor/Organization
       </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
@@ -1926,6 +2164,66 @@
       <xPath harvest:slotName="document_doi">//Document/doi</xPath>
       <xPath harvest:slotName="document_author_list">//Document/author_list</xPath>
       <xPath harvest:slotName="document_editor_list">//Document/editor_list</xPath>
+      <xPath harvest:slotName="citation_author_organization_name">
+        //Document/List_Author/Organization/organization_name
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_rorid">
+        //Document/List_Author/Organization/organization_rorid
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_contributor_type">
+        //Document/List_Author/Organization/contributor_type
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_contributor_type">
+        //Document/List_Author/Person/contributor_type
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_display_full_name">
+        //Document/List_Author/Person/display_full_name
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_given_name">
+        //Document/List_Author/Person/given_name
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_family_name">
+        //Document/List_Author/Person/family_name
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_orcid">
+        //Document/List_Author/Person/person_orcid
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_affiliation_organization_name">
+        //Document/List_Author/Person/Affiliation/organization_name
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_affiliation_organization_rorid">
+        //Document/List_Author/Person/Affiliation/organization_rorid
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_name">
+        //Identification_Area/Citation_Information/List_Editor/Organization/organization_name
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_rorid">
+        //Identification_Area/Citation_Information/List_Editor/Organization/organization_rorid
+      </xPath>
+      <xPath harvest:slotName="citation_editor_organization_contributor_type">
+        //Identification_Area/Citation_Information/List_Editor/Organization/contributor_type
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_contributor_type">
+        //Identification_Area/Citation_Information/List_Editor/Person/contributor_type
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_display_full_name">
+        //Identification_Area/Citation_Information/List_Editor/Person/display_full_name
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_given_name">
+        //Identification_Area/Citation_Information/List_Editor/Person/given_name
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_family_name">
+        //Identification_Area/Citation_Information/List_Editor/Person/family_name
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_orcid">
+        //Identification_Area/Citation_Information/List_Editor/Person/person_orcid
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_affiliation_organization_name">
+        //Identification_Area/Citation_Information/List_Editor/Person/Affiliation/organization_name
+      </xPath>
+      <xPath harvest:slotName="citation_editor_person_affiliation_organization_rorid">
+        //Identification_Area/Citation_Information/List_Editor/Person/Affiliation/organization_rorid
+      </xPath>
       <xPath harvest:slotName="document_acknowledgement_text">//Document/acknowledgement_text</xPath>
       <xPath harvest:slotName="document_copyright">//Document/copyright</xPath>
       <xPath harvest:slotName="document_publication_date">//Document/publication_date</xPath>
@@ -1966,6 +2264,36 @@
       </xPath>
       <xPath harvest:slotName="citation_editor_list">
         //Identification_Area/Citation_Information/editor_list
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_name">
+        //Identification_Area/Citation_Information/List_Author/Organization/organization_name
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_rorid">
+        //Identification_Area/Citation_Information/List_Author/Organization/organization_rorid
+      </xPath>
+      <xPath harvest:slotName="citation_author_organization_contributor_type">
+        //Identification_Area/Citation_Information/List_Author/Organization/contributor_type
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_contributor_type">
+        //Identification_Area/Citation_Information/List_Author/Person/contributor_type
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_display_full_name">
+        //Identification_Area/Citation_Information/List_Author/Person/display_full_name
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_given_name">
+        //Identification_Area/Citation_Information/List_Author/Person/given_name
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_family_name">
+        //Identification_Area/Citation_Information/List_Author/Person/family_name
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_orcid">
+        //Identification_Area/Citation_Information/List_Author/Person/person_orcid
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_affiliation_organization_name">
+        //Identification_Area/Citation_Information/List_Author/Person/Affiliation/organization_name
+      </xPath>
+      <xPath harvest:slotName="citation_author_person_affiliation_organization_rorid">
+        //Identification_Area/Citation_Information/List_Author/Person/Affiliation/organization_rorid
       </xPath>
       <xPath harvest:slotName="citation_publication_year">
         //Identification_Area/Citation_Information/publication_year
@@ -2113,6 +2441,21 @@
      <referenceTypeMap harvest:value="agency_ref">
        <modelValue>
          node_to_agency
+       </modelValue>
+       <modelValue>
+         investigation_to_agency
+       </modelValue>
+       <modelValue>
+         instrument_host_to_agency
+       </modelValue>
+       <modelValue>
+         instrument_to_agency
+       </modelValue>
+       <modelValue>
+         facility_to_agency
+       </modelValue>
+       <modelValue>
+         telescope_to_agency
        </modelValue>
      </referenceTypeMap>
      <referenceTypeMap harvest:value="airborne_ref">
@@ -2427,6 +2770,9 @@
          instrument_host_to_investigation
        </modelValue>
        <modelValue>
+         instrument_to_investigation
+       </modelValue>
+       <modelValue>
          resource_to_investigation
        </modelValue>
        <modelValue>
@@ -2591,6 +2937,9 @@
          instrument_to_telescope
        </modelValue>
        <modelValue>
+         investigation_to_telescope
+       </modelValue>
+       <modelValue>
          is_telescope
        </modelValue>
      </referenceTypeMap>
@@ -2622,6 +2971,11 @@
      <referenceTypeMap harvest:value="volume_ref">
        <modelValue>
          has_volume
+       </modelValue>
+     </referenceTypeMap>
+     <referenceTypeMap harvest:value="ancillary_ref">
+       <modelValue>
+         collection_to_ancillary
        </modelValue>
      </referenceTypeMap>
   </references>

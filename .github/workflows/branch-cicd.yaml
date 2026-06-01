@@ -38,14 +38,14 @@ jobs:
         steps:
             -
                 name: 💳 Checkout
-                uses: actions/checkout@v4
+                uses: actions/checkout@v6
                 with:
                     lfs: true
                     fetch-depth: 0
                     token: ${{secrets.ADMIN_GITHUB_TOKEN || github.token}}
             -
                 name: 💵 Maven Cache
-                uses: actions/cache@v4
+                uses: actions/cache@v5
                 with:
                     path: ~/.m2/repository
                     # The "key" used to indicate a set of cached files is the operating system runner
@@ -57,7 +57,7 @@ jobs:
                     restore-keys: pds-${{runner.os}}-mvn-
             -
                 name: ☕️ Set up OpenJDK
-                uses: actions/setup-java@v4
+                uses: actions/setup-java@v5
                 with:
                     distribution: 'adopt'
                     java-version: ${{matrix.java-version}}
@@ -73,18 +73,13 @@ jobs:
             -
                 name: 🩺 Run Smoke Tests
                 run: |
-                    echo "Skipping Smoke Tests for now since starting Solr is not currently working"
-                    # echo "Prep environment"
-                    # export DATA_HOME=/registry-data
-                    # sudo mkdir $DATA_HOME
-                    # sudo chown 8983:8983 $DATA_HOME
-                    # sudo chmod 777 $DATA_HOME
+                    echo "Preparing environment for smoke tests"
+                    export DATA_HOME=/tmp/registry-data
+                    mkdir -p $DATA_HOME
 
-                    # export LEGACY_REGISTRY_HOME=$(pwd)/registry-mgr-legacy-*/
-                    # export LEGACY_HARVEST_HOME=$(pwd)/harvest-legacy-*/
-                    # export LEGACY_CATALOG_HOME=$(pwd)/catalog-legacy-*/
-                    # cd test
-                    # ./smoke-tests.sh
+                    source test/setup-test-env.sh
+                    cd test
+                    ./smoke-tests.sh
 
 ...
 

@@ -1,12 +1,146 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-legacy-solr/tree/«unknown») (2024-08-13)
+## [«unknown»](https://github.com/NASA-PDS/registry-legacy-solr/tree/«unknown») (2026-05-26)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.1.2...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v5.1.1...«unknown»)
+
+**Defects:**
+
+- Upgrade Apache Solr to 9.10.1 to address security vulnerabilities [\#249](https://github.com/NASA-PDS/registry-legacy-solr/issues/249)
+- Harvest crawler processes non-XML files unnecessarily [\#246](https://github.com/NASA-PDS/registry-legacy-solr/issues/246)
+- Unexpected `Internal Reference` And `Reference` Page Types Values [\#243](https://github.com/NASA-PDS/registry-legacy-solr/issues/243) [[s.medium](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.medium)]
+
+## [v5.1.1](https://github.com/NASA-PDS/registry-legacy-solr/tree/v5.1.1) (2026-01-10)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v5.0.2...v5.1.1)
+
+**Defects:**
+
+- harvest-solr XML flattening does not preserve relationships between nested elements [\#237](https://github.com/NASA-PDS/registry-legacy-solr/issues/237) [[s.medium](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.medium)]
+
+## [v5.0.2](https://github.com/NASA-PDS/registry-legacy-solr/tree/v5.0.2) (2025-12-31)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v5.0.1...v5.0.2)
+
+## [v5.0.1](https://github.com/NASA-PDS/registry-legacy-solr/tree/v5.0.1) (2025-12-16)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.5.5...v5.0.1)
+
+**Improvements:**
+
+- Auto-restart the registry legacy docker container unless stopped [\#217](https://github.com/NASA-PDS/registry-legacy-solr/issues/217)
 
 **Other closed issues:**
 
+- Upgrade Apache Solr from 9.8.0 to 9.10.0 [\#228](https://github.com/NASA-PDS/registry-legacy-solr/issues/228)
+
+## [v4.5.5](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.5.5) (2025-05-30)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.5.3...v4.5.5)
+
+**Requirements:**
+
+- As a user, I want to only execute one harvest-solr at a time [\#208](https://github.com/NASA-PDS/registry-legacy-solr/issues/208)
+
+## [v4.5.3](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.5.3) (2025-05-29)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.5.2...v4.5.3)
+
+**Requirements:**
+
+- As a user, I want to load instrument context products that use the CTLI LDD to specify instrument type [\#206](https://github.com/NASA-PDS/registry-legacy-solr/issues/206)
+
+## [v4.5.2](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.5.2) (2025-05-28)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.5.1...v4.5.2)
+
+**Requirements:**
+
+- As a user, I want to load and search Product\_Externals [\#201](https://github.com/NASA-PDS/registry-legacy-solr/issues/201)
+
+## [v4.5.1](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.5.1) (2025-05-28)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.5.0...v4.5.1)
+
+**Defects:**
+
+- Bug introduced when supporting product external and missing resource\_refs [\#204](https://github.com/NASA-PDS/registry-legacy-solr/issues/204) [[s.high](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.high)]
+
+## [v4.5.0](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.5.0) (2025-05-27)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.3.0...v4.5.0)
+
+**Requirements:**
+
+- As a user, I want to search by the new List\_Author and List\_Editor attributes [\#199](https://github.com/NASA-PDS/registry-legacy-solr/issues/199)
+- As a user, I want to provide a data input path via command-line [\#179](https://github.com/NASA-PDS/registry-legacy-solr/issues/179)
+
+**Improvements:**
+
+- Upgrade Solr to 9.8 due to some known issues with 9.7 [\#197](https://github.com/NASA-PDS/registry-legacy-solr/issues/197)
+- Update regex to avoid potential vulnerability [\#195](https://github.com/NASA-PDS/registry-legacy-solr/issues/195)
+
+**Defects:**
+
+- NullPointerException being thrown and catalog-solr is not completing execution [\#184](https://github.com/NASA-PDS/registry-legacy-solr/issues/184) [[s.critical](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.critical)]
+- Possible memory leak related to use of Solr library per `Direct buffer memory` errors [\#172](https://github.com/NASA-PDS/registry-legacy-solr/issues/172) [[s.medium](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.medium)]
+
+**Other closed issues:**
+
+- Remove Tools from Registry for MVP delivery [\#141](https://github.com/NASA-PDS/registry-legacy-solr/issues/141)
+
+## [v4.3.0](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.3.0) (2024-12-09)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.2.2...v4.3.0)
+
+**Improvements:**
+
+- Update `page_type` to "\<context\> Portal" for all context products [\#175](https://github.com/NASA-PDS/registry-legacy-solr/issues/175)
+- Add single-value title and context name field to enable sorting [\#158](https://github.com/NASA-PDS/registry-legacy-solr/issues/158)
+
+**Defects:**
+
+- SIP\_Deep\_Archive products showing up in search results [\#176](https://github.com/NASA-PDS/registry-legacy-solr/issues/176) [[s.medium](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.medium)]
+- Harvest ignoring secondary members of collections managed by EN [\#174](https://github.com/NASA-PDS/registry-legacy-solr/issues/174)
+
+**Other closed issues:**
+
+- Update page-type facet to collapse Data Set, Data Collection, and Data Bundle to Data [\#168](https://github.com/NASA-PDS/registry-legacy-solr/issues/168)
+- Update page\_type to use `Instrument Host` instead of `Instrument_Host` [\#159](https://github.com/NASA-PDS/registry-legacy-solr/issues/159)
+
+## [v4.2.2](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.2.2) (2024-11-26)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.2.1...v4.2.2)
+
+## [v4.2.1](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.2.1) (2024-11-26)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.2.0...v4.2.1)
+
+## [v4.2.0](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.2.0) (2024-11-25)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v4.1.2...v4.2.0)
+
+**Requirements:**
+
+- As a user, I want to provide search/access links using the hsk.cat files within the data set [\#93](https://github.com/NASA-PDS/registry-legacy-solr/issues/93)
+
+**Defects:**
+
+- Cassini ISS Users Guide returns "No Document Information found in the registry" msg [\#163](https://github.com/NASA-PDS/registry-legacy-solr/issues/163) [[s.high](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.high)]
+- viewDataset.jsp shows no links for Search/Access Data [\#156](https://github.com/NASA-PDS/registry-legacy-solr/issues/156) [[s.high](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.high)]
+- viewDocument.jsp has no links for SEARCH/ACCESS DATA [\#154](https://github.com/NASA-PDS/registry-legacy-solr/issues/154) [[s.high](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.high)]
+- `page_type` not working for context products [\#147](https://github.com/NASA-PDS/registry-legacy-solr/issues/147) [[s.critical](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.critical)]
+- Unable to set custom facet fields \(`facet.field`\) [\#130](https://github.com/NASA-PDS/registry-legacy-solr/issues/130) [[s.critical](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.critical)]
+
+**Other closed issues:**
+
+- Fix empty named facet values [\#151](https://github.com/NASA-PDS/registry-legacy-solr/issues/151)
+- Update `*_ref` fields to use LIDs instead of LIDVIDs [\#143](https://github.com/NASA-PDS/registry-legacy-solr/issues/143)
+- Update `investigation_name` fields for to be only 1 value [\#139](https://github.com/NASA-PDS/registry-legacy-solr/issues/139)
+- Add new page\_type field to Solr metadata to support web mod effort [\#118](https://github.com/NASA-PDS/registry-legacy-solr/issues/118)
+- Develop script to reload PDS3 data where we are missing original catalog files [\#116](https://github.com/NASA-PDS/registry-legacy-solr/issues/116)
 - Add catalog solr test data to smoke tests [\#113](https://github.com/NASA-PDS/registry-legacy-solr/issues/113)
+- Prep for Solr Registry production deployment [\#103](https://github.com/NASA-PDS/registry-legacy-solr/issues/103)
 - Create Installation and Deployment page on Wiki [\#97](https://github.com/NASA-PDS/registry-legacy-solr/issues/97)
 
 ## [v4.1.2](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.1.2) (2024-07-31)
@@ -36,10 +170,6 @@
 ## [v4.0.1](https://github.com/NASA-PDS/registry-legacy-solr/tree/v4.0.1) (2024-07-25)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v3.1.0...v4.0.1)
-
-**Requirements:**
-
-- As a user, I want to provide search/access links using the hsk.cat files within the data set [\#93](https://github.com/NASA-PDS/registry-legacy-solr/issues/93)
 
 **Improvements:**
 

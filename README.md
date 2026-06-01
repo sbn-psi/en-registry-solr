@@ -11,10 +11,21 @@ We also have a backup copy of the EN-hosted registry, stored in our own registry
 
 We use this Registry codebase because it includes the schema necessary to store the backup copy and serve it in the exact way that the frontend expects it to be in.
 
+## Build
+This upstream line now requires OpenJDK 17 or higher.
+
+Build this repo with:
+
+```sh
+mvn install
+```
+
+Schema changes require redeploying and reindexing Solr before clients can rely on the new fields.
+
 ## Deployment
 1. Build this repo with `mvn install`
-2. Take the release of registry-mgr-legacy/target/registry-mgr-legacy-{version}-bin.tar.gz and move it to a VM with Docker
-3. Make a /var/solr/solrdata/ directory that is owned by UID and group 8983 and has permissions 774
+2. Take the release of `registry-mgr-legacy/target/registry-mgr-legacy-{version}-bin.tar.gz` and move it to a VM with Docker
+3. Make a `/var/solr/solrdata/` directory that is owned by UID and group 8983 and has permissions 774
 4. Unpack the release somewhere, and from the root directory of the installation, run `DATA_HOME=/var/solr bin/registry_legacy_installer_docker.sh install`
 5. Add Basic Authentication to the new Solr server and ensure the credentials are available to Archive Loader and ArcNav (see below)
 
