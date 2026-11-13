@@ -1,41 +1,31 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
+# Security updates only: 0 disables routine version PRs, not security PRs.
+# Alerts/security updates are enabled separately in repository settings.
+# Docker manifest coverage is retained; this is not a container CVE scanner.
 version: 2
 updates:
-  - package-ecosystem: "maven" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: maven
+    directory: /
     schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "github-actions" # See documentation for possible values
-    directory: "/" # Location of package manifests
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 0
+  - package-ecosystem: docker
+    directories:
+      - /deploy/sbn-solr
+      - /registry-mgr-legacy/src/main/resources/build
     schedule:
-      interval: "weekly"
-    groups:
-       # Specify a name for the group, which will be used in pull request titles
-       # and branch names
-       dev-dependencies:
-          # Define patterns to include dependencies in the group (based on
-          # dependency name)
-          applies-to: version-updates # Applies the group rule to version updates
-          patterns:
-            - "*"       # A wildcard that matches all dependencies in the package
-                        # ecosystem. Note: using "*" may open a large pull request
-
-  - package-ecosystem: "docker" # See documentation for possible values
-    directory: "/docker/" # Location of package manifests
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 0
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "weekly"
-    groups:
-       # Specify a name for the group, which will be used in pull request titles
-       # and branch names
-       dev-dependencies:
-          # Define patterns to include dependencies in the group (based on
-          # dependency name)
-          applies-to: version-updates # Applies the group rule to version updates
-          patterns:
-            - "*"       # A wildcard that matches all dependencies in the package
-                        # ecosystem. Note: using "*" may open a large pull request
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 0
+  - package-ecosystem: pip
+    directory: /src/main/resources
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 0

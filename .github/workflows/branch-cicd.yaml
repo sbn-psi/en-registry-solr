@@ -1,0 +1,51 @@
+name: Fork CI
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: fork-ci-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Build and test all Maven modules
+        run: mvn -B -ntp install
+      - name: Test reload and standalone release scripts without production services
+        run: |
+          test/reload-all-tests.sh
+          test/install-release-tests.sh
+          test/installer-command-tests.sh
+      - name: Test SBN wrapper contracts
+        run: test/sbn-wrapper-tests.sh
+      - name: Build SBN image locally without publishing
+        env:
+          SKIP_MAVEN: 'true'
+          REGISTRY_IMAGE: en-registry-solr:ci
+        run: deploy/sbn-solr/scripts/build-image.sh
+      - name: Run upstream integration smoke tests on disposable local Solr
+        shell: bash
+        run: |
+          tar -xzf harvest-legacy/target/harvest-legacy-*-bin.tar.gz
+          tar -xzf registry-mgr-legacy/target/registry-mgr-legacy-*-bin.tar.gz
+          tar -xzf catalog-legacy/target/catalog-legacy-*-bin.tar.gz
+          test/installer-command-tests.sh registry-mgr-legacy-*/bin/registry_legacy_installer_docker.sh
+          export DATA_HOME="$RUNNER_TEMP/registry-data"
+          mkdir -p "$DATA_HOME"
+          source test/setup-test-env.sh
+          cd test
+          ./smoke-tests.sh
