@@ -52,3 +52,23 @@ repository, not here.
 Deploy this image from the Archive Loader repository. Archive Loader provides
 the Compose services, generated runtime credentials, Solr `security.json`,
 collection bootstrap, health checks, and bind-mount-to-volume migration helper.
+
+## Container security
+
+[Container security](../../.github/workflows/container-security.yml) builds the
+registry distribution and this complete custom image on pull requests, pushes to
+`main`, Mondays at 15:41 UTC, and manual runs. It uses the official Aqua Trivy
+Action pinned to a commit SHA, scanning OS packages and Java libraries. Scan
+caches are reused; vulnerability databases are still refreshed normally.
+
+The `solr-trivy-<commit>` artifact is retained for 14 days. It includes the full
+JSON report and package inventory (all severities, including unfixed findings),
+the image identity, a summary, and actionable JSON/SARIF. Fixable HIGH/CRITICAL
+findings appear in the job summary and fail the scan job after reports are saved.
+Actionable SARIF is also uploaded to GitHub code scanning where available; fork
+PRs retain their artifact without attempting a privileged upload. A partial scan
+that does not identify both OS and Java packages fails instead of reporting clean.
+
+This workflow does not publish images, deploy, upgrade runtime versions or create
+base-image fix PRs. Dependabot remains security-only. Scan results describe the
+newly built image, not the image currently deployed on a host.
