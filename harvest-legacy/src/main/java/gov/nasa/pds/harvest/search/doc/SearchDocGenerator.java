@@ -120,12 +120,14 @@ public class SearchDocGenerator {
 			typeMap.put("package_id", "string");
 			fieldMap.put("package_id", Arrays.asList(TransactionManager.getInstance().getTransactionId()));
 
-      // PDSSBN: Add resource url as just the folder containing the label
-      if(!fieldMap.containsKey("file_ref_url")) {
-        // If file_ref_url is not present, we cannot create resource_url
-        log.warning("file_ref_url not found in fieldMap, cannot create resource_url");
+      // PDSSBN: Use the label's folder when a label URL is available. A mapped
+      // field may exist with no values; keep the document and its resource URL.
+      List<String> fileUrls = fieldMap.get("file_ref_url");
+      if (fileUrls == null || fileUrls.isEmpty() || fileUrls.get(0) == null
+          || fileUrls.get(0).isBlank()) {
+        log.warning("No file_ref_url value available; keeping the configured resource_url");
       } else {
-        String fileUrl = fieldMap.get("file_ref_url").get(0);
+        String fileUrl = fileUrls.get(0);
         String resourceUrl = fileUrl.substring(0, fileUrl.lastIndexOf("/") + 1);
         fieldMap.put("resource_url", Arrays.asList(resourceUrl));
         typeMap.put("resource_url", "string");
