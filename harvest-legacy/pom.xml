@@ -8,7 +8,7 @@
   <parent>
     <groupId>gov.nasa.pds</groupId>
     <artifactId>registry-legacy</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.7.0-SNAPSHOT</version>
   </parent>
 
   <groupId>gov.nasa.pds.registry-legacy</groupId>
@@ -76,7 +76,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.7.1</version>
+        <version>3.8.0</version>
         <executions>
           <execution>
             <id>bin-release</id>
@@ -96,7 +96,7 @@
       <plugin>
 	    <groupId>org.codehaus.mojo</groupId>
 	    <artifactId>buildnumber-maven-plugin</artifactId>
-	    <version>3.2.1</version>
+	    <version>3.3.0</version>
         <executions>
           <execution>
             <phase>validate</phase>
@@ -136,14 +136,6 @@
     </plugins>
   </build>
 
-  <repositories>
-    <repository>
-      <id>snapshots-repo</id>
-      <name>FuseSource 3rdP</name>
-      <url>https://repo.fusesource.com/nexus/content/repositories/releases-3rd-party/</url>
-    </repository>
-  </repositories>
-
   <dependencies>
     <dependency>
       <groupId>commons-cli</groupId>
@@ -158,9 +150,9 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.6</version>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.20.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -171,7 +163,7 @@
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
       <artifactId>jaxb-impl</artifactId>
-      <version>3.0.2</version>
+      <version>4.0.0</version>
     </dependency>
     <dependency>
       <groupId>javax.activation</groupId>
@@ -183,13 +175,6 @@
       <groupId>org.glassfish.jaxb</groupId>
       <artifactId>jaxb-runtime</artifactId>
       <version>2.3.5</version>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.activation</groupId>
-      <artifactId>activation</artifactId>
-      <version>1.1.1</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.ws.rs</groupId>
@@ -244,10 +229,16 @@
       <artifactId>gson</artifactId>
       <version>2.14.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.11.4</version>
+      <scope>test</scope>
+    </dependency>
   	<dependency>
   	  <groupId>org.json</groupId>
   	  <artifactId>json</artifactId>
-  	  <version>20240303</version>
+  	  <version>20260719</version>
   	</dependency>
     <dependency>
       <groupId>org.apache.tika</groupId>
@@ -256,9 +247,9 @@
     </dependency>
 	<!-- https://mvnrepository.com/artifact/com.google.common/google-collect -->
 	<dependency>
-	    <groupId>com.google.common</groupId>
-	    <artifactId>google-collect</artifactId>
-	    <version>1.0</version>
+	    <groupId>com.google.guava</groupId>
+	    <artifactId>guava</artifactId>
+	    <version>33.8.0-jre</version>
 	</dependency>
 	<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
 	<dependency>
@@ -270,7 +261,7 @@
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-context</artifactId>
-	    <version>6.1.20</version>
+	    <version>7.0.8</version>
 	</dependency>
 
 	<dependency>

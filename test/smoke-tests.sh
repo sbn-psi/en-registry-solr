@@ -201,6 +201,109 @@ query_solr() {
     return 0
 }
 
+# Query a specific Solr request handler and check the number of matching documents
+query_solr_handler() {
+    local handler=$1
+    local query=$2
+    local expected_count=$3
+    local test_name=$4
+
+    log_info "$test_name: Querying Solr handler /$handler: $query"
+
+    local response=$(curl -s -G "http://localhost:8983/solr/data/${handler}" --data-urlencode "q=${query}" --data-urlencode "wt=json")
+    local actual_count=$(echo "$response" | grep -o '"numFound":[0-9]*' | head -1 | cut -d':' -f2)
+
+    if [ -z "$actual_count" ]; then
+        log_error "$test_name: Failed to query Solr or parse response"
+        return 1
+    fi
+
+    if [ "$actual_count" -ne "$expected_count" ]; then
+        log_error "$test_name: Expected exactly $expected_count documents, found $actual_count"
+        return 1
+    fi
+
+    log_success "$test_name: Found $actual_count documents (expected $expected_count)"
+    return 0
+}
+
+# Print the number of documents a handler returns for a query and an optional filter query
+solr_count() {
+    local handler=$1
+    local query=$2
+    local filter=${3:-}
+
+    local args=(--data-urlencode "q=${query}" --data-urlencode "wt=json")
+    if [ -n "$filter" ]; then
+        args+=(--data-urlencode "fq=${filter}")
+    fi
+
+    curl -s -G "http://localhost:8983/solr/data/${handler}" "${args[@]}" \
+        | grep -o '"numFound":[0-9]*' | head -1 | cut -d':' -f2
+}
+
+# Print the score a handler gives to the document with the given lid for a query
+solr_score() {
+    local handler=$1
+    local query=$2
+    local lid=$3
+
+    curl -s -G "http://localhost:8983/solr/data/${handler}" \
+        --data-urlencode "q=${query}" --data-urlencode "fq=lid:\"${lid}\"" \
+        --data-urlencode "fl=score" --data-urlencode "rows=1" --data-urlencode "facet=false" \
+        --data-urlencode "wt=json" \
+        | grep -o '"score":[0-9.eE+-]*' | head -1 | cut -d':' -f2
+}
+
+# Print the lid of every document a handler returns for a query, one per line, in rank order
+solr_lids_ranked() {
+    local handler=$1
+    local query=$2
+
+    curl -s -G "http://localhost:8983/solr/data/${handler}" \
+        --data-urlencode "q=${query}" --data-urlencode "fl=lid" --data-urlencode "rows=50" \
+        --data-urlencode "facet=false" --data-urlencode "wt=json" \
+        | grep -o '"lid":"[^"]*"' | cut -d'"' -f4
+}
+
+# Succeed if the lids a handler returns for a query are exactly the expected ones, in the expected rank
+# order and with no repeats (a newline separated list)
+check_lids() {
+    local test_name=$1
+    local handler=$2
+    local query=$3
+    local expected=$4
+
+    local actual
+    actual=$(solr_lids_ranked "$handler" "$query")
+    if [ "$actual" != "$expected" ]; then
+        log_error "$test_name ($handler): Expected '$expected' for the query '$query', found '$actual'"
+        return 1
+    fi
+
+    log_success "$test_name ($handler): '$query' found exactly $(echo "$expected" | wc -l | tr -d ' ') product(s)"
+    return 0
+}
+
+# Succeed if the count is a positive number (and, when given, equal to the expected count)
+check_count() {
+    local test_name=$1
+    local actual=$2
+    local expected=${3:-}
+
+    if [ -z "$actual" ] || [ "$actual" -eq 0 ]; then
+        log_error "$test_name: Expected at least one document, found '${actual}'"
+        return 1
+    fi
+    if [ -n "$expected" ] && [ "$actual" -ne "$expected" ]; then
+        log_error "$test_name: Expected $expected documents, found $actual"
+        return 1
+    fi
+
+    log_success "$test_name: Found $actual documents"
+    return 0
+}
+
 # Find generated Solr doc files (handles variable filenames)
 find_solr_doc() {
     local output_dir=$1
@@ -437,6 +540,7 @@ log_info "Running PDS4 harvest..."
     -C "$LEGACY_HARVEST_HOME/conf/search/defaults" \
     -o "$PDS4_OUTDIR" \
     --verbose 0 \
+    --context-products "$PARENTDIR/src/test/resources/data/context/context_products_test.json" \
     --target "$PDS4_TEST_DATA"
 
 check_status $? "PDS4 harvest failed"
@@ -542,6 +646,287 @@ query_solr "*:*" "$TOTAL_SOLR_COUNT" "PDS3 Solr Validation"
 check_status $? "PDS3 Solr validation failed"
 
 # ============================================================================
+# TEST 3: Superseded Product Versions
+# ============================================================================
+
+log_info "==============================================="
+log_info "TEST 3: Superseded Product Versions"
+log_info "==============================================="
+
+VERSIONS_TEST_DATA="$PARENTDIR/src/test/resources/data/versions"
+
+# Two versions of one product. The title of version 1.0 contains OLDNAME; the title of version 1.1 does not.
+log_info "Loading two versions of one product into Solr..."
+"$LEGACY_REGISTRY_HOME/bin/registry-mgr-solr" "$VERSIONS_TEST_DATA"
+check_status $? "Failed to load product versions into Solr"
+
+sleep 2  # Give Solr time to commit
+
+# Both versions stay in the index so version history is available
+query_solr_handler "all" "lid:\"urn:nasa:pds:context:instrument:test.versions\"" 2 "Versions Kept In Index"
+check_status $? "Both product versions should be in the index"
+
+# A term that only appears in the older version must not return it, and the current version must be found
+for handler in keyword archive-filter; do
+    query_solr_handler "$handler" "OLDNAME" 0 "Older Version Hidden ($handler)"
+    check_status $? "$handler returned a superseded product version"
+
+    query_solr_handler "$handler" "CURRENTNAME" 1 "Latest Version Found ($handler)"
+    check_status $? "$handler did not return the latest product version"
+done
+
+# A newer version loaded later supersedes the previous latest version
+VERSIONS_LID="lid:\"urn:nasa:pds:context:instrument:test.versions\""
+
+log_info "Loading a newer version of the same product..."
+"$LEGACY_REGISTRY_HOME/bin/registry-mgr-solr" "$PARENTDIR/src/test/resources/data/versions-newer"
+check_status $? "Failed to load the newer product version into Solr"
+
+sleep 2
+
+query_solr_handler "all" "$VERSIONS_LID" 3 "Newer Version Kept In Index"
+check_status $? "All three product versions should be in the index"
+
+for handler in keyword archive-filter; do
+    query_solr_handler "$handler" "CURRENTNAME" 0 "Previous Latest Hidden ($handler)"
+    check_status $? "$handler returned a version that a newer version supersedes"
+
+    query_solr_handler "$handler" "NEWESTNAME" 1 "Newest Version Found ($handler)"
+    check_status $? "$handler did not return the newest product version"
+done
+
+# Loading replaces a document and drops its flag, so loading the older versions again must hide them again
+log_info "Loading the older versions again..."
+"$LEGACY_REGISTRY_HOME/bin/registry-mgr-solr" "$VERSIONS_TEST_DATA"
+check_status $? "Failed to load the older product versions into Solr"
+
+sleep 2
+
+for handler in keyword archive-filter; do
+    query_solr_handler "$handler" "OLDNAME" 0 "Oldest Version Hidden After Reload ($handler)"
+    check_status $? "$handler returned a superseded product version after a reload"
+
+    query_solr_handler "$handler" "NEWESTNAME" 1 "Newest Version Found After Reload ($handler)"
+    check_status $? "$handler did not return the newest product version after a reload"
+done
+
+# Removing the newest version leaves the older ones flagged; loading an older version again makes it current
+log_info "Removing the newest version..."
+curl -s -X POST -H 'Content-Type: application/json' \
+    --data-binary '{"delete":{"query":"lid:\"urn:nasa:pds:context:instrument:test.versions\" AND version_id:1.2"}}' \
+    "http://localhost:8983/solr/data/update?commit=true" > /dev/null
+
+query_solr_handler "keyword" "CURRENTNAME" 0 "Older Versions Stay Hidden After Removing The Newest"
+check_status $? "Older versions should stay hidden until they are loaded again"
+
+"$LEGACY_REGISTRY_HOME/bin/registry-mgr-solr" "$VERSIONS_TEST_DATA"
+check_status $? "Failed to load the older product versions into Solr"
+
+sleep 2
+
+query_solr_handler "keyword" "CURRENTNAME" 1 "Older Version Current Again After Reload"
+check_status $? "Loading the older versions again should make the latest of them current"
+
+# ============================================================================
+# TEST 4: Context Product Names, Types And Aliases
+# ============================================================================
+
+log_info "==============================================="
+log_info "TEST 4: Context Product Names, Types And Aliases"
+log_info "==============================================="
+
+# The PDS4 harvest in TEST 1 ran with a small context products file
+# (src/test/resources/data/context). Search must find a product by an alias of the context
+# product it references, names and types must be the context product's, and the facets must
+# still be built from the names.
+# SBN DocWriter stores context references as LIDVIDs.
+MOON_REF='target_ref:"urn:nasa:pds:context:target:satellite.earth.moon::1.0"'
+DUST_REF='target_ref:"urn:nasa:pds:context:target:dust.dust::1.0"'
+
+# An alias that exists only in the context products file finds every product that references the
+# target, and the target's own context product document, which carries its aliases too
+MOON_LID='lid:"urn:nasa:pds:context:target:satellite.earth.moon"'
+moon_refs=$(solr_count keyword "$MOON_REF OR $MOON_LID")
+moon_aliases=$(solr_count keyword "SMOKEMOONALIAS")
+check_count "Alias Finds Referencing Products (keyword)" "$moon_aliases" "$moon_refs"
+check_status $? "keyword did not find every product that references the Moon target by its alias"
+
+check_count "Alias Finds Referencing Products (archive-filter)" "$(solr_count archive-filter SMOKEMOONALIAS)"
+check_status $? "archive-filter did not find products by a context product alias"
+
+for alias in SMOKEDUSTALIAS SMOKEMISSIONALIAS SMOKEINSTRUMENTALIAS SMOKEHOSTALIAS; do
+    check_count "Alias $alias (keyword)" "$(solr_count keyword "$alias")"
+    check_status $? "keyword did not find products by the alias $alias"
+done
+
+# The alternate_id and alternate_title values on the labels themselves are indexed fields
+check_count "Field aliases Holds The Label's alternate_id And alternate_title" "$(solr_count all "aliases:ROSETTA")"
+check_status $? "The aliases field does not hold the alternate_id and alternate_title values of the labels"
+
+# It also holds the aliases that harvest adds from the context products
+check_count "Field aliases Holds The Context Product Aliases" "$(solr_count all "aliases:SMOKEMOONALIAS")" "$moon_refs"
+check_status $? "The aliases field does not hold the aliases of the context products"
+
+# Names and types are the context product's; the label spelling is kept as an alternate name
+bundle=$(curl -s -G "http://localhost:8983/solr/data/all" --data-urlencode 'q=lid:"urn:nasa:pds:ch1_m3"' \
+    --data-urlencode "fl=investigation_name,investigation_name_alternate,instrument_type,instrument_host_type" \
+    --data-urlencode "wt=json")
+for expected in "Chandrayaan-1 Lunar Orbiter Mission" "CHANDRAYAAN-1" "Spectrometer" "Spacecraft"; do
+    if ! echo "$bundle" | grep -q "$expected"; then
+        log_error "Context Product Values: '$expected' is missing from the ch1_m3 bundle: $bundle"
+        cleanup_and_exit 1
+    fi
+done
+log_success "Context Product Values: ch1_m3 has the context product name, alternate name and types"
+
+# Facets are still built: from the canonical name when it is in the hierarchy, and from an alternate
+# name when it is not
+check_count "Moon Target Facet" "$(solr_count all "$MOON_REF" 'facet_target:"1,satellite"')" "$(solr_count all "$MOON_REF")"
+check_status $? "Products that reference the Moon target lost their facet_target value"
+
+check_count "Dust Target Facet Through An Alternate Name" "$(solr_count all "$DUST_REF" 'facet_target:"1,other"')" "$(solr_count all "$DUST_REF")"
+check_status $? "Products that reference the Dust target lost their facet_target value"
+
+# ============================================================================
+# TEST 5: PDS4 Products Rank Above PDS3 Products
+# ============================================================================
+
+log_info "==============================================="
+log_info "TEST 5: PDS4 Products Rank Above PDS3 Products"
+log_info "==============================================="
+
+# Two documents with the same text, one PDS4 and one PDS3 (src/test/resources/data/model-boost).
+# Their scores differ only by the PDS4 boost, which multiplies the score of a PDS4 product by 1.5.
+"$LEGACY_REGISTRY_HOME/bin/registry-mgr-solr" "$PARENTDIR/src/test/resources/data/model-boost"
+check_status $? "Failed to load the model boost test documents into Solr"
+
+sleep 2
+
+BOOST_PDS4_LID="urn:nasa:pds:boost_test_pds4"
+BOOST_PDS3_LID="urn:nasa:pds:context_pds3:data_set:data_set.boost_test_pds3"
+
+for handler in keyword search archive-filter; do
+    pds4_score=$(solr_score "$handler" BOOSTMODELTERM "$BOOST_PDS4_LID")
+    pds3_score=$(solr_score "$handler" BOOSTMODELTERM "$BOOST_PDS3_LID")
+    if [ -z "$pds4_score" ] || [ -z "$pds3_score" ]; then
+        log_error "PDS4 Boost ($handler): Could not read both scores (PDS4 '$pds4_score', PDS3 '$pds3_score')"
+        cleanup_and_exit 1
+    fi
+    # The PDS4 score is 1.5 times the PDS3 score; 1.4 leaves room for rounding
+    if ! awk -v a="$pds4_score" -v b="$pds3_score" 'BEGIN { exit !(b > 0 && a / b >= 1.4) }'; then
+        log_error "PDS4 Boost ($handler): The PDS4 score $pds4_score is not at least 1.4 times the PDS3 score $pds3_score"
+        cleanup_and_exit 1
+    fi
+    log_success "PDS4 Boost ($handler): PDS4 score $pds4_score against PDS3 score $pds3_score"
+done
+
+# ============================================================================
+# TEST 6: LID And LIDVID Queries
+# ============================================================================
+
+log_info "==============================================="
+log_info "TEST 6: LID And LIDVID Queries"
+log_info "==============================================="
+
+# A query that is a LID or a LIDVID finds that product, whatever the version and the case. The
+# insight_documents test bundle has the collection document_rise.
+LID_BUNDLE="urn:nasa:pds:insight_documents"
+LID_COLLECTION="urn:nasa:pds:insight_documents:document_rise"
+LID_NO_PRODUCT="urn:nasa:pds:insight_documents:document_rise:no_such_product"
+LID_HIDDEN="urn:nasa:pds:insight_documents:document_rise:hidden_resource"
+
+# A resource that /keyword and /archive-filter leave out of their results
+"$LEGACY_REGISTRY_HOME/bin/registry-mgr-solr" "$PARENTDIR/src/test/resources/data/lid-search"
+check_status $? "Failed to load the LID search test document into Solr"
+
+sleep 2
+
+# Every product under the bundle, as the handler that hides nothing sees them
+ALL_UNDER_BUNDLE=$(solr_lids_ranked all "lid:urn\\:nasa\\:pds\\:insight_documents*" | sort -u)
+
+for handler in keyword search archive-filter; do
+    check_lids "Bundle LID" "$handler" "$LID_BUNDLE" "$LID_BUNDLE"
+    check_status $? "A bundle LID should find only the bundle"
+
+    check_lids "Bundle LIDVID" "$handler" "${LID_BUNDLE}::1.0" "$LID_BUNDLE"
+    check_status $? "A LIDVID should find the product, whatever its version"
+
+    check_lids "Collection LID" "$handler" "$LID_COLLECTION" "$LID_COLLECTION"
+    check_status $? "A collection LID should find only the collection"
+
+    check_lids "Upper Case LID" "$handler" "URN:NASA:PDS:INSIGHT_DOCUMENTS" "$LID_BUNDLE"
+    check_status $? "A LID in upper case should find the product"
+
+    # A product that is not in the index finds its collection and its bundle
+    check_lids "Product LID Fallback" "$handler" "$LID_NO_PRODUCT" "$(printf '%s\n%s' "$LID_COLLECTION" "$LID_BUNDLE")"
+    check_status $? "A product LID that is not indexed should find its collection, then its bundle"
+
+    # A product the handler leaves out counts as not indexed for that handler
+    if [ "$handler" = "search" ]; then
+        check_lids "Hidden Resource LID" "$handler" "$LID_HIDDEN" "$LID_HIDDEN"
+    else
+        check_lids "Hidden Resource LID Fallback" "$handler" "$LID_HIDDEN" "$(printf '%s\n%s' "$LID_COLLECTION" "$LID_BUNDLE")"
+    fi
+    check_status $? "A product that the handler hides should fall back to its collection and its bundle"
+
+    # A collection that is not in the index finds its bundle
+    check_lids "Collection LID Fallback" "$handler" "${LID_BUNDLE}:no_such_collection" "$LID_BUNDLE"
+    check_status $? "A collection LID that is not indexed should find its bundle"
+
+    # A trailing * asks for the product and everything below it, the product first, each product once,
+    # and every product the handler would return
+    prefix_lids=$(solr_lids_ranked "$handler" "${LID_BUNDLE}*")
+    expected_lids=$ALL_UNDER_BUNDLE
+    if [ "$handler" != "search" ]; then
+        expected_lids=$(echo "$ALL_UNDER_BUNDLE" | grep -vx "$LID_HIDDEN")
+    fi
+    if [ "$(echo "$prefix_lids" | head -1)" != "$LID_BUNDLE" ]; then
+        log_error "LID Prefix ($handler): Expected the bundle first, found '$(echo "$prefix_lids" | head -1)'"
+        cleanup_and_exit 1
+    fi
+    if [ "$(echo "$prefix_lids" | sort)" != "$expected_lids" ]; then
+        log_error "LID Prefix ($handler): Expected exactly the products below the bundle, once each. Expected:
+$expected_lids
+Found:
+$(echo "$prefix_lids" | sort)"
+        cleanup_and_exit 1
+    fi
+    log_success "LID Prefix ($handler): the bundle comes first and the $(echo "$expected_lids" | wc -l | tr -d ' ') products under the bundle prefix are each found once"
+done
+
+# ============================================================================
+# TEST 7: Installer Script And Backup
+# ============================================================================
+
+log_info "==============================================="
+log_info "TEST 7: Installer Script And Backup"
+log_info "==============================================="
+
+INSTALLER="$LEGACY_REGISTRY_HOME/bin/registry_legacy_installer_docker.sh"
+
+# The build must leave the installer as it is in the source. Maven replaces ${name} and ${project.version}
+# with project properties wherever it filters a file, which turned the name of a backup into the name of
+# the project and made every backup of a release fail.
+if grep -q "Legacy Registry Manager Solr" "$INSTALLER" || ! grep -q 'backup_name=${collection}-${label}' "$INSTALLER"; then
+    log_error "Installer: The build changed the installer script in the distribution: $INSTALLER"
+    cleanup_and_exit 1
+fi
+log_success "Installer: the distribution has the installer script as it is in the source"
+
+# A backup takes both collections to the backup directory under the given label
+BACKUP_DIR=${BACKUP_HOME:-$DATA_HOME/solr-backups}
+"$INSTALLER" backup smoke
+check_status $? "The installer failed to back up the registry"
+
+for collection in registry data; do
+    if [ ! -d "$BACKUP_DIR/${collection}-smoke" ]; then
+        log_error "Backup: The backup of the collection $collection is missing: $BACKUP_DIR/${collection}-smoke"
+        cleanup_and_exit 1
+    fi
+    log_success "Backup: $BACKUP_DIR/${collection}-smoke exists"
+done
+
+# ============================================================================
 # Final Summary
 # ============================================================================
 
@@ -554,5 +939,10 @@ log_success "✓ PDS4 Solr loading and verification"
 log_success "✓ PDS3 catalog processing and document generation"
 log_success "✓ PDS3 document validation"
 log_success "✓ PDS3 Solr loading and verification"
+log_success "✓ Superseded product versions hidden from search"
+log_success "✓ Context product names, types and aliases"
+log_success "✓ PDS4 products ranked above PDS3 products"
+log_success "✓ LID and LIDVID queries"
+log_success "✓ Installer script and registry backup"
 
 cleanup_and_exit 0

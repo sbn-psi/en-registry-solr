@@ -1,41 +1,45 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
 updates:
-  - package-ecosystem: "maven" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: maven
+    directory: /
     schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "github-actions" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
     groups:
-       # Specify a name for the group, which will be used in pull request titles
-       # and branch names
-       dev-dependencies:
-          # Define patterns to include dependencies in the group (based on
-          # dependency name)
-          applies-to: version-updates # Applies the group rule to version updates
-          patterns:
-            - "*"       # A wildcard that matches all dependencies in the package
-                        # ecosystem. Note: using "*" may open a large pull request
-
-  - package-ecosystem: "docker" # See documentation for possible values
-    directory: "/docker/" # Location of package manifests
+      maven-patch-minor:
+        applies-to: version-updates
+        patterns: ['*']
+        update-types: [patch, minor]
+  - package-ecosystem: docker
+    directories:
+      - /deploy/sbn-solr
+      - /registry-mgr-legacy/src/main/resources/build
     schedule:
-      interval: "weekly"
+      interval: weekly
+      day: monday
     groups:
-       # Specify a name for the group, which will be used in pull request titles
-       # and branch names
-       dev-dependencies:
-          # Define patterns to include dependencies in the group (based on
-          # dependency name)
-          applies-to: version-updates # Applies the group rule to version updates
-          patterns:
-            - "*"       # A wildcard that matches all dependencies in the package
-                        # ecosystem. Note: using "*" may open a large pull request
+      docker-patch-minor:
+        applies-to: version-updates
+        patterns: ['*']
+        update-types: [patch, minor]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions-patch-minor:
+        applies-to: version-updates
+        patterns: ['*']
+        update-types: [patch, minor]
+  - package-ecosystem: pip
+    directory: /src/main/resources
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      python-patch-minor:
+        applies-to: version-updates
+        patterns: ['*']
+        update-types: [patch, minor]

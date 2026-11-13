@@ -41,3 +41,7 @@ The build script automatically loads `deploy/sbn-solr/.env` and uses only these 
 Deploy this image from the Archive Loader repository. Archive Loader provides the Compose services, generated runtime credentials, Solr `security.json`, collection bootstrap, health checks, and bind-mount-to-volume migration helper.
 
 The old packaged `registry_legacy_installer_docker.sh` remains in the upstream-style release artifact, but SBN deployments should prefer the Archive Loader deployment path because it handles named volumes, security generation, ZooKeeper upload, configset upload, collection bootstrap, and health checks.
+
+## Upstream tools
+
+[Running the tools](docs/running-the-tools.md) and [upgrading a release](docs/upgrading-a-release.md) describe the upstream standalone installer. SBN SolrCloud deployments continue to use Archive Loader; do not run the standalone upgrade procedure against that deployment.

@@ -83,10 +83,46 @@ This script automatically finds the unpacked distribution directories and sets a
 4. Loads documents into Solr
 5. Queries Solr to verify data was loaded
 
+### Test 3: Superseded Product Versions
+1. Loads two versions of one product (`src/test/resources/data/versions/`) and checks that both stay in the index while `/keyword` and `/archive-filter` return only the latest
+2. Loads a newer version (`src/test/resources/data/versions-newer/`) and checks that it supersedes the previous latest
+3. Loads the older versions again and checks that they are hidden again (loading drops the `superseded` flag, and `registry-mgr-solr` sets it after every load)
+4. Removes the newest version and checks that the older ones stay hidden until they are loaded again
+
+### Test 4: Context Product Names, Types And Aliases
+The PDS4 harvest in Test 1 runs with a small context products file (`src/test/resources/data/context/context_products_test.json`), so no network access is needed.
+1. Checks that an alias that exists only in that file finds every product that references the context product, through `/keyword` and `/archive-filter`
+2. Checks that a bundle carries the context product's name, its other name and its types instead of the label's values
+3. Checks that the target facets are still built, from the canonical name when it is in the hierarchy and from an alternate name when it is not
+
+### Test 5: PDS4 Products Rank Above PDS3 Products
+1. Loads two documents with the same text, one PDS4 and one PDS3 (`src/test/resources/data/model-boost/`)
+2. Checks that on `/keyword`, `/search` and `/archive-filter` the PDS4 document scores at least 1.4 times the PDS3 one (the boost multiplies the PDS4 score by 1.5)
+
+### Test 6: LID And LIDVID Queries
+On `/keyword`, `/search` and `/archive-filter`, using the `insight_documents` bundle from Test 1:
+1. Checks that a bundle LID, a LIDVID, a collection LID and an upper case LID each find only that product
+2. Checks that a product LID or a collection LID that is not in the index finds its parents, nearest first (the collection, then the bundle, or the bundle)
+3. Loads a resource that `/keyword` and `/archive-filter` hide (`src/test/resources/data/lid-search/`) and checks that those handlers treat its LID as not indexed and find its collection and bundle, while `/search` finds the resource itself
+4. Checks that `<LID>*` finds the bundle first, then every product under the prefix that the handler returns, each once
+
+## Scale Test for Superseded Versions
+
+`versions-scale-test.sh` times `registry-mgr-solr -mark-superseded` on 180000 synthetic documents (60000 products with 3 versions each). It is a manual tool and is not part of the smoke tests or CI, because it takes a few minutes and its timings depend on the machine.
+
+Run it against an empty, throwaway Solr (for example the one the smoke tests install); it refuses to run when the `data` collection already holds documents, and removes its documents when it finishes:
+
+```bash
+# From the repository root
+export LEGACY_REGISTRY_HOME=$(echo $(pwd)/registry-mgr-legacy-*)
+test/versions-scale-test.sh
+```
+
 ## Test Data
 
 - **PDS4 Test Data:** `src/test/resources/data/pds4/`
 - **PDS3 Test Data:** `src/test/resources/data/pds3/`
+- **Product Version Test Data:** `src/test/resources/data/versions/` and `src/test/resources/data/versions-newer/`
 - **Expected Outputs:** `src/test/resources/data/expected/`
 
 ## Troubleshooting

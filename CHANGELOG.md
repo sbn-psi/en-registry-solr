@@ -1,8 +1,71 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-legacy-solr/tree/«unknown») (2026-05-26)
+## [release/5.6.0](https://github.com/NASA-PDS/registry-legacy-solr/tree/release/5.6.0) (2026-11-11)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v5.1.1...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v5.5.6...release/5.6.0)
+
+**Requirements:**
+
+- As a data user, I want keyword search to understand synonyms for science facets so that I can find products with my own wording [\#318](https://github.com/NASA-PDS/registry-legacy-solr/issues/318)
+- As a data user, I want to search by Science\_Facets values so that I can find products by what the data is about [\#317](https://github.com/NASA-PDS/registry-legacy-solr/issues/317)
+- As a registry operator, I want to install a release and upgrade the registry with one script [\#315](https://github.com/NASA-PDS/registry-legacy-solr/issues/315)
+
+## [v5.5.6](https://github.com/NASA-PDS/registry-legacy-solr/tree/v5.5.6) (2026-11-07)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v5.5.5...v5.5.6)
+
+**Defects:**
+
+- Registry installer in the release tarballs fails every backup because the build rewrites the script [\#313](https://github.com/NASA-PDS/registry-legacy-solr/issues/313)
+
+## [v5.5.5](https://github.com/NASA-PDS/registry-legacy-solr/tree/v5.5.5) (2026-11-05)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v5.4.1...v5.5.5)
+
+**Requirements:**
+
+- As a user, I want keyword search to recognize LIDs and LIDVIDs, so that I can find a bundle, collection or document from its identifier [\#307](https://github.com/NASA-PDS/registry-legacy-solr/issues/307)
+
+## [v5.4.1](https://github.com/NASA-PDS/registry-legacy-solr/tree/v5.4.1) (2026-11-04)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v5.3.0...v5.4.1)
+
+**Requirements:**
+
+- As a user, I want keyword search to match and boost context-product aliases [\#300](https://github.com/NASA-PDS/registry-legacy-solr/issues/300)
+- As a user, I want harvest to take names, types and aliases from registered context products, so that keyword search finds products by any known name [\#299](https://github.com/NASA-PDS/registry-legacy-solr/issues/299)
+- As a node operator, I want to upgrade and restore the Legacy Solr Registry without reloading all data [\#296](https://github.com/NASA-PDS/registry-legacy-solr/issues/296)
+
+**Defects:**
+
+- Keyword search handler does not search the text field, giving different results than archive-filter [\#293](https://github.com/NASA-PDS/registry-legacy-solr/issues/293) [[s.medium](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.medium)]
+- archive-filter collapse returns older version when text query only matches older version of same LID [\#261](https://github.com/NASA-PDS/registry-legacy-solr/issues/261) [[s.medium](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.medium)]
+
+**Other closed issues:**
+
+- reload\_all.sh does not stop when a step fails and hardcodes site paths [\#303](https://github.com/NASA-PDS/registry-legacy-solr/issues/303)
+
+## [v5.3.0](https://github.com/NASA-PDS/registry-legacy-solr/tree/v5.3.0) (2026-10-15)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v5.2.0...v5.3.0)
+
+**Requirements:**
+
+- As a EN Operator, I want to automate Registry load on Harvest's Solr doc creation [\#281](https://github.com/NASA-PDS/registry-legacy-solr/issues/281)
+- As a EN operator, I want to be able to exclude download of NASA files [\#277](https://github.com/NASA-PDS/registry-legacy-solr/issues/277)
+- As an EN operator, I want the ESA PSA sync to happen automatically [\#276](https://github.com/NASA-PDS/registry-legacy-solr/issues/276)
+- As a user, I want to sync ESA PSA products from the Search API [\#135](https://github.com/NASA-PDS/registry-legacy-solr/issues/135)
+
+**Defects:**
+
+- \(Bad\) PSA XML labels are not processable by Harvest due to missing `inventory reference_type` [\#292](https://github.com/NASA-PDS/registry-legacy-solr/issues/292) [[s.medium](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.medium)]
+- ESA PSA sync missing collections for urn:esa:psa:em16\_tgo\_cas \(and possibly others\) [\#286](https://github.com/NASA-PDS/registry-legacy-solr/issues/286) [[s.medium](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.medium)]
+- catalog-solr does not process hsk.cat files [\#283](https://github.com/NASA-PDS/registry-legacy-solr/issues/283)
+- `pds_sync_api.py` often errors with a code 429 [\#275](https://github.com/NASA-PDS/registry-legacy-solr/issues/275) [[s.medium](https://github.com/NASA-PDS/registry-legacy-solr/labels/s.medium)]
+
+## [v5.2.0](https://github.com/NASA-PDS/registry-legacy-solr/tree/v5.2.0) (2026-06-30)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-legacy-solr/compare/v5.1.1...v5.2.0)
 
 **Defects:**
 
