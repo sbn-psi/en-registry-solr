@@ -1,14 +1,14 @@
 name: Fork CI
 on:
   push:
-    branches: [main]
+    branches: ['**']
   pull_request:
     branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: fork-ci-${{ github.ref }}
+  group: fork-ci-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 jobs:
   build-test:
