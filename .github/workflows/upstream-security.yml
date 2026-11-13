@@ -1,0 +1,24 @@
+name: Upstream security watch
+on:
+  schedule:
+    - cron: '23 15 * * 1'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/upstream-security.yml
+      - .github/scripts/check-upstream-security.py
+permissions:
+  contents: read
+jobs:
+  check-upstream:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Report upstream security changes needing review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORK_REF: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python3 .github/scripts/check-upstream-security.py

@@ -1,3 +1,6 @@
+# Security updates only: 0 disables routine version PRs, not security PRs.
+# Alerts/security updates are enabled separately in repository settings.
+# Docker manifest coverage is retained; this is not a container CVE scanner.
 version: 2
 updates:
   - package-ecosystem: maven
@@ -5,12 +8,7 @@ updates:
     schedule:
       interval: weekly
       day: monday
-    open-pull-requests-limit: 10
-    groups:
-      maven-patch-minor:
-        applies-to: version-updates
-        patterns: ['*']
-        update-types: [patch, minor]
+    open-pull-requests-limit: 0
   - package-ecosystem: docker
     directories:
       - /deploy/sbn-solr
@@ -18,28 +16,16 @@ updates:
     schedule:
       interval: weekly
       day: monday
-    groups:
-      docker-patch-minor:
-        applies-to: version-updates
-        patterns: ['*']
-        update-types: [patch, minor]
+    open-pull-requests-limit: 0
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
       day: monday
-    groups:
-      actions-patch-minor:
-        applies-to: version-updates
-        patterns: ['*']
-        update-types: [patch, minor]
+    open-pull-requests-limit: 0
   - package-ecosystem: pip
     directory: /src/main/resources
     schedule:
       interval: weekly
       day: monday
-    groups:
-      python-patch-minor:
-        applies-to: version-updates
-        patterns: ['*']
-        update-types: [patch, minor]
+    open-pull-requests-limit: 0
