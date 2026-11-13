@@ -29,6 +29,7 @@ jobs:
         run: |
           test/reload-all-tests.sh
           test/install-release-tests.sh
+          test/installer-command-tests.sh
       - name: Test SBN wrapper contracts
         run: test/sbn-wrapper-tests.sh
       - name: Build SBN image locally without publishing
@@ -42,6 +43,7 @@ jobs:
           tar -xzf harvest-legacy/target/harvest-legacy-*-bin.tar.gz
           tar -xzf registry-mgr-legacy/target/registry-mgr-legacy-*-bin.tar.gz
           tar -xzf catalog-legacy/target/catalog-legacy-*-bin.tar.gz
+          test/installer-command-tests.sh registry-mgr-legacy-*/bin/registry_legacy_installer_docker.sh
           export DATA_HOME="$RUNNER_TEMP/registry-data"
           mkdir -p "$DATA_HOME"
           source test/setup-test-env.sh

@@ -193,7 +193,6 @@ start_registry_container() {
       -v ${BACKUP_HOME}:${SOLR_BACKUP_MOUNT} \
       -e SOLR_HEAP=$SOLR_HEAP \
       -e SOLR_OPTS="-Dsolr.allowPaths=${SOLR_BACKUP_MOUNT}" \
-
       $DOCKER_IMAGE:$VERSION | tee -a $LOG 2>&1
 
     print_status $?
