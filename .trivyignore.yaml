@@ -1,0 +1,3 @@
+# Reviewed, temporary exceptions only. No findings are currently suppressed.
+# See deploy/sbn-solr/README.md#reviewed-exceptions for paths, statement and expiry.
+vulnerabilities: []

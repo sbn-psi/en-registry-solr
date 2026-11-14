@@ -1,0 +1,31 @@
+name: Container security PR feedback
+on:
+  workflow_run:
+    workflows: ['Container security']
+    types: [completed]
+permissions: {}
+concurrency:
+  group: container-security-feedback-${{ github.event.workflow_run.head_repository.full_name }}-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+jobs:
+  comment:
+    if: ${{ github.repository == 'sbn-psi/en-registry-solr' && github.event.workflow_run.event == 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: write
+    steps:
+      # workflow_run github.sha is the trusted default-branch commit, never PR code.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: .github/scripts/container-security-comment.cjs
+          sparse-checkout-cone-mode: false
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            const comment = require('./.github/scripts/container-security-comment.cjs');
+            await comment({github, context, core});
