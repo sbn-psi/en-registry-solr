@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from copy import deepcopy
 import importlib.util
 import json
 import os
@@ -56,6 +57,47 @@ class TrivyReportTests(unittest.TestCase):
     def test_summary_escapes_package_metadata(self):
         _, _, summary = self.run_report([{"Severity": "HIGH", "FixedVersion": "2", "PkgName": "a|b\nc"}])
         self.assertIn("a\\|b c", summary)
+
+    def test_policy_affects_gate_but_raw_counts_and_source_remain_unfiltered(self):
+        scan = {"SchemaVersion": 2, "ArtifactName": "image", "ArtifactID": "sha256:test", "Results": [
+            {"Target": "Ubuntu", "Class": "os-pkgs", "Type": "ubuntu", "Vulnerabilities": []},
+            {"Target": "Java", "Type": "jar", "Vulnerabilities": [
+                {"VulnerabilityID": "same", "Severity": "HIGH", "FixedVersion": "2", "PkgPath": path}
+                for path in ("one.jar", "two.jar")]}]}
+        policy = deepcopy(scan)
+        policy["Results"][1]["Vulnerabilities"].pop()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            raw = path / "full.json"
+            filtered = path / "policy-filtered.json"
+            original = json.dumps(scan)
+            raw.write_text(original)
+            filtered.write_text(json.dumps(policy))
+            self.assertEqual(reporter.report(raw, path, filtered), 1)
+            self.assertEqual(raw.read_text(), original)
+            summary = (path / "summary.md").read_text()
+            self.assertIn("| HIGH | 2 |", summary)
+            self.assertIn("Before reviewed exceptions: 2; excluded by policy: 1", summary)
+            policy["Results"][1]["Vulnerabilities"] = []
+            filtered.write_text(json.dumps(policy))
+            self.assertEqual(reporter.report(raw, path, filtered), 0)
+            self.assertEqual(raw.read_text(), original)
+
+    def test_wrong_image_or_invented_policy_finding_fails_closed(self):
+        scan = {"SchemaVersion": 2, "ArtifactName": "image", "Results": [
+            {"Class": "os-pkgs", "Type": "ubuntu"}, {"Type": "jar"}]}
+        for change in (lambda p: p.update(ArtifactName="another-image"),
+                       lambda p: p["Results"][1].update(Vulnerabilities=[{"Severity": "HIGH"}])):
+            with tempfile.TemporaryDirectory() as directory:
+                path = Path(directory)
+                raw = path / "full.json"
+                policy = path / "policy.json"
+                raw.write_text(json.dumps(scan))
+                changed = deepcopy(scan)
+                change(changed)
+                policy.write_text(json.dumps(changed))
+                with self.assertRaises(ValueError):
+                    reporter.report(raw, path, policy)
 
     def test_incomplete_or_partial_image_report_fails_closed(self):
         with tempfile.TemporaryDirectory() as directory:

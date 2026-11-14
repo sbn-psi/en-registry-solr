@@ -8,7 +8,20 @@ import os
 from pathlib import Path
 
 
-def report(source, destination):
+def eligible(vulnerability):
+    fixed = vulnerability.get("FixedVersion")
+    return (vulnerability.get("Severity") in ("HIGH", "CRITICAL")
+            and isinstance(fixed, str) and bool(fixed.strip()))
+
+
+def records(scan):
+    # Compare complete records, including package path and target; retain duplicates.
+    return Counter(json.dumps([result.get("Target"), result.get("Type"), vulnerability], sort_keys=True)
+                   for result in scan.get("Results", [])
+                   for vulnerability in result.get("Vulnerabilities") or [])
+
+
+def report(source, destination, policy_source=None):
     scan = json.loads(source.read_text())
     results = scan.get("Results")
     if scan.get("SchemaVersion") != 2 or not isinstance(results, list):
@@ -17,17 +30,23 @@ def report(source, destination):
         raise ValueError("The complete Solr image scan did not identify OS packages")
     if not any(result.get("Type") == "jar" for result in results):
         raise ValueError("The complete Solr image scan did not identify Java packages")
-    counts = Counter()
+    policy = json.loads(policy_source.read_text()) if policy_source else scan
+    if (policy.get("SchemaVersion") != 2 or not isinstance(policy.get("Results"), list)
+            or policy.get("ArtifactName") != scan.get("ArtifactName")
+            or policy.get("ArtifactID") != scan.get("ArtifactID")):
+        raise ValueError("Policy report must describe the same complete image scan")
+    if records(policy) - records(scan):
+        raise ValueError("Policy report contains findings absent from the unfiltered scan")
+    raw_eligible = sum(eligible(v) for result in results for v in result.get("Vulnerabilities") or [])
+    counts = Counter(v.get("Severity", "UNKNOWN")
+                     for result in results for v in result.get("Vulnerabilities") or [])
     actionable = []
-    filtered = deepcopy(scan)
+    filtered = deepcopy(policy)
     filtered["Results"] = []
-    for result in results:
+    for result in policy["Results"]:
         selected = []
         for vulnerability in result.get("Vulnerabilities") or []:
-            severity = vulnerability.get("Severity", "UNKNOWN")
-            counts[severity] += 1
-            fixed = vulnerability.get("FixedVersion")
-            if severity in ("HIGH", "CRITICAL") and isinstance(fixed, str) and fixed.strip():
+            if eligible(vulnerability):
                 selected.append(vulnerability)
                 actionable.append((result.get("Target", ""), vulnerability))
         if selected:
@@ -45,7 +64,15 @@ def report(source, destination):
         lines.append(f"| {severity} | {counts[severity]} |")
     lines += ["", f"**Actionable HIGH/CRITICAL findings with a fixed version: {len(actionable)}**", "",
               "Counts are finding records; repeated package installations can repeat a CVE.", "",
-              "The full JSON/package inventory and actionable JSON/SARIF are retained in the scan artifact."]
+              f"Before reviewed exceptions: {raw_eligible}; excluded by policy: {raw_eligible - len(actionable)}.", "",
+              "Download the `solr-trivy-<commit>` artifact on this run. `full.json` is unfiltered (all severities, "
+              "including unfixed findings); `policy-filtered.json` applies `.trivyignore.yaml`; "
+              "`actionable.json` / `actionable.sarif` contain the remaining fixed HIGH/CRITICAL findings.", "",
+              "**Reviewing a finding:** use its exact `PkgPath` from `full.json`, document the evidence/reviewer "
+              "in `statement`, and set a short future `expired_at` in `.trivyignore.yaml`. Scope `paths` to each "
+              "reviewed package copy. See `deploy/sbn-solr/README.md#reviewed-exceptions` for an example. "
+              "No exceptions are supplied by default. Never use a CVE exception to hide a build, scanner, or "
+              "reporting error; fix the failing step instead."]
     if actionable:
         lines += ["", "| Severity | Package | Installed | Fixed | Vulnerability | Image target |",
                   "| --- | --- | --- | --- | --- | --- |"]
@@ -76,5 +103,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path)
     parser.add_argument("destination", type=Path)
+    parser.add_argument("--policy-report", type=Path)
     arguments = parser.parse_args()
-    report(arguments.source, arguments.destination)
+    report(arguments.source, arguments.destination, arguments.policy_report)

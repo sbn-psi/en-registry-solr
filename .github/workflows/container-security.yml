@@ -31,7 +31,9 @@ jobs:
           java-version: '17'
           cache: maven
       - name: Validate report filtering
-        run: python3 test/trivy-report-tests.py
+        run: |
+          python3 test/trivy-report-tests.py
+          node --test test/container-security-comment-tests.cjs
       - name: Prepare the SBN registry distribution
         run: mvn -B -ntp -pl registry-mgr-legacy -am package
       - name: Build the complete custom image with the SBN wrapper
@@ -40,13 +42,19 @@ jobs:
         run: |
           deploy/sbn-solr/scripts/build-image.sh
           mkdir -p trivy-reports
+          printf '{}\n' > trivy-reports/unfiltered-config.yaml
+          cp .trivyignore.yaml trivy-reports/reviewed-policy.yaml
           docker image inspect "$REGISTRY_IMAGE" --format '{{json .}}' > trivy-reports/image-inspect.json
           printf '%s\n' "$GITHUB_SHA" > trivy-reports/source-commit.txt
       - name: Scan all image OS and library vulnerabilities
         id: scan
+        env:
+          # The full report must bypass repository exceptions and implicit config.
+          TRIVY_IGNOREFILE: /dev/null
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           version: v0.76.2
+          trivy-config: trivy-reports/unfiltered-config.yaml
           scan-type: image
           image-ref: ${{ env.REGISTRY_IMAGE }}
           scanners: vuln
@@ -59,13 +67,17 @@ jobs:
           exit-code: '0'
           timeout: 10m
           cache: 'true'
+      - name: Apply reviewed exceptions to a separate report
+        id: policy
+        run: trivy --config trivy-reports/unfiltered-config.yaml convert --ignorefile .trivyignore.yaml --format json --output trivy-reports/policy-filtered.json trivy-reports/full.json
       - name: Summarize fixable HIGH and CRITICAL findings
         id: report
-        run: python3 .github/scripts/report-trivy.py trivy-reports/full.json trivy-reports
+        run: python3 .github/scripts/report-trivy.py trivy-reports/full.json trivy-reports --policy-report trivy-reports/policy-filtered.json
       - name: Convert the actionable findings to SARIF without rescanning
         id: sarif
-        run: trivy convert --format sarif --output trivy-reports/actionable.sarif trivy-reports/actionable.json
+        run: trivy --config trivy-reports/unfiltered-config.yaml convert --ignorefile /dev/null --format sarif --output trivy-reports/actionable.sarif trivy-reports/actionable.json
       - name: Retain the full scan and actionable reports
+        id: artifact
         if: ${{ always() && steps.scan.outcome == 'success' }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
@@ -85,6 +97,7 @@ jobs:
         if: ${{ always() && steps.upload-sarif.outcome == 'failure' }}
         run: echo '::warning::GitHub SARIF upload was unavailable; the complete scan remains in the report artifact.'
       - name: Fail on fixable HIGH or CRITICAL findings
+        id: gate
         if: ${{ always() && steps.report.outcome == 'success' }}
         run: |
           count=$(cat trivy-reports/actionable-count.txt)
@@ -92,3 +105,23 @@ jobs:
             echo "::error::$count HIGH/CRITICAL findings have a fixed version. See the job summary and scan artifact."
             exit 1
           fi
+      - name: Explain the scan result
+        if: ${{ always() }}
+        env:
+          REPORT_OUTCOME: ${{ steps.report.outcome }}
+          GATE_OUTCOME: ${{ steps.gate.outcome }}
+        run: |
+          {
+            echo '## Container security result'
+            if [ "$REPORT_OUTCOME" != success ]; then
+              echo '**Build/scanner/reporting error:** inspect the failed step. This is not a vulnerability exception; do not suppress CVEs to fix it.'
+            elif [ "$GATE_OUTCOME" = failure ]; then
+              echo '**Security gate failed:** fixed HIGH/CRITICAL findings remain after reviewed exceptions. The check intentionally stays red.'
+            else
+              echo 'The vulnerability gate passed; also inspect any other failed build/report/upload step.'
+            fi
+            echo ''
+            echo 'Reports: run artifact `solr-trivy-<commit>` (14 days). `full.json` is unfiltered; actionable JSON/SARIF and the summary apply `.trivyignore.yaml`.'
+            echo 'Review guidance: `deploy/sbn-solr/README.md#reviewed-exceptions`. Scope paths, record evidence in statement, and set expired_at. Build/scanner errors require fixing the failed step.'
+            echo 'PR comment automation uses trusted default-branch code and activates only after the feedback workflow is merged into main.'
+          } >> "$GITHUB_STEP_SUMMARY"

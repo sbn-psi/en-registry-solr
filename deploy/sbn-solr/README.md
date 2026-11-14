@@ -72,3 +72,59 @@ that does not identify both OS and Java packages fails instead of reporting clea
 This workflow does not publish images, deploy, upgrade runtime versions or create
 base-image fix PRs. Dependabot remains security-only. Scan results describe the
 newly built image, not the image currently deployed on a host.
+
+### Reviewed exceptions
+
+The committed [`.trivyignore.yaml`](../../.trivyignore.yaml) starts with
+`vulnerabilities: []`: no CVEs are suppressed. Keep the fixed HIGH/CRITICAL gate
+red until a dependency fix or a reviewed, temporary exception resolves each
+remaining finding. A failed build, scanner, policy parse or report step requires
+fixing that step; it is not a vulnerability exception.
+
+Download `solr-trivy-<commit>` from the Actions run. `full.json` bypasses repository
+ignore files and implicit Trivy configuration, preserving all severities,
+unfixed findings and the package inventory. A separate native Trivy conversion
+applies `.trivyignore.yaml` to `policy-filtered.json`; the Python report derives
+`actionable.json`, the gate count, summary and SARIF from that filtered copy.
+The artifact also includes the policy used (`reviewed-policy.yaml`), image identity
+and scan commit. Invalid policy YAML fails the job. SARIF upload availability
+does not weaken the gate or replace the downloadable reports.
+
+For a finding that has been reviewed as non-applicable or temporarily accepted,
+add an entry in a PR using this **illustrative template**, replacing the ID,
+path, evidence and expiry with reviewed values:
+
+```yaml
+vulnerabilities:
+  - id: CVE-YYYY-NNNNN
+    paths:
+      - opt/solr-VERSION/modules/MODULE/lib/PACKAGE-VERSION.jar
+    statement: "Reviewer and review date; rationale; evidence/advisory link; revisit condition."
+    expired_at: 2026-12-01
+```
+
+Use exact `PkgPath` values from `full.json`, relative to the image root. Include
+`paths` rather than making an image-wide CVE exception. Another installed copy
+of the same CVE remains actionable unless that copy is also reviewed and listed.
+Record the reviewer, evidence and reasoning in `statement`, and choose a short
+future `expired_at` in `YYYY-MM-DD` form. Expired entries stop matching. Re-review
+when image contents or exposure change. An advisory or triage category alone
+is not an automatic exception. Exceptions never remove findings from `full.json`.
+
+### PR feedback
+
+After [the feedback workflow](../../.github/workflows/container-security-feedback.yml)
+is merged into `main`, completed Container security PR runs update one
+`github-actions[bot]` marker comment with the result, report links and exception
+guidance. A successful rerun updates an existing comment; an initially clean run
+does not create one. Stale PR heads and older runs are skipped. The handler
+supports fork and Dependabot PRs using GitHub metadata, and checks out only the
+trusted default-branch commit. It never downloads or executes PR artifacts or
+checks out PR code. Its token has only Actions/contents read and PR write;
+the image-build job has no PR-write permission.
+
+**Activation limitation:** a newly added `workflow_run` handler does not run
+from this PR branch. Its API routing, ownership, stale-head and success/error
+logic are tested with mocked GitHub responses; a live bot comment can only be
+verified after the workflow reaches the default branch. Initial guidance on
+this PR is posted manually. No runtime remediation or CVE exceptions are included.
